@@ -1,0 +1,680 @@
+//Food page code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flavors of India | A Culinary Journey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/scrollreveal"></script>
+    <style>
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .food-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .spice-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: dash 5s linear forwards;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="bg-amber-50 font-sans">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white bg-opacity-90 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold text-amber-600 flex items-center">
+                        <svg class="w-8 h-8 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor" class="text-amber-500"></path>
+                        </svg>
+                        Flavors of India
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#history" class="text-gray-700 hover:text-amber-600 transition">History</a>
+                    <a href="#regions" class="text-gray-700 hover:text-amber-600 transition">Regional Cuisines</a>
+                    <a href="#recipes" class="text-gray-700 hover:text-amber-600 transition">Recipes</a>
+                    <a href="#spices" class="text-gray-700 hover:text-amber-600 transition">Spices</a>
+                    <a href="#gallery" class="text-gray-700 hover:text-amber-600 transition">Gallery</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="menu-btn" class="text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
+            <a href="#history" class="block py-2 text-gray-700 hover:text-amber-600 transition">History</a>
+            <a href="#regions" class="block py-2 text-gray-700 hover:text-amber-600 transition">Regional Cuisines</a>
+            <a href="#recipes" class="block py-2 text-gray-700 hover:text-amber-600 transition">Recipes</a>
+            <a href="#spices" class="block py-2 text-gray-700 hover:text-amber-600 transition">Spices</a>
+            <a href="#gallery" class="block py-2 text-gray-700 hover:text-amber-600 transition">Gallery</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-24 pb-40 parallax" style="background-image: url('https://images.unsplash.com/photo-1585937421612-70a008356fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1632&q=80');">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center backdrop-blur-sm bg-white/30 p-10 rounded-xl max-w-4xl mx-auto">
+                <h1 class="text-5xl md:text-7xl font-bold text-white mb-6 animate__animated animate__fadeInDown">Discover Indian Cuisine</h1>
+                <p class="text-xl md:text-2xl text-white mb-8 animate__animated animate__fadeIn animate__delay-1s">A 5000-year journey of flavors, spices, and culinary traditions</p>
+                <a href="#history" class="inline-block bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 animate__animated animate__fadeInUp animate__delay-2s">
+                    Begin the Journey
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- History Section -->
+    <section id="history" class="py-20 bg-gradient-to-b from-amber-50 to-amber-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-amber-900 mb-4">The Rich History of Indian Cuisine</h2>
+                <div class="w-24 h-1 bg-amber-600 mx-auto"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="history-timeline">
+                    <div class="relative pl-8 pb-12 border-l-2 border-amber-400">
+                        <div class="absolute -left-2 top-0 w-4 h-4 rounded-full bg-amber-600"></div>
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-amber-800 mb-2">Indus Valley Civilization (3000 BCE)</h3>
+                            <p class="text-gray-700">Early evidence of wheat, barley, and rice cultivation. Use of clay ovens and cooking vessels.</p>
+                        </div>
+                        
+                        <div class="absolute -left-2 top-24 w-4 h-4 rounded-full bg-amber-600"></div>
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-amber-800 mb-2">Vedic Period (1500-500 BCE)</h3>
+                            <p class="text-gray-700">Introduction of vegetarianism through religious texts. Development of Ayurveda and food classification.</p>
+                        </div>
+                        
+                        <div class="absolute -left-2 top-56 w-4 h-4 rounded-full bg-amber-600"></div>
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-amber-800 mb-2">Maurya & Gupta Empires (322 BCE-550 CE)</h3>
+                            <p class="text-gray-700">Spice trade flourished. Sugar production began. Cookbooks and culinary texts emerged.</p>
+                        </div>
+                        
+                        <div class="absolute -left-2 top-96 w-4 h-4 rounded-full bg-amber-600"></div>
+                        <div>
+                            <h3 class="text-2xl font-bold text-amber-800 mb-2">Mughal Era (1526-1857)</h3>
+                            <p class="text-gray-700">Introduction of Persian cooking techniques. Birth of biryani, kebabs, and rich curries.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Ancient Indian Cooking" class="rounded-xl shadow-2xl floating">
+                    <div class="absolute -bottom-6 -right-6 bg-white p-4 rounded-lg shadow-lg hidden md:block">
+                        <h4 class="font-bold text-amber-800">Did You Know?</h4>
+                        <p class="text-sm text-gray-700">The word "curry" comes from the Tamil word "kari" meaning sauce or relish.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Regional Cuisines -->
+    <section id="regions" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-amber-900 mb-4">Diverse Regional Cuisines</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">India's culinary landscape changes every 100 km, offering unique flavors in each region</p>
+                <div class="w-24 h-1 bg-amber-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-500">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1588&q=80" alt="North Indian Cuisine" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-amber-800 mb-2">North Indian</h3>
+                        <p class="text-gray-600">Rich gravies, tandoori dishes, wheat-based breads. Famous for butter chicken, naan, and rajma chawal.</p>
+                    </div>
+                </div>
+                
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-500">
+                    <div class="h-48 overflow-hidden">
+                        <img src="southin.jpeg">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-amber-800 mb-2">South Indian</h3>
+                        <p class="text-gray-600">Rice-based dishes, coconut flavors, fermented foods. Known for dosa, idli, sambar, and filter coffee.</p>
+                    </div>
+                </div>
+                
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-500">
+                    <div class="h-48 overflow-hidden">
+                        <img src="eastin.jpeg">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-amber-800 mb-2">East Indian</h3>
+                        <p class="text-gray-600">Subtle flavors, mustard oil, fish dishes. Famous for rasgulla, macher jhol, and momos.</p>
+                    </div>
+                </div>
+                
+                <div class="food-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-500">
+                    <div class="h-48 overflow-hidden">
+                        <img src="westind.jpeg" alt="West Indian Cuisine" class="w-full h-full object-cover transition duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-amber-800 mb-2">West Indian</h3>
+                        <p class="text-gray-600">Coastal flavors, coconut milk, seafood. Known for vada pav, dhokla, and Goan fish curry.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+    <!-- Recipes Section -->
+    <section id="recipes" class="py-20 bg-amber-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-amber-900 mb-4">Signature Recipes</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Try these iconic dishes from your own kitchen</p>
+                <div class="w-24 h-1 bg-amber-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Recipe 1 -->
+                <div class="recipe-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-500 group">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="butter.jpeg" alt="Butter Chicken" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <h3 class="text-2xl font-bold text-white">Butter Chicken</h3>
+                            <p class="text-amber-200">North India's creamy delight</p>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-bold">45 mins</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-amber-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <span class="text-gray-700">4.8 (124)</span>
+                            </div>
+                            <span class="text-gray-500">Serves 4</span>
+                        </div>
+                        <button class="view-recipe-btn w-full bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg transition flex items-center justify-center">
+                            View Recipe
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Recipe 2 -->
+                <div class="recipe-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-500 group">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="dosa.jpeg">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <h3 class="text-2xl font-bold text-white">Masala Dosa</h3>
+                            <p class="text-amber-200">South India's crispy pancake</p>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-bold">1 hr 20 mins</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-amber-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <span class="text-gray-700">4.9 (98)</span>
+                            </div>
+                            <span class="text-gray-500">Serves 2</span>
+                        </div>
+                        <button class="view-recipe-btn w-full bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg transition flex items-center justify-center">
+                            View Recipe
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Recipe 3 -->
+                <div class="recipe-card bg-white rounded-xl overflow-hidden shadow-lg transition duration-500 group">
+                    <div class="relative h-64 overflow-hidden">
+                        <img src="josh.jpeg">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70"></div>
+                        <div class="absolute bottom-0 left-0 p-6">
+                            <h3 class="text-2xl font-bold text-white">Rogan Josh</h3>
+                            <p class="text-amber-200">Kashmir's aromatic lamb curry</p>
+                        </div>
+                        <div class="absolute top-4 right-4 bg-amber-600 text-white px-3 py-1 rounded-full text-sm font-bold">2 hrs 30 mins</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex items-center">
+                                <svg class="w-5 h-5 text-amber-500 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                                </svg>
+                                <span class="text-gray-700">4.7 (87)</span>
+                            </div>
+                            <span class="text-gray-500">Serves 6</span>
+                        </div>
+                        <button class="view-recipe-btn w-full bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold py-2 px-4 rounded-lg transition flex items-center justify-center">
+                            View Recipe
+                            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#" class="inline-block bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105">
+                    Explore More Recipes
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-amber-900 mb-4">A Visual Feast</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Experience the vibrant colors and textures of Indian cuisine</p>
+                <div class="w-24 h-1 bg-amber-600 mx-auto mt-4"></div>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Indian Food" class="w-full h-48 object-cover transition duration-700 hover:scale-110">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1603893662172-99ed0cea2a08?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Indian Food" class="w-full h-48 object-cover transition duration-700 hover:scale-110">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="butter.jpeg">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="dosa.jpeg">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="josh.jpeg">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1601050690117-94f5f6fa1bd0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1587&q=80" alt="Indian Food" class="w-full h-48 object-cover transition duration-700 hover:scale-110">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Indian Food" class="w-full h-48 object-cover transition duration-700 hover:scale-110">
+                </div>
+                <div class="gallery-item overflow-hidden rounded-lg shadow-md hover:shadow-xl transition duration-500">
+                    <img src="https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1588&q=80" alt="Indian Food" class="w-full h-48 object-cover transition duration-700 hover:scale-110">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="py-20 bg-amber-800 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Join Our Culinary Journey</h2>
+            <p class="text-xl text-amber-200 mb-8">Get weekly recipes, cooking tips, and stories about Indian cuisine delivered to your inbox</p>
+            
+            <div class="max-w-md mx-auto">
+                <form class="flex flex-col sm:flex-row gap-4">
+                    <input type="email" placeholder="Your email address" class="flex-grow px-4 py-3 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="text-sm text-amber-300 mt-3">We respect your privacy. Unsubscribe at any time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-amber-900 text-amber-100 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold text-white mb-4">Flavors of India</h3>
+                    <p class="mb-4">Exploring the rich culinary heritage of India, one recipe at a time.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-amber-300 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-amber-300 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-amber-300 hover:text-white transition">
+                            <i class="fab fa-pinterest"></i>
+                        </a>
+                        <a href="#" class="text-amber-300 hover:text-white transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-4">Explore</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#history" class="hover:text-white transition">History</a></li>
+                        <li><a href="#regions" class="hover:text-white transition">Regional Cuisines</a></li>
+                        <li><a href="#recipes" class="hover:text-white transition">Recipes</a></li>
+                        <li><a href="#spices" class="hover:text-white transition">Spices</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-white transition">Cooking Classes</a></li>
+                        <li><a href="#" class="hover:text-white transition">Spice Guides</a></li>
+                        <li><a href="#" class="hover:text-white transition">Kitchen Essentials</a></li>
+                        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-bold text-white mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            contact@flavorsofindia.com
+                        </li>
+                        <li class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                            </svg>
+                            9986194679
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-amber-800 mt-12 pt-8 text-center text-sm">
+                <p>&copy; 2025 Flavors of India. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Recipe Modal -->
+    <div id="recipe-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="relative">
+                <button id="close-modal" class="absolute top-4 right-4 bg-white rounded-full p-2 shadow-lg z-10">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                <img id="modal-image" src="" alt="" class="w-full h-64 md:h-80 object-cover rounded-t-xl">
+            </div>
+            
+            <div class="p-6 md:p-8">
+                <h2 id="modal-title" class="text-3xl font-bold text-amber-900 mb-2"></h2>
+                <p id="modal-subtitle" class="text-xl text-gray-600 mb-6"></p>
+                
+                <div class="grid md:grid-cols-3 gap-8 mb-8">
+                    <div class="bg-amber-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-amber-800 mb-2">Prep Time</h4>
+                        <p id="prep-time" class="text-gray-700"></p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-amber-800 mb-2">Cook Time</h4>
+                        <p id="cook-time" class="text-gray-700"></p>
+                    </div>
+                    <div class="bg-amber-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-amber-800 mb-2">Servings</h4>
+                        <p id="servings" class="text-gray-700"></p>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-amber-800 mb-4">Ingredients</h3>
+                        <ul id="ingredients" class="space-y-2 text-gray-700">
+                            <!-- Filled by JavaScript -->
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold text-amber-800 mb-4">Instructions</h3>
+                        <ol id="instructions" class="space-y-4 text-gray-700">
+                            <!-- Filled by JavaScript -->
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-btn').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                document.getElementById('mobile-menu').classList.add('hidden');
+            });
+        });
+
+        // Recipe data
+        const recipes = [
+            {
+                id: 1,
+                title: "Butter Chicken",
+                subtitle: "North India's creamy delight",
+                image: "https://images.unsplash.com/photo-1633945274309-2c16cf9687a4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                prepTime: "15 mins",
+                cookTime: "30 mins",
+                servings: "4",
+                ingredients: [
+                    "500g boneless chicken, cut into pieces",
+                    "1 cup yogurt",
+                    "2 tbsp lemon juice",
+                    "1 tbsp ginger-garlic paste",
+                    "1 tsp turmeric powder",
+                    "2 tsp garam masala",
+                    "1 tsp chili powder",
+                    "2 tbsp butter",
+                    "1 large onion, finely chopped",
+                    "1 can (400g) tomato puree",
+                    "1 cup heavy cream",
+                    "1 tsp sugar",
+                    "Salt to taste",
+                    "Fresh coriander for garnish"
+                ],
+                instructions: [
+                    "Marinate chicken with yogurt, lemon juice, ginger-garlic paste, turmeric, 1 tsp garam masala, and chili powder. Refrigerate for at least 1 hour.",
+                    "Grill or bake the chicken until cooked through. Set aside.",
+                    "In a pan, melt butter and sauté onions until golden brown.",
+                    "Add tomato puree and cook for 5 minutes. Add remaining garam masala, sugar, and salt.",
+                    "Stir in cream and simmer for 10 minutes on low heat.",
+                    "Add grilled chicken pieces and simmer for another 5 minutes.",
+                    "Garnish with fresh coriander and serve with naan or rice."
+                ]
+            },
+            {
+                id: 2,
+                title: "Masala Dosa",
+                subtitle: "South India's crispy pancake",
+                image: "https://images.unsplash.com/photo-1632818924360-68d4994cfdb2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                prepTime: "8 hours (fermentation)",
+                cookTime: "20 mins",
+                servings: "2",
+                ingredients: [
+                    "1 cup rice",
+                    "1/4 cup urad dal (black gram)",
+                    "1/2 tsp fenugreek seeds",
+                    "Salt to taste",
+                    "Oil for cooking",
+                    "For potato filling:",
+                    "3 medium potatoes, boiled and mashed",
+                    "1 onion, finely chopped",
+                    "1 green chili, chopped",
+                    "1/2 tsp mustard seeds",
+                    "1/2 tsp turmeric powder",
+                    "1 sprig curry leaves",
+                    "2 tbsp oil",
+                    "Salt to taste"
+                ],
+                instructions: [
+                    "Soak rice, urad dal, and fenugreek seeds separately for 4-6 hours.",
+                    "Grind to a smooth batter, mix together, add salt, and let ferment overnight.",
+                    "For filling: Heat oil, add mustard seeds. When they pop, add curry leaves, onion, and green chili.",
+                    "Add turmeric and mashed potatoes. Mix well and cook for 2-3 minutes.",
+                    "Heat a griddle, pour ladle of batter, spread in circular motion to make thin crepe.",
+                    "Drizzle oil around edges, cook until crisp. Place potato filling on one side, fold over.",
+                    "Serve hot with coconut chutney and sambar."
+                ]
+            },
+            {
+                id: 3,
+                title: "Rogan Josh",
+                subtitle: "Kashmir's aromatic lamb curry",
+                image: "https://images.unsplash.com/photo-1603893662172-99ed0cea2a08?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+                prepTime: "30 mins",
+                cookTime: "2 hours",
+                servings: "6",
+                ingredients: [
+                    "1 kg lamb, cut into pieces",
+                    "1 cup yogurt",
+                    "2 onions, finely sliced",
+                    "4 tbsp mustard oil",
+                    "1 tbsp ginger-garlic paste",
+                    "2 tsp fennel powder",
+                    "1 tsp dry ginger powder",
+                    "1 tsp asafoetida",
+                    "2 tsp Kashmiri red chili powder",
+                    "1 tsp garam masala",
+                    "1 tsp cardamom powder",
+                    "1/2 cup mustard oil",
+                    "Salt to taste",
+                    "Fresh coriander for garnish"
+                ],
+                instructions: [
+                    "Marinate lamb with yogurt, ginger-garlic paste, and salt for 2 hours.",
+                    "Heat mustard oil until smoking point, then cool slightly. Add onions and sauté until golden.",
+                    "Add marinated lamb and cook on high heat for 10 minutes.",
+                    "Add all dry spices and mix well. Cook for another 5 minutes.",
+                    "Add 2 cups water, cover and simmer on low heat for 1.5 hours until lamb is tender.",
+                    "Uncover and cook until oil separates from gravy.",
+                    "Garnish with fresh coriander and serve with steamed rice."
+                ]
+            }
+        ];
+
+        // Recipe modal functionality
+        document.querySelectorAll('.view-recipe-btn').forEach((btn, index) => {
+            btn.addEventListener('click', function() {
+                const recipe = recipes[index];
+                document.getElementById('modal-title').textContent = recipe.title;
+                document.getElementById('modal-subtitle').textContent = recipe.subtitle;
+                document.getElementById('modal-image').src = recipe.image;
+                document.getElementById('prep-time').textContent = recipe.prepTime;
+                document.getElementById('cook-time').textContent = recipe.cookTime;
+                document.getElementById('servings').textContent = recipe.servings;
+                
+                const ingredientsList = document.getElementById('ingredients');
+                ingredientsList.innerHTML = '';
+                recipe.ingredients.forEach(ingredient => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start';
+                    li.innerHTML = `
+                        <svg class="w-5 h-5 text-amber-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>${ingredient}</span>
+                    `;
+                    ingredientsList.appendChild(li);
+                });
+                
+                const instructionsList = document.getElementById('instructions');
+                instructionsList.innerHTML = '';
+                recipe.instructions.forEach((instruction, i) => {
+                    const li = document.createElement('li');
+                    li.className = 'flex';
+                    li.innerHTML = `
+                        <span class="bg-amber-600 text-white font-bold rounded-full w-8 h-8 flex items-center justify-center mr-4 flex-shrink-0">${i+1}</span>
+                        <span>${instruction}</span>
+                    `;
+                    instructionsList.appendChild(li);
+                });
+                
+                document.getElementById('recipe-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close modal
+        document.getElementById('close-modal').addEventListener('click', function() {
+            document.getElementById('recipe-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Scroll reveal animations
+        ScrollReveal().reveal('.history-timeline', { 
+            delay: 300,
+            distance: '50px',
+            origin: 'left'
+        });
+        
+        ScrollReveal().reveal('.food-card', { 
+            delay: 200,
+            distance: '30px',
+            interval: 100,
+            origin: 'bottom'
+        });
+        
+        ScrollReveal().reveal('.gallery-item', { 
+            delay: 100,
+            distance: '20px',
+            interval: 50,
+            origin: 'bottom'
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
