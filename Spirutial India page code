@@ -1,0 +1,320 @@
+//Spiritual code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiritual Journeys in India</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        primaryDark: '#4A49B0',
+                        light: '#FFFFFF',
+                        dark: '#181818',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    <style>
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .dark .card-hover:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-light dark:bg-dark text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white dark:bg-dark shadow-md dark:shadow-gray-800">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-primary dark:text-primary text-3xl">ॐ</span>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Divine India</h1>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="#home" class="hover:text-primary dark:hover:text-primary transition-colors">Home</a>
+                <a href="#destinations" class="hover:text-primary dark:hover:text-primary transition-colors">Destinations</a>
+                <a href="#about" class="hover:text-primary dark:hover:text-primary transition-colors">About</a>
+                <button id="darkModeToggle" class="focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </nav>
+            <button id="mobileMenuButton" class="md:hidden focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden px-4 py-2 bg-white dark:bg-gray-900 shadow-lg">
+            <div class="flex flex-col space-y-3 pb-3">
+                <a href="#home" class="hover:text-primary dark:hover:text-primary transition-colors">Home</a>
+                <a href="#destinations" class="hover:text-primary dark:hover:text-primary transition-colors">Destinations</a>
+                <a href="#about" class="hover:text-primary dark:hover:text-primary transition-colors">About</a>
+                <button id="mobileDarkModeToggle" class="focus:outline-none flex items-center">
+                    <span class="mr-2">Toggle Dark Mode</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-[60vh] md:h-[70vh] overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-black/60 to-black/40"></div>
+        <img 
+            src="spiritualindia.jpeg" 
+            alt="Spiritual India" 
+            class="absolute inset-0 w-full h-full object-cover"
+        >
+        <div class="relative container mx-auto px-4 h-full flex flex-col justify-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 animate-fade-in">
+                Sacred Spiritual Journeys
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 max-w-2xl animate-fade-in">
+                Discover the ancient wisdom and divine experiences across India's most spiritual destinations
+            </p>
+            <a href="#destinations" class="mt-8 px-6 py-3 bg-primary hover:bg-primaryDark text-white rounded-full inline-block w-fit transition-all duration-300 animate-fade-in">
+                Explore Destinations
+            </a>
+        </div>
+    </section>
+
+    <!-- Introduction -->
+    <section id="about" class="py-16 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-10">India: A Land of Spiritual Awakening</h2>
+            <div class="max-w-4xl mx-auto">
+                <p class="text-lg leading-relaxed mb-6">
+                    For millennia, India has been the cradle of spiritual traditions that have transformed humanity. From the banks of the sacred Ganges to the snow-capped Himalayas, this ancient land offers profound experiences for seekers on their path to self-discovery.
+                </p>
+                <p class="text-lg leading-relaxed">
+                    Whether you seek meditation, yoga, ancient rituals, or simply a connection to something greater than yourself, India's spiritual destinations offer transformative experiences that have drawn pilgrims and spiritual seekers from across the globe.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations -->
+    <section id="destinations" class="py-16 bg-white dark:bg-dark">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-16">Sacred Destinations</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Varanasi -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-64 overflow-hidden">
+                        <img src="varanasi.jpeg" alt="Varanasi" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Varanasi</h3>
+                        <p class="text-primary dark:text-primary font-medium mb-4">Famous for: Ancient Ghats, Ganges River, Evening Aarti</p>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            One of the world's oldest continuously inhabited cities, Varanasi is considered the spiritual capital of India. The sacred Ganges River and its ghats offer pilgrims a place for ritual bathing and cremation ceremonies.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Rishikesh -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-64 overflow-hidden">
+                        <img src="rishikesh.jpeg" alt="Rishikesh" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Rishikesh</h3>
+                        <p class="text-primary dark:text-primary font-medium mb-4">Famous for: Yoga Capital, Beatles Ashram, Ganges River</p>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            Known as the "Yoga Capital of the World," Rishikesh attracts spiritual seekers with its numerous ashrams, yoga retreats, and the sacred Ganges River flowing through lush landscapes.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bodh Gaya -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-64 overflow-hidden">
+                        <img src="bodhgaya.jpeg" alt="Bodh Gaya" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Bodh Gaya</h3>
+                        <p class="text-primary dark:text-primary font-medium mb-4">Famous for: Buddha's Enlightenment, Mahabodhi Temple</p>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            The place where Gautama Buddha attained enlightenment under the Bodhi Tree. The Mahabodhi Temple Complex is a UNESCO World Heritage site and a key pilgrimage site for Buddhists worldwide.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Amritsar -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-64 overflow-hidden">
+                        <img src="amritsar.jpeg" alt="Amritsar Golden Temple" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Amritsar</h3>
+                        <p class="text-primary dark:text-primary font-medium mb-4">Famous for: Golden Temple, Sikh Spiritual Center</p>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            Home to the stunning Golden Temple (Harmandir Sahib), the spiritual center of the Sikh faith. The temple's golden structure reflected in the surrounding sacred pool creates a serene and divine atmosphere.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Dharamshala -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-64 overflow-hidden">
+                        <img src="dharamshala.jpeg" alt="Dharamshala" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Dharamshala</h3>
+                        <p class="text-primary dark:text-primary font-medium mb-4">Famous for: Dalai Lama Residence, Tibetan Buddhism</p>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            Home to the Dalai Lama and the Tibetan government-in-exile. This serene hill station in the Himalayas offers monasteries, meditation centers, and pristine natural beauty.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Haridwar -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg card-hover">
+                    <div class="h-64 overflow-hidden">
+                        <img src="haridwar.jpeg" alt="Haridwar" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold mb-2">Haridwar</h3>
+                        <p class="text-primary dark:text-primary font-medium mb-4">Famous for: Sacred Bathing Ghats, Evening Ganga Aarti</p>
+                        <p class="text-gray-700 dark:text-gray-300">
+                            One of the seven holiest places in Hinduism where the Ganges River emerges from the mountains into the plains. The evening Ganga Aarti (fire ceremony) at Har Ki Pauri ghat is a mesmerizing spiritual experience.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="relative py-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60"></div>
+        <img 
+            src="https://images.unsplash.com/photo-1600100598311-6c9f91887b03?q=80&w=1920&auto=format&fit=crop" 
+            alt="Spiritual Journey" 
+            class="absolute inset-0 w-full h-full object-cover mix-blend-overlay"
+        >
+        <div class="relative container mx-auto px-4 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Embark on Your Spiritual Journey Today</h2>
+            <p class="text-xl text-white/90 max-w-3xl mx-auto mb-8">
+                Experience the transformative power of India's sacred destinations and connect with traditions thousands of years in the making.
+            </p>
+            <button class="px-8 py-4 bg-white hover:bg-gray-100 text-primary font-bold rounded-full text-lg transition-all duration-300">
+                Plan Your Journey
+            </button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="text-primary text-2xl mr-2">ॐ</span> Divine India
+                    </h3>
+                    <p class="text-gray-400">
+                        Guiding spiritual seekers to India's most sacred destinations since 2024.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#destinations" class="text-gray-400 hover:text-primary transition-colors">Destinations</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-primary transition-colors">About</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-gray-400">
+                        <li>Email: contact@divineindia.com</li>
+                        <li>Phone: +91 98765 43210</li>
+                        <li>Address: New Delhi, India</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2024 Divine India. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Dark mode toggle
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMode);
+        document.getElementById('mobileDarkModeToggle').addEventListener('click', toggleDarkMode);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                // Close mobile menu if open
+                document.getElementById('mobileMenu').classList.add('hidden');
+                
+                // Scroll to section
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
