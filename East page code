@@ -1,0 +1,833 @@
+//East page code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>East India: Cultural Heritage</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#FF9933',  // Saffron
+                        secondary: '#138808', // Green
+                        accent: '#5D5CDE',
+                        dark: '#181818',
+                        eastblue: '#2A6A9E', // Water theme color for East India
+                        eastgreen: '#1E5631', // Lush green representing East's landscapes
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                        'bounce-light': 'bounceLight 2s infinite',
+                        'wave': 'wave 5s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        bounceLight: {
+                            '0%, 100%': { transform: 'translateY(0)', opacity: '1' },
+                            '50%': { transform: 'translateY(-10px)', opacity: '0.8' },
+                        },
+                        wave: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '50%': { transform: 'translateX(20px)' },
+                        }
+                    },
+                    backgroundImage: {
+                        'river-pattern': "url('data:image/svg+xml,%3Csvg width='100' height='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 10 Q 25 0, 50 10 T 100 10' stroke='%232A6A9E' stroke-width='2' fill='none'/%3E%3C/svg%3E')",
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .scroll-trigger {
+            opacity: 0;
+        }
+        
+        .scroll-trigger.active {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .dark .card {
+            background-color: #2d2d2d;
+        }
+        
+        .dark .bg-white {
+            background-color: #1f1f1f;
+        }
+        
+        .dark .text-gray-800 {
+            color: #e0e0e0;
+        }
+        
+        .dark .text-gray-700 {
+            color: #d0d0d0;
+        }
+        
+        .dark .text-gray-600 {
+            color: #b0b0b0;
+        }
+        
+        .shadow-special {
+            box-shadow: 0 0 15px rgba(42, 106, 158, 0.5);
+        }
+        
+        .dark .shadow-special {
+            box-shadow: 0 0 20px rgba(42, 106, 158, 0.7);
+        }
+
+        .hidden-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .expanded .hidden-content {
+            max-height: 2000px;
+            transition: max-height 1s ease-in;
+        }
+
+        .rotate-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expanded .rotate-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Dark mode toggle animation */
+        .toggle-circle {
+            transition: transform 0.3s ease;
+        }
+        
+        .dark .toggle-circle {
+            transform: translateX(1.5rem);
+        }
+
+        /* Wave pattern */
+        .wave-pattern {
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 10 Q 25 0, 50 10 T 100 10" stroke="%232A6A9E" stroke-width="2" fill="none"/%3E%3C/svg%3E');
+            background-repeat: repeat-x;
+            animation: wave-move 10s linear infinite;
+        }
+
+        .dark .wave-pattern {
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 10 Q 25 0, 50 10 T 100 10" stroke="%23418fb6" stroke-width="2" fill="none"/%3E%3C/svg%3E');
+        }
+
+        @keyframes wave-move {
+            from { background-position: 0 0; }
+            to { background-position: 100% 0; }
+        }
+    </style>
+</head>
+<body class="font-sans bg-white dark:bg-dark text-gray-800 dark:text-gray-100 transition-colors duration-300">
+    <!-- Dark Mode Toggle -->
+    <div class="fixed top-4 right-4 z-50 flex">
+        <button id="dark-mode-toggle" class="flex items-center justify-start p-1 bg-gray-200 dark:bg-gray-700 rounded-full w-16 h-8 transition-colors duration-300">
+            <div class="toggle-circle bg-white dark:bg-eastblue w-6 h-6 rounded-full shadow-md flex items-center justify-center">
+                <i class="fas fa-sun text-yellow-400 dark:hidden text-xs"></i>
+                <i class="fas fa-moon text-blue-300 hidden dark:block text-xs"></i>
+            </div>
+        </button>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-r from-eastblue/70 to-eastgreen/70 z-10"></div>
+            <img src="https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&q=80" 
+                 alt="East India background" class="w-full h-full object-cover">
+        </div>
+        
+        <nav class="relative z-20 px-4 py-6 flex items-center justify-between">
+            <div class="flex items-center">
+                <i class="fas fa-water text-white text-3xl mr-2 animate-float"></i>
+                <h1 class="text-white text-2xl font-bold">East India Heritage</h1>
+            </div>
+            
+            <ul class="hidden md:flex space-x-8 text-white font-medium">
+                <li><a href="#home" class="hover:text-blue-200 transition">Home</a></li>
+                <li><a href="#food" class="hover:text-blue-200 transition">Cuisine</a></li>
+                <li><a href="#festivals" class="hover:text-blue-200 transition">Festivals</a></li>
+            </ul>
+            
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </nav>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-0 right-0 bg-white dark:bg-gray-800 z-30 shadow-lg animate-fade-in">
+            <ul class="py-4 px-6 space-y-4">
+                <li><a href="#home" class="block text-gray-800 dark:text-white font-medium">Home</a></li>
+                <li><a href="#food" class="block text-gray-800 dark:text-white font-medium">Cuisine</a></li>
+                <li><a href="#festivals" class="block text-gray-800 dark:text-white font-medium">Festivals</a></li>
+            </ul>
+        </div>
+        
+        <!-- Hero Section -->
+        <div id="home" class="relative z-10 px-6 py-24 md:py-32 max-w-6xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 opacity-0 animate-fade-in" style="animation-delay: 0.3s;">
+                The Mystique of East India
+            </h1>
+            <p class="text-lg md:text-xl text-white opacity-80 mb-10 max-w-2xl mx-auto opacity-0 animate-fade-in" style="animation-delay: 0.6s;">
+                Where rivers flow through stories, traditions blend with modernity, and cultures create a tapestry of diversity
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fade-in" style="animation-delay: 0.9s;">
+                <a href="#food" class="bg-white text-eastblue px-8 py-3 rounded-full font-medium hover:bg-gray-100 transition shadow-lg">
+                    Explore Cuisine
+                </a>
+                <a href="#festivals" class="bg-transparent text-white border-2 border-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition">
+                    Discover Festivals
+                </a>
+            </div>
+        </div>
+        
+        <!-- Floating elements -->
+        <div class="absolute bottom-10 left-10 w-16 h-16 bg-white/10 rounded-full animate-float" style="animation-delay: 0.2s;"></div>
+        <div class="absolute top-40 right-20 w-10 h-10 bg-white/10 rounded-full animate-float" style="animation-delay: 0.5s;"></div>
+        <div class="absolute bottom-40 right-40 w-24 h-24 bg-white/10 rounded-full animate-float" style="animation-delay: 0.8s;"></div>
+    </header>
+    
+    <!-- Introduction Section -->
+    <section class="px-6 py-20 bg-gray-50 dark:bg-gray-900 relative">
+        <div class="wave-pattern absolute h-6 w-full top-0 left-0 opacity-30"></div>
+        <div class="wave-pattern absolute h-6 w-full bottom-0 left-0 opacity-30"></div>
+        
+        <div class="max-w-4xl mx-auto text-center scroll-trigger">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">The Cultural Mosaic of East India</h2>
+            <p class="text-gray-700 dark:text-gray-300 mb-10">
+                East India encompasses the states of West Bengal, Odisha, Bihar, Jharkhand, and the Seven Sisters of the Northeast.
+                This region, cradled by the mighty rivers Ganges and Brahmaputra, is a melting pot of cultures,
+                where ancient traditions blend with colonial influences, creating a unique cultural identity.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md text-center">
+                    <i class="fas fa-water text-4xl text-eastblue mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">River Culture</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Life revolves around mighty rivers that shape traditions, livelihoods, and celebrations
+                    </p>
+                </div>
+                <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md text-center">
+                    <i class="fas fa-music text-4xl text-eastblue mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Rich Arts</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Home to classical dance forms, literary traditions, and distinctive artistic styles
+                    </p>
+                </div>
+                <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-md text-center">
+                    <i class="fas fa-landmark text-4xl text-eastblue mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Historical Depth</h3>
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Ancient empires, Buddhist heritage, and colonial influences create a layered history
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Food Section -->
+    <section id="food" class="px-6 py-24 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-100 dark:to-gray-900 z-0"></div>
+        
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="text-center mb-16 scroll-trigger">
+                <h2 class="text-4xl font-bold mb-6">Flavors of the East</h2>
+                <p class="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+                    East Indian cuisine is characterized by its subtle flavors, masterful use of seafood, and the distinctive 
+                    influence of mustard oil. From sweet delicacies to hearty rice dishes, the region offers a diverse palette of tastes.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Rasgulla Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="rasagulla.jpeg" alt="Rasgulla" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Rasgulla</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Spongy cheese balls soaked in sugar syrup, a beloved Bengali sweet.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Origin Controversy</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                The origin of rasgulla sparked one of India's most famous culinary disputes between West Bengal and Odisha. 
+                                While Bengal claims Nabin Chandra Das invented it in 1868, Odisha asserts it evolved from the temple 
+                                offering "Kheer Mohana" in Puri, dating back at least 600 years. In 2017, West Bengal received the 
+                                Geographical Indication (GI) tag for "Banglar Rasgulla" while in 2018, Odisha received the GI tag for 
+                                "Odisha Rasgulla," acknowledging both variants as distinct.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Cultural Significance</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                In Bengali culture, rasgulla is more than just a sweet – it's a symbol of celebration. It's traditionally 
+                                offered as "mukh mishti" (sweetening the mouth) at the end of important ceremonies. In Odisha, 
+                                particularly at the Jagannath Temple, offering rasgulla to appease Goddess Lakshmi is a crucial part of 
+                                the Rath Yatra festival, highlighting its religious significance.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Culinary Innovation</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                The creation of rasgulla demonstrates remarkable food science understanding. The cheesemakers discovered 
+                                that heating chhana (cottage cheese) with semolina under precise conditions creates a spongy texture 
+                                that can absorb sugar syrup. Modern variations include chocolate rasgulla, mango rasgulla, and even 
+                                a vacuum-packed canned version that helped spread this regional delicacy worldwide.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Machher Jhol Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="fishfry.jpeg" alt="Bengali Fish Curry" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Machher Jhol</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Traditional Bengali fish curry with light, flavorful gravy.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">River-Influenced Cuisine</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Machher Jhol (fish curry) embodies the riverine identity of Bengal. With rivers like Hooghly, Padma, and 
+                                numerous tributaries flowing through the region, fish became central to Bengali cuisine and culture. 
+                                The traditional saying "Machhe Bhate Bangali" (Bengalis thrive on fish and rice) reflects this deep 
+                                connection. Historically, different fish were associated with specific social occasions and seasons.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Culinary Technique</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                True Machher Jhol represents culinary precision. The key lies in the "panch phoron" (five-spice blend) 
+                                tempered in mustard oil, creating a distinctive base flavor. The gravy is typically light, allowing the 
+                                fish's natural flavors to shine. Different variations exist, from the simple "tel jhol" (with minimal 
+                                spices) to the more complex "jhal jhol" (spicy variant with green chilies). The most prized fish for 
+                                this dish is Rohu (Rui), though Katla and Hilsa are also used for special occasions.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Social Ritual</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                Serving Machher Jhol follows specific etiquette in traditional Bengali households. The fish head is 
+                                offered to the most respected or eldest family member as a sign of honor. Meals are often served 
+                                in a specific sequence, with fish curry coming after bitter vegetables (shukto) but before sweet 
+                                dishes. During Bengali weddings, serving fish symbolizes prosperity and fertility for the newlyweds.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Litti Chokha Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="Litti-Chokha.jpeg" alt="Litti Chokha" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Litti Chokha</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Roasted wheat balls filled with spiced sattu, served with mashed vegetables.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Historical Resilience</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Litti Chokha's origins demonstrate remarkable adaptation to challenging circumstances. During the 1857 
+                                Indian rebellion against British rule, this dish became crucial for freedom fighters. Its long shelf life, 
+                                no need for utensils, and high nutritional content made it ideal for soldiers on the move. The dish could 
+                                be prepared in advance, buried in sand, and cooked slowly with minimal fire, preventing detection by 
+                                British forces.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Nutritional Wisdom</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                At the heart of Litti is sattu – roasted gram flour that is remarkably nutritious. Rich in protein, fiber, 
+                                and complex carbohydrates, sattu provides sustained energy and was ideal for regions prone to food scarcity. 
+                                The accompanying chokha – made from roasted and mashed vegetables like eggplant, potatoes, and tomatoes – 
+                                adds essential vitamins and minerals. This balanced combination developed intuitively in a resource-limited 
+                                environment, showcasing the nutritional wisdom embedded in traditional cuisines.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Regional Identity</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                While primarily associated with Bihar, Litti Chokha enjoys variations across eastern India, including 
+                                parts of Jharkhand and eastern Uttar Pradesh. In Bihar, it remains a cultural cornerstone, celebrated in 
+                                folk songs and regional literature. Despite its humble origins, it has transcended class boundaries to 
+                                become a unifying dish enjoyed by all social strata. Recent years have seen gourmet adaptations in urban 
+                                restaurants, though purists insist that authentic Litti must be roasted over cow dung cakes for its 
+                                distinctive smoky flavor.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pitha Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="pist.jpg" alt="Assamese Pitha" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Pitha</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Traditional rice cakes from Assam and Northeast India with various fillings.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Harvest Celebration</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Pitha is intrinsically linked to harvest festivals across Northeast India, particularly during Bihu in Assam 
+                                and Poush Parbon in Bengal. These rice cakes celebrate the first rice harvest of the season, symbolizing 
+                                prosperity and gratitude. The preparation of various pitha types is not just cooking but a ceremonial 
+                                activity where women gather to make them collectively, sharing stories and strengthening community bonds.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Diverse Varieties</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                The genius of pitha lies in its versatility. Different regions have developed dozens of varieties:
+                                <br>- Til Pitha: Rice flour pancakes with sesame filling
+                                <br>- Ghila Pitha: Deep-fried rice flour dough shaped like donuts
+                                <br>- Sunga Pitha: Rice batter cooked inside bamboo tubes
+                                <br>- Bhapa Pitha: Steamed with coconut fillings
+                                <br>- Chitoi Pitha: Soft spongy rice cakes with tiny holes
+                                Each type requires specific techniques passed down through generations, with cooking methods ranging from 
+                                steaming and frying to roasting and baking.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Cultural Preservation</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                In modern times, pitha-making has become a symbol of cultural preservation for communities from Northeast 
+                                India. As urbanization changes traditional lifestyles, seasonal pitha-making workshops and competitions 
+                                have emerged to pass skills to younger generations. The dish represents the agricultural heritage, 
+                                sophisticated food preservation techniques, and the use of locally available ingredients – serving as 
+                                an edible archive of Northeast Indian cultural knowledge.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Festival Section -->
+    <section id="festivals" class="px-6 py-24 bg-gray-100 dark:bg-gray-900 relative">
+        <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white dark:from-gray-900 to-transparent z-10"></div>
+        
+        <div class="max-w-6xl mx-auto relative z-20">
+            <div class="text-center mb-16 scroll-trigger">
+                <h2 class="text-4xl font-bold mb-6">Celebrations of East India</h2>
+                <p class="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
+                    East India's festivals blend religious devotion with artistic expression, historical commemoration, and seasonal cycles.
+                    These celebrations showcase the region's deep cultural roots and vibrant community spirit.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <!-- Durga Puja Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden shadow-special">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="durga.jpeg" alt="Durga Puja" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Durga Puja</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Bengal's greatest festival celebrating the goddess Durga's victory over evil.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Artistic Phenomenon</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Durga Puja has evolved into one of the world's largest art festivals. Each year, thousands of pandals 
+                                (temporary structures) transform Kolkata and other Bengali cities into open-air galleries. These pandals 
+                                showcase incredible creativity with themes ranging from ancient temples to contemporary social issues. 
+                                In 2021, UNESCO recognized Durga Puja on its Representative List of the Intangible Cultural Heritage of 
+                                Humanity, acknowledging its unique blend of religion, art, and communal harmony.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Historical Evolution</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                While the worship of Goddess Durga dates back centuries, the grand public celebration began during 
+                                18th-century Bengal. The first recorded grand community puja (sarbojanin) was organized by twelve friends 
+                                in Guptipara, Hooghly, in 1790. During British colonial rule, wealthy landlords (zamindars) started organizing 
+                                lavish pujas. The festival took on nationalist overtones during India's freedom struggle, with community 
+                                pujas becoming expressions of cultural identity and resistance. Post-independence, it evolved into the 
+                                spectacular carnival-like celebration seen today.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Economic Engine</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                Durga Puja drives a massive seasonal economy worth billions of rupees. It creates a complex ecosystem 
+                                involving artisans, decorators, lighting specialists, clothing retailers, food vendors, and the 
+                                entertainment industry. The festival provides critical income for thousands of traditional craftspeople, 
+                                particularly the kumors (clay artisans) who create the elaborate idols. In recent years, corporate 
+                                sponsorship has transformed many pujas into major commercial events with budgets sometimes exceeding 
+                                ₹1 crore (approximately $120,000) for a single pandal.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bihu Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="bihu.jpg" alt="Bihu Dance" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Bihu</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Assam's most important festival marking seasonal transitions and agricultural cycles.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Three Seasonal Celebrations</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Bihu is actually a set of three distinct festivals marking Assam's agricultural calendar:
+                                <br>- Bohag Bihu (Rongali Bihu): Celebrated in April, it marks the Assamese New Year and spring season when 
+                                fields are prepared for cultivation. It's the most exuberant of the three.
+                                <br>- Magh Bihu (Bhogali Bihu): January's harvest festival involves community feasting and bonfires.
+                                <br>- Kati Bihu (Kongali Bihu): October's somber festival happens during the lean agricultural period, with 
+                                lamps lit in paddy fields to guide the spirits of prosperity.
+                                This triple celebration demonstrates Assamese society's deep connection to agricultural rhythms.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Cultural Expression</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                The vibrant Bihu dance embodies Assamese cultural identity. Performed with dynamic movements and 
+                                accompanied by traditional instruments like the dhol (drum), pepa (buffalo horn pipe), and gagana 
+                                (bamboo instrument), it represents youthful energy and fertility. Originally performed in rice fields to 
+                                celebrate harvest, the dance features intricate hand gestures and rapid hip movements. Young men and 
+                                women dance separately and then together, symbolizing the community's wishes for agricultural prosperity.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Communal Harmony</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                Bihu holds significance as a unifying cultural force in Assam's diverse society. Though originally an 
+                                indigenous pre-Hindu tradition, it is now celebrated by people of all religions and ethnic backgrounds 
+                                in Assam, including Muslims, Christians, and various tribal communities. During a time when regional 
+                                identities are sometimes under pressure, Bihu serves as a cultural anchor that transcends religious 
+                                boundaries while preserving local heritage against homogenizing globalizing influences.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rath Yatra Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="rath.jpeg" alt="Rath Yatra" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Rath Yatra</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Odisha's ancient chariot festival dedicated to Lord Jagannath.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Engineering Marvel</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                The Rath Yatra features three massive wooden chariots that are rebuilt every year using traditional 
+                                techniques without formal blueprints. The largest chariot, Lord Jagannath's Nandighosha, stands 45 feet 
+                                tall and has 16 wheels. These chariots represent remarkable engineering knowledge passed down through 
+                                generations of craftsmen called Maharanas. The construction follows precise rituals starting on Akshaya 
+                                Tritiya day, taking exactly 58 days to complete. Each chariot requires hundreds of logs and thousands of 
+                                man-hours with no modern tools used – a testament to ancient Indian engineering excellence.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Historical Continuity</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                The Rath Yatra of Puri is possibly the world's oldest continuously celebrated festival. Historical records 
+                                confirm it has been observed annually since at least the 12th century CE without interruption, even during 
+                                foreign invasions, natural disasters, and pandemics (with modifications during COVID-19). The earliest mention 
+                                of the chariot procession appears in the Skanda Purana, and carvings at the Konark Sun Temple (13th century) 
+                                depict the festival. This remarkable continuity makes it a living museum of religious and cultural practices.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Global Influence</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                The Rath Yatra has influenced world culture in unexpected ways. The English word "juggernaut" (meaning 
+                                unstoppable force) derives from Jagannath's chariot, as described by British colonizers who witnessed 
+                                devotees' fervor during the festival. The ISKCON movement popularized the festival globally, with over 
+                                175 cities worldwide now hosting their own Rath Yatras. During the festival, Puri exemplifies remarkable 
+                                social inclusivity – it's one of the rare occasions in traditional Hindu practice where caste distinctions 
+                                are officially suspended, as devotees of all backgrounds can touch the deities' chariots.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Chhath Puja Card -->
+                <div class="card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                    <div class="relative h-60 overflow-hidden">
+                        <img src="chath.jpeg" alt="Chhath Puja" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    </div>
+                    <div class="p-6 expandable-card">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-2xl font-bold">Chhath Puja</h3>
+                            <button class="expand-btn text-accent">
+                                <i class="fas fa-chevron-down rotate-icon"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">
+                            Bihar's ancient festival worshipping the sun god and celebrating water sources.
+                        </p>
+                        <div class="hidden-content">
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Ancient Solar Worship</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Chhath Puja predates written history, with some scholars tracing it to the Vedic period when the sun was 
+                                worshipped as the source of all energy. Historical evidence suggests it was observed in the ancient Magadh 
+                                kingdom (modern-day Bihar) at least 3,000 years ago. The festival is dedicated primarily to Surya (the sun god) 
+                                and Chhathi Maiya (believed to be Surya's sister), making it one of the rare Hindu celebrations where a female 
+                                deity is the primary focus. The rituals show striking parallels to ancient Egyptian and Mesopotamian solar 
+                                worship practices.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Environmental Significance</h4>
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Chhath Puja embodies profound environmental wisdom. The rituals purify water bodies and emphasize harmony 
+                                with nature. Devotees (vratins) stand in water for extended periods, offering prayers at sunrise and sunset – 
+                                the two transitional periods when solar ultraviolet radiation naturally purifies water. The strict fasting and 
+                                use of natural materials like bamboo, clay, and biodegradable substances demonstrate sustainable practices 
+                                long before modern environmentalism. The festival essentially creates community accountability for maintaining 
+                                clean water sources, with rivers and ponds specially cleaned before celebrations.
+                            </p>
+                            <h4 class="font-semibold text-lg mt-4 mb-2">Women's Central Role</h4>
+                            <p class="text-gray-700 dark:text-gray-300">
+                                Chhath Puja uniquely places women at the center of religious observance. The main vratins (observers) are 
+                                typically women who undertake demanding rituals including a 36-hour waterless fast while standing for long 
+                                periods in water. This challenging observance highlights women's spiritual authority and endurance. Men 
+                                assume supportive roles, often caring for children and domestic responsibilities during the festival – a 
+                                notable role reversal in traditional societies. The festival is also remarkable for its absence of Brahmin 
+                                priests; women perform all rituals independently, representing an indigenous tradition that empowers female 
+                                religious leadership.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Special Regional Highlights -->
+    <section class="px-6 py-20 bg-white dark:bg-gray-800 relative">
+        <div class="wave-pattern absolute h-6 w-full bottom-0 left-0 opacity-30"></div>
+        
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-12 scroll-trigger">
+                <h2 class="text-3xl font-bold mb-6">The Seven Sisters of Northeast</h2>
+                <p class="text-gray-700 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+                    Beyond the states of West Bengal, Odisha, and Bihar lies the vibrant mosaic of cultures found in 
+                    Northeast India's Seven Sisters - Assam, Arunachal Pradesh, Meghalaya, Manipur, Mizoram, Nagaland, and Tripura.
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 scroll-trigger">
+                <!-- Cultural Diversity -->
+                <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition-all">
+                    <div class="w-16 h-16 bg-eastblue/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <i class="fas fa-users text-2xl text-eastblue"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Ethnic Diversity</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
+                        Home to over 220 ethnic groups and 220 languages, representing one of the world's most diverse cultural landscapes
+                    </p>
+                </div>
+                
+                <!-- Natural Beauty -->
+                <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition-all">
+                    <div class="w-16 h-16 bg-eastblue/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <i class="fas fa-mountain text-2xl text-eastblue"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Natural Wonders</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
+                        From living root bridges in Meghalaya to Manipur's floating islands, the region's natural beauty inspires unique cultural practices
+                    </p>
+                </div>
+                
+                <!-- Traditional Arts -->
+                <div class="p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition-all">
+                    <div class="w-16 h-16 bg-eastblue/10 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <i class="fas fa-paint-brush text-2xl text-eastblue"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-center">Rich Artistry</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-center">
+                        Renowned for distinctive textiles, bamboo crafts, and tribal arts that tell stories of ancestral traditions and beliefs
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 px-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-water text-eastblue text-2xl mr-2"></i>
+                        <h3 class="text-xl font-bold">East India Heritage</h3>
+                    </div>
+                    <p class="text-gray-400">
+                        Exploring the cultural richness, flavors, and celebrations of India's eastern regions.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#food" class="text-gray-400 hover:text-white transition">Cuisine</a></li>
+                        <li><a href="#festivals" class="text-gray-400 hover:text-white transition">Festivals</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Discover More</h4>
+                    <p class="text-gray-400 mb-4">
+                        This experience offers a glimpse of East India's diverse traditions, flavors, and celebrations.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="https://incredible-india.org" target="_blank" class="text-gray-400 hover:text-white transition">
+                            <i class="fas fa-globe text-xl"></i>
+                        </a>
+                        <a href="https://instagram.com/incredibleindia" target="_blank" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://youtube.com/incredibleindia" target="_blank" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-youtube text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2025 East India Heritage Experience. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        // Dark mode toggle listener
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        // Dark mode toggle button
+        document.getElementById('dark-mode-toggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+        
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Scroll animations
+        const scrollTriggers = document.querySelectorAll('.scroll-trigger');
+        
+        const observerOptions = {
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        scrollTriggers.forEach(trigger => {
+            observer.observe(trigger);
+        });
+        
+        // Expandable cards
+        const expandBtns = document.querySelectorAll('.expand-btn');
+        
+        expandBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const card = btn.closest('.expandable-card');
+                card.classList.toggle('expanded');
+            });
+        });
+    </script>
+</body>
+</html>
