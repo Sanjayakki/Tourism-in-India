@@ -1,0 +1,1752 @@
+//West page code
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wonders of West India</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        :root {
+            /* Rajasthan Colors */
+            --rajasthan-brown: #A67C52;
+            --rajasthan-orange: #F19C33;
+            --rajasthan-red: #B22234;
+            
+            /* Goa Colors */
+            --goa-teal: #0F8B8D;
+            --goa-beige: #F2D2A9;
+            --goa-pink: #FE7F9C;
+            
+            /* Rann of Kutch Colors */
+            --kutch-white: #F5F5F5;
+            --kutch-silver: #C8C8C8;
+            --kutch-indigo: #2C365E;
+            
+            /* Base Colors */
+            --primary: var(--rajasthan-orange);
+            --secondary: var(--goa-teal);
+            --accent: var(--rajasthan-red);
+            --background: #FFFFFF;
+            --text: #333333;
+        }
+        
+        .dark {
+            --background: #121212;
+            --text: #F5F5F5;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Cormorant', serif;
+        }
+        
+        .hero-text {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .section-transition {
+            transition: all 0.7s ease-in-out;
+        }
+        
+        .rajasthan-bg {
+            background: linear-gradient(45deg, var(--rajasthan-brown), var(--rajasthan-orange));
+        }
+        
+        .goa-bg {
+            background: linear-gradient(45deg, var(--goa-teal), var(--goa-beige));
+        }
+        
+        .kutch-bg {
+            background: linear-gradient(45deg, var(--kutch-silver), var(--kutch-indigo));
+        }
+        
+        .region-card {
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            cursor: pointer;
+        }
+        
+        .region-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .itinerary-card {
+            transition: transform 0.3s ease;
+        }
+        
+        .itinerary-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .festival-item {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .festival-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+        }
+        
+        .food-tile {
+            overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+        
+        .food-tile:hover img {
+            transform: scale(1.1);
+        }
+        
+        .food-tile img {
+            transition: transform 0.6s ease;
+        }
+        
+        .traveler-story {
+            transition: all 0.3s ease;
+        }
+        
+        .traveler-story:hover {
+            transform: translateY(-5px);
+        }
+        
+        .footer-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .footer-icon:hover {
+            transform: scale(1.2);
+        }
+        
+        .map-pin {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .map-pin:hover {
+            transform: scale(1.2) translateY(-5px);
+        }
+        
+        .plan-trip-button {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(242, 210, 169, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(242, 210, 169, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(242, 210, 169, 0);
+            }
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        /* Scene animations */
+        .scene-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .scene-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+
+        /* Mobile navigation */
+        .mobile-nav {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+        }
+        
+        .mobile-nav.active {
+            transform: translateX(0);
+        }
+
+        /* Letter animation for hero text */
+        .animated-letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="w-24 h-24 relative">
+            <div class="absolute top-0 left-0 w-full h-full border-8 border-t-transparent border-b-transparent rounded-full animate-spin" style="border-color: var(--rajasthan-orange) var(--rajasthan-orange) var(--goa-teal) var(--kutch-indigo); animation-duration: 1.5s;"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-lg font-bold">West India</div>
+        </div>
+    </div>
+
+    <!-- Floating Plan Trip Button -->
+    <div class="fixed bottom-8 right-8 z-50 plan-trip-button">
+       <a href="bookingoriginal.html" button class="bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-full px-5 py-3 font-bold shadow-lg flex items-center space-x-2">
+            <span>Plan Your Trip</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+        </button></a>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="fixed w-full top-0 z-50 transition-all duration-300" id="main-header">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center">
+                <span class="text-2xl font-bold text-white">Wonders of West India</span>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="#destinations" class="text-white hover:text-yellow-200 transition">Destinations</a>
+                <a href="#journey" class="text-white hover:text-yellow-200 transition">Plan Journey</a>
+                <a href="#festivals" class="text-white hover:text-yellow-200 transition">Festivals</a>
+                <a href="#food" class="text-white hover:text-yellow-200 transition">Cuisine</a>
+                <a href="#stories" class="text-white hover:text-yellow-200 transition">Stories</a>
+            </nav>
+            
+            <!-- Dark Mode Toggle -->
+            <button id="darkModeToggle" class="ml-4 w-10 h-10 rounded-full flex items-center justify-center bg-black/20 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                </svg>
+            </button>
+            
+            <!-- Mobile Menu Button -->
+            <button id="mobileMenuBtn" class="md:hidden w-10 h-10 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div id="mobileNav" class="mobile-nav absolute top-full left-0 w-full bg-black/90 md:hidden">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex flex-col space-y-4">
+                    <a href="#destinations" class="text-white hover:text-yellow-200 transition py-2">Destinations</a>
+                    <a href="#journey" class="text-white hover:text-yellow-200 transition py-2">Plan Journey</a>
+                    <a href="#festivals" class="text-white hover:text-yellow-200 transition py-2">Festivals</a>
+                    <a href="#food" class="text-white hover:text-yellow-200 transition py-2">Cuisine</a>
+                    <a href="#stories" class="text-white hover:text-yellow-200 transition py-2">Stories</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero relative h-screen overflow-hidden" id="hero">
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+        
+        <!-- Hero Carousel -->
+        <div class="hero-carousel absolute inset-0">
+            <div class="carousel-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000" style="background-image: url('https://images.unsplash.com/photo-1598507855224-ed01e2333d47?auto=format&fit=crop&q=80'); opacity: 1;"></div>
+            <div class="carousel-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000" style="background-image: url('https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&q=80');"></div>
+            <div class="carousel-slide absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-1000" style="background-image: url('https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&q=80');"></div>
+        </div>
+        
+        <!-- Hero Content -->
+<div class="relative h-full bg-gradient-to-r from-purple-600 to-indigo-800">
+    <div class="container mx-auto px-4 h-full flex items-center justify-center text-center relative z-20">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-4 hero-text">
+                <span class="block">West India:</span>
+                <span class="block">Where Desert Dances,</span>
+                <span class="block">Shores Sing, and</span>
+                <span class="block">Stars Touch Salt.</span>
+            </h1>
+            <p class="text-xl text-white/90 mb-8 hero-text">
+                Discover the rich cultural tapestry, breathtaking landscapes, and vibrant traditions of Rajasthan, Goa, and the Rann of Kutch.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#destinations" class="px-8 py-3 bg-white text-gray-900 rounded-full font-bold hover:bg-opacity-90 transition transform hover:scale-105">
+                    Explore Destinations
+                </a>
+                <a href="#journey" class="px-8 py-3 border-2 border-white text-white rounded-full font-bold hover:bg-white/20 transition transform hover:scale-105">
+                    Plan Your Journey
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+            <div class="scroll-indicator w-8 h-12 border-2 border-white rounded-full flex justify-center">
+                <div class="w-1 h-3 bg-white rounded-full mt-2"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destination Showcase -->
+    <section id="destinations" class="py-20 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 scene-element"><Discover Mystical West India</h2>
+            
+            <!-- Rajasthan -->
+            <div class="destination-block mb-24 scene-element">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="md:w-1/2">
+                        <div class="relative overflow-hidden rounded-lg aspect-video">
+                            <img src="rajasthan.jpeg" alt="Rajasthan Palace" class="w-full h-full object-cover transform hover:scale-110 transition duration-700">
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="p-4">
+                            <h3 class="text-3xl font-bold mb-4" style="color: var(--rajasthan-red);">Rajasthan: Royal Legacy</h3>
+                            <p class="mb-6 text-gray-700 dark:text-gray-300">Beneath the golden sand dunes lies a tapestry of royal heritage, vibrant folk traditions, and architectural marvels. Experience the grandeur of Rajasthan's majestic forts, colorful festivals, and warm hospitality.</p>
+                            <div class="flex flex-wrap gap-3 mb-6">
+                                <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900 dark:text-amber-100 text-amber-800 rounded-full text-sm">Royal Forts</span>
+                                <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900 dark:text-amber-100 text-amber-800 rounded-full text-sm">Desert Safari</span>
+                                <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900 dark:text-amber-100 text-amber-800 rounded-full text-sm">Folk Dances</span>
+                                <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900 dark:text-amber-100 text-amber-800 rounded-full text-sm">Palace Heritage</span>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="#" class="inline-flex items-center font-medium rajasthan-bg text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                                    Explore Rajasthan
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rajasthan Highlights -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&q=80" alt="Jaipur Pink City" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Pink City of Jaipur</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Explore the historic palaces, bazaars, and the majestic Amber Fort.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1622397815608-ec6cacff2722?auto=format&fit=crop&q=80" alt="Udaipur Palace" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Udaipur Lake Palace</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Experience the romantic lake city with its stunning royal architecture.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1625228983336-feb1d7ffd86a?auto=format&fit=crop&q=80" alt="Jaisalmer Fort" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Golden Jaisalmer</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Wander through the golden fort and embark on mesmerizing desert safaris.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1624653223240-2747c8a485d3?auto=format&fit=crop&q=80" alt="Rajasthan Folk Dance" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Cultural Performances</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Immerse yourself in traditional Rajasthani folk music and dance.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Goa -->
+            <div class="destination-block mb-24 scene-element">
+                <div class="flex flex-col md:flex-row-reverse gap-8 items-center">
+                    <div class="md:w-1/2">
+                        <div class="relative overflow-hidden rounded-lg aspect-video">
+                            <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&q=80" alt="Goa Beach" class="w-full h-full object-cover transform hover:scale-110 transition duration-700">
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="p-4">
+                            <h3 class="text-3xl font-bold mb-4" style="color: var(--goa-teal);">Goa: Coastal Paradise</h3>
+                            <p class="mb-6 text-gray-700 dark:text-gray-300">Where every sunset starts a song, Goa's sun-kissed beaches, Portuguese-influenced architecture, and vibrant nightlife create a perfect blend of relaxation and adventure for every traveler.</p>
+                            <div class="flex flex-wrap gap-3 mb-6">
+                                <span class="px-3 py-1 bg-teal-100 dark:bg-teal-900 dark:text-teal-100 text-teal-800 rounded-full text-sm">Pristine Beaches</span>
+                                <span class="px-3 py-1 bg-teal-100 dark:bg-teal-900 dark:text-teal-100 text-teal-800 rounded-full text-sm">Colonial Heritage</span>
+                                <span class="px-3 py-1 bg-teal-100 dark:bg-teal-900 dark:text-teal-100 text-teal-800 rounded-full text-sm">Nightlife</span>
+                                <span class="px-3 py-1 bg-teal-100 dark:bg-teal-900 dark:text-teal-100 text-teal-800 rounded-full text-sm">Seafood Cuisine</span>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="#" class="inline-flex items-center font-medium goa-bg text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                                    Explore Goa
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Goa Highlights -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1587922546307-776261961527?auto=format&fit=crop&q=80" alt="Anjuna Beach" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Anjuna Beach</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Experience the vibrant beach culture and famous flea markets.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1589308078059-be1415eab4c3?auto=format&fit=crop&q=80" alt="Old Goa Churches" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Old Goa Churches</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Discover the UNESCO World Heritage Portuguese architecture.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1566289773816-b4bd96e97d4d?auto=format&fit=crop&q=80" alt="Dudhsagar Falls" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Dudhsagar Falls</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Trek to one of India's tallest waterfalls in the Western Ghats.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1600093991667-54f007e5fec2?auto=format&fit=crop&q=80" alt="Goa Nightlife" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Vibrant Nightlife</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Dance the night away at beachside clubs and famous parties.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Rann of Kutch -->
+            <div class="destination-block scene-element">
+                <div class="flex flex-col md:flex-row gap-8 items-center">
+                    <div class="md:w-1/2">
+                        <div class="relative overflow-hidden rounded-lg aspect-video">
+                            <img src="https://images.unsplash.com/photo-1593530634418-8ff3e61fe915?auto=format&fit=crop&q=80" alt="Rann of Kutch" class="w-full h-full object-cover transform hover:scale-110 transition duration-700">
+                        </div>
+                    </div>
+                    <div class="md:w-1/2">
+                        <div class="p-4">
+                            <h3 class="text-3xl font-bold mb-4" style="color: var(--kutch-indigo);">Rann of Kutch: Ethereal Beauty</h3>
+                            <p class="mb-6 text-gray-700 dark:text-gray-300">The desert that glows under moonlight, transforming into an endless canvas of shimmering white salt. Experience the surreal landscape, vibrant cultural festivals, and intricate handicrafts of this unique region.</p>
+                            <div class="flex flex-wrap gap-3 mb-6">
+                                <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-100 text-indigo-800 rounded-full text-sm">White Desert</span>
+                                <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-100 text-indigo-800 rounded-full text-sm">Rann Utsav</span>
+                                <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-100 text-indigo-800 rounded-full text-sm">Mirror Crafts</span>
+                                <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-100 text-indigo-800 rounded-full text-sm">Tribal Culture</span>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="#" class="inline-flex items-center font-medium kutch-bg text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                                    Explore Rann of Kutch
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Kutch Highlights -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1589396575653-c09c794ff6a2?auto=format&fit=crop&q=80" alt="White Desert" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">White Salt Desert</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Witness the mesmerizing endless white landscape under moonlight.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1558439749-b53156b6aaaf?auto=format&fit=crop&q=80" alt="Rann Utsav" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Rann Utsav Festival</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Experience the grand cultural festival with music, dance, and crafts.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1612450622797-f618d6025dea?auto=format&fit=crop&q=80" alt="Kutch Handicrafts" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Mirror Embroidery</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Discover the intricate handicrafts and textiles of Kutch artisans.</p>
+                        </div>
+                    </div>
+                    <div class="region-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg">
+                        <div class="relative h-48">
+                            <img src="https://images.unsplash.com/photo-1600873335384-b093d868c93e?auto=format&fit=crop&q=80" alt="Dhordo Village" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-xl mb-2">Tent City Dhordo</h4>
+                            <p class="text-gray-700 dark:text-gray-300">Stay in the vibrant tent city during the Rann Utsav festival.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Plan Your Journey Section -->
+    <section id="journey" class="py-20 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 scene-element">Plan Your Journey</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-16 max-w-3xl mx-auto scene-element">Craft your perfect West India adventure with our curated itineraries. From royal palaces to pristine beaches and salt deserts, choose the experience that speaks to your wanderlust.</p>
+            
+            <!-- Itinerary Filters -->
+            <div class="mb-12 scene-element">
+                <div class="flex flex-wrap justify-center gap-4 mb-6">
+                    <button class="px-6 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md hover:shadow-lg transition duration-300 text-gray-800 dark:text-white font-medium itinerary-filter active" data-filter="all">All Journeys</button>
+                    <button class="px-6 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md hover:shadow-lg transition duration-300 text-gray-800 dark:text-white font-medium itinerary-filter" data-filter="royal">Royal Trail</button>
+                    <button class="px-6 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md hover:shadow-lg transition duration-300 text-gray-800 dark:text-white font-medium itinerary-filter" data-filter="beach">Beach + Culture</button>
+                    <button class="px-6 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md hover:shadow-lg transition duration-300 text-gray-800 dark:text-white font-medium itinerary-filter" data-filter="adventure">Rann Adventure</button>
+                </div>
+                <div class="flex flex-wrap justify-center gap-4 mb-6">
+                    <div class="relative inline-block">
+                        <select class="appearance-none bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white py-2 px-4 pr-8 rounded-full leading-tight focus:outline-none focus:shadow-outline">
+                            <option>Any Duration</option>
+                            <option>3-5 Days</option>
+                            <option>7-10 Days</option>
+                            <option>10+ Days</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-white">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="relative inline-block">
+                        <select class="appearance-none bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white py-2 px-4 pr-8 rounded-full leading-tight focus:outline-none focus:shadow-outline">
+                            <option>Any Budget</option>
+                            <option>Budget-Friendly</option>
+                            <option>Mid-Range</option>
+                            <option>Luxury</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-white">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="relative inline-block">
+                        <select class="appearance-none bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white py-2 px-4 pr-8 rounded-full leading-tight focus:outline-none focus:shadow-outline">
+                            <option>Any Season</option>
+                            <option>Winter (Oct-Feb)</option>
+                            <option>Spring (Mar-Apr)</option>
+                            <option>Summer (May-Jun)</option>
+                            <option>Monsoon (Jul-Sep)</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-white">
+                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Itineraries -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 scene-element">
+                <!-- Royal Trail -->
+                <div class="itinerary-card bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg" data-category="royal">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1519058425933-3085c4ea4f68?auto=format&fit=crop&q=80" alt="Royal Rajasthan Trail" class="w-full h-full object-cover">
+                        <div class="absolute top-0 right-0 bg-amber-500 text-white px-3 py-1 m-2 rounded-full text-xs font-bold">7 Days</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">The Royal Trail</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-300 ml-2">4.9 (127 reviews)</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Journey through Jodhpur, Jaisalmer, and Udaipur to experience the grandeur of Rajasthan's royal heritage.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-100 rounded text-xs">Forts</span>
+                            <span class="px-2 py-1 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-100 rounded text-xs">Desert Safari</span>
+                            <span class="px-2 py-1 bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-100 rounded text-xs">Luxury</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">From $899</span>
+                            <button class="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Beach Culture -->
+                <div class="itinerary-card bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg" data-category="beach">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&q=80" alt="Goa Beach Culture" class="w-full h-full object-cover">
+                        <div class="absolute top-0 right-0 bg-teal-500 text-white px-3 py-1 m-2 rounded-full text-xs font-bold">5 Days</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Beach + Culture Escape</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-300 ml-2">4.7 (93 reviews)</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Explore Goa's pristine beaches, colonial heritage, and vibrant nightlife in one perfect package.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 rounded text-xs">Beaches</span>
+                            <span class="px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 rounded text-xs">Colonial Sites</span>
+                            <span class="px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 rounded text-xs">Mid-Range</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">From $649</span>
+                            <button class="px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Rann Adventure -->
+                <div class="itinerary-card bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg" data-category="adventure">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1593530634418-8ff3e61fe915?auto=format&fit=crop&q=80" alt="Rann of Kutch Adventure" class="w-full h-full object-cover">
+                        <div class="absolute top-0 right-0 bg-indigo-500 text-white px-3 py-1 m-2 rounded-full text-xs font-bold">4 Days</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Rann Adventure</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-300 ml-2">4.8 (76 reviews)</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Discover the surreal white desert and vibrant cultural heritage of Kutch through Bhuj and Dhordo.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100 rounded text-xs">White Desert</span>
+                            <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100 rounded text-xs">Folk Art</span>
+                            <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100 rounded text-xs">Adventure</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">From $499</span>
+                            <button class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Grand Tour -->
+                <div class="itinerary-card bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg" data-category="all">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1558439749-b53156b6aaaf?auto=format&fit=crop&q=80" alt="West India Grand Tour" class="w-full h-full object-cover">
+                        <div class="absolute top-0 right-0 bg-purple-500 text-white px-3 py-1 m-2 rounded-full text-xs font-bold">12 Days</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">West India Grand Tour</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-300 ml-2">5.0 (42 reviews)</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">The ultimate West India experience combining the best of Rajasthan, Goa, and the Rann of Kutch.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 rounded text-xs">Comprehensive</span>
+                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 rounded text-xs">Luxury</span>
+                            <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-100 rounded text-xs">All Regions</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">From $1,899</span>
+                            <button class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Backpacker Tour -->
+                <div class="itinerary-card bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg" data-category="all">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1566289773816-b4bd96e97d4d?auto=format&fit=crop&q=80" alt="Backpacker's Delight" class="w-full h-full object-cover">
+                        <div class="absolute top-0 right-0 bg-green-500 text-white px-3 py-1 m-2 rounded-full text-xs font-bold">10 Days</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Backpacker's Delight</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-300 ml-2">4.5 (118 reviews)</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Budget-friendly, authentic experiences through the best of West India's hostels and local stays.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded text-xs">Budget</span>
+                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded text-xs">Local Culture</span>
+                            <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 rounded text-xs">Flexible</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">From $399</span>
+                            <button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Festival Special -->
+                <div class="itinerary-card bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg" data-category="all">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1558439749-b53156b6aaaf?auto=format&fit=crop&q=80" alt="Festival Special" class="w-full h-full object-cover">
+                        <div class="absolute top-0 right-0 bg-pink-500 text-white px-3 py-1 m-2 rounded-full text-xs font-bold">8 Days</div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-2">Festival Special Tour</h3>
+                        <div class="flex items-center mb-4">
+                            <div class="flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                            <span class="text-gray-600 dark:text-gray-300 ml-2">4.9 (86 reviews)</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">Experience the vibrant festivals of West India, from Desert Festival to Rann Utsav and Goa Carnival.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100 rounded text-xs">Festivals</span>
+                            <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100 rounded text-xs">Cultural</span>
+                            <span class="px-2 py-1 bg-pink-100 dark:bg-pink-900 text-pink-800 dark:text-pink-100 rounded text-xs">Photography</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold">From $1,199</span>
+                            <button class="px-4 py-2 bg-pink-600 hover:bg-pink-700 text-white rounded-lg transition">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Custom Journey Button -->
+            <div class="text-center mt-12 scene-element">
+                <button class="px-8 py-4 bg-gradient-to-r from-amber-500 to-pink-500 text-white rounded-full text-lg font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    Create Your Custom Journey
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Festivals & Culture Section -->
+    <section id="festivals" class="py-20 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 scene-element">Festivals & Culture</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-16 max-w-3xl mx-auto scene-element">Immerse yourself in the vibrant celebrations that bring West India's heritage to life. Each festival is a colorful tapestry of tradition, music, and joy.</p>
+            
+            <!-- Festival Gallery -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <!-- Desert Festival -->
+                <div class="festival-item rounded-xl overflow-hidden shadow-lg relative scene-element">
+                    <img src="https://images.unsplash.com/photo-1603204043142-55b9127862d9?auto=format&fit=crop&q=80" alt="Desert Festival" class="w-full h-96 object-cover">
+                    <div class="festival-overlay absolute inset-0 flex flex-col justify-end p-6">
+                        <span class="px-3 py-1 bg-amber-500 text-white rounded-full text-xs w-max mb-3">February</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Desert Festival, Jaisalmer</h3>
+                        <p class="text-white/90 mb-4">Experience the magic of Rajasthan's golden city with camel races, folk performances, and turban-tying competitions set against golden sand dunes.</p>
+                        <a href="#" class="inline-flex items-center text-white font-medium hover:underline">
+                            Join the Celebration
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Rann Utsav -->
+                <div class="festival-item rounded-xl overflow-hidden shadow-lg relative scene-element">
+                    <img src="https://images.unsplash.com/photo-1593530634418-8ff3e61fe915?auto=format&fit=crop&q=80" alt="Rann Utsav" class="w-full h-96 object-cover">
+                    <div class="festival-overlay absolute inset-0 flex flex-col justify-end p-6">
+                        <span class="px-3 py-1 bg-indigo-500 text-white rounded-full text-xs w-max mb-3">November - February</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Rann Utsav, Kutch</h3>
+                        <p class="text-white/90 mb-4">Celebrate under the full moon on the shimmering white salt desert with handicrafts, folk music, and the magical glow of the Rann at night.</p>
+                        <a href="#" class="inline-flex items-center text-white font-medium hover:underline">
+                            Join the Celebration
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Goa Carnival -->
+                <div class="festival-item rounded-xl overflow-hidden shadow-lg relative scene-element">
+                    <img src="https://images.unsplash.com/photo-1565886728041-a045b746b6f5?auto=format&fit=crop&q=80" alt="Goa Carnival" class="w-full h-96 object-cover">
+                    <div class="festival-overlay absolute inset-0 flex flex-col justify-end p-6">
+                        <span class="px-3 py-1 bg-teal-500 text-white rounded-full text-xs w-max mb-3">February - March</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Goa Carnival</h3>
+                        <p class="text-white/90 mb-4">Join the vibrant parade of colorful floats, dancers, and musicians celebrating Goa's Portuguese heritage with feasts and revelry.</p>
+                        <a href="#" class="inline-flex items-center text-white font-medium hover:underline">
+                            Join the Celebration
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Pushkar Fair -->
+                <div class="festival-item rounded-xl overflow-hidden shadow-lg relative scene-element">
+                    <img src="https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?auto=format&fit=crop&q=80" alt="Pushkar Fair" class="w-full h-96 object-cover">
+                    <div class="festival-overlay absolute inset-0 flex flex-col justify-end p-6">
+                        <span class="px-3 py-1 bg-amber-500 text-white rounded-full text-xs w-max mb-3">November</span>
+                        <h3 class="text-2xl font-bold text-white mb-2">Pushkar Camel Fair</h3>
+                        <p class="text-white/90 mb-4">Witness one of the world's largest camel fairs with trading, competitions, and cultural performances around the sacred Pushkar Lake.</p>
+                        <a href="#" class="inline-flex items-center text-white font-medium hover:underline">
+                            Join the Celebration
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Festival Calendar -->
+            <div class="scene-element">
+                <h3 class="text-2xl font-bold text-center mb-8">Festival Calendar</h3>
+                <div class="relative overflow-x-auto rounded-lg shadow-lg">
+                    <table class="w-full text-left">
+                        <thead class="text-white uppercase bg-gray-800 dark:bg-gray-700">
+                            <tr>
+                                <th scope="col" class="px-6 py-3">Festival</th>
+                                <th scope="col" class="px-6 py-3">Location</th>
+                                <th scope="col" class="px-6 py-3">Date</th>
+                                <th scope="col" class="px-6 py-3">Highlights</th>
+                                <th scope="col" class="px-6 py-3">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                                <td class="px-6 py-4 font-medium">Desert Festival</td>
+                                <td class="px-6 py-4">Jaisalmer, Rajasthan</td>
+                                <td class="px-6 py-4">February 12-14</td>
+                                <td class="px-6 py-4">Camel races, turban tying competitions</td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">Details</a>
+                                </td>
+                            </tr>
+                            <tr class="bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
+                                <td class="px-6 py-4 font-medium">Rann Utsav</td>
+                                <td class="px-6 py-4">Dhordo, Kutch</td>
+                                <td class="px-6 py-4">Nov 1 - Feb 28</td>
+                                <td class="px-6 py-4">Full moon desert experience, folk music</td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">Details</a>
+                                </td>
+                            </tr>
+                            <tr class="bg-white dark:bg-gray-800 border-b dark:border-gray-700">
+                                <td class="px-6 py-4 font-medium">Goa Carnival</td>
+                                <td class="px-6 py-4">Panaji, Goa</td>
+                                <td class="px-6 py-4">February 22-25</td>
+                                <td class="px-6 py-4">Float parades, music, King Momo</td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">Details</a>
+                                </td>
+                            </tr>
+                            <tr class="bg-gray-50 dark:bg-gray-700 border-b dark:border-gray-600">
+                                <td class="px-6 py-4 font-medium">Pushkar Fair</td>
+                                <td class="px-6 py-4">Pushkar, Rajasthan</td>
+                                <td class="px-6 py-4">November 8-16</td>
+                                <td class="px-6 py-4">Camel trading, cultural performances</td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">Details</a>
+                                </td>
+                            </tr>
+                            <tr class="bg-white dark:bg-gray-800">
+                                <td class="px-6 py-4 font-medium">Navratri</td>
+                                <td class="px-6 py-4">Gujarat (Kutch)</td>
+                                <td class="px-6 py-4">October (varies)</td>
+                                <td class="px-6 py-4">Garba dance, nine nights of celebration</td>
+                                <td class="px-6 py-4">
+                                    <a href="#" class="text-blue-600 dark:text-blue-400 hover:underline">Details</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Food & Flavor Section -->
+    <section id="food" class="py-20 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 scene-element">Food & Flavor Journey</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-16 max-w-3xl mx-auto scene-element">Savor the distinct culinary heritage of West India, from royal Rajasthani feasts to fresh Goan seafood and traditional Kutchi delicacies.</p>
+            
+            <!-- Food Gallery -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                <!-- Rajasthan Foods -->
+                <div class="food-section scene-element">
+                    <h3 class="text-2xl font-bold mb-6" style="color: var(--rajasthan-red);">Rajasthani Cuisine</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Dal Baati Churma -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1626132647523-66c6eafa5487?auto=format&fit=crop&q=80" alt="Dal Baati Churma" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Dal Baati Churma</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Baked wheat rolls served with lentil curry and sweetened cereal.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Laal Maas -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1665295845209-a8adc6e2c59a?auto=format&fit=crop&q=80" alt="Laal Maas" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Laal Maas</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Fiery red meat curry prepared with local chilies and spices.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Ghewar -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1615832494473-d41e77a7dcef?auto=format&fit=crop&q=80" alt="Ghewar" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Ghewar</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Intricate disc-shaped sweet soaked in sugar syrup and topped with nuts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Goa Foods -->
+                <div class="food-section scene-element">
+                    <h3 class="text-2xl font-bold mb-6" style="color: var(--goa-teal);">Goan Cuisine</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Fish Curry Rice -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1589301760014-d929f3979dbc?auto=format&fit=crop&q=80" alt="Fish Curry Rice" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Fish Curry Rice</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Coconut-based spicy curry with fresh local fish served with rice.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Bebinca -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1587314168485-3236d6710123?auto=format&fit=crop&q=80" alt="Bebinca" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Bebinca</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Traditional layered pudding dessert with Portuguese influence.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Vindaloo -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1631292784640-2b24be092fd6?auto=format&fit=crop&q=80" alt="Vindaloo" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Vindaloo</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Fiery curry with meat marinated in vinegar, garlic, and spices.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Kutch Foods -->
+                <div class="food-section scene-element">
+                    <h3 class="text-2xl font-bold mb-6" style="color: var(--kutch-indigo);">Kutchi Cuisine</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <!-- Dabeli -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1606491956689-2ea866880c84?auto=format&fit=crop&q=80" alt="Dabeli" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Dabeli</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Spicy potato filling in a bun with chutneys, pomegranate, and peanuts.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Bajra Rotla -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&q=80" alt="Bajra Rotla" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Bajra Rotla</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Millet flatbread, a staple food often served with yogurt or vegetables.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Kutchi Thali -->
+                        <div class="food-tile bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg">
+                            <div class="relative h-48">
+                                <img src="https://images.unsplash.com/photo-1625398407796-82650a8c9285?auto=format&fit=crop&q=80" alt="Kutchi Thali" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-xl mb-2">Kutchi Thali</h4>
+                                <p class="text-gray-700 dark:text-gray-300">Complete meal with khichdi, kadhi, vegetables, and traditional sweets.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Culinary Experiences -->
+            <div class="bg-white dark:bg-gray-700 rounded-xl p-8 shadow-lg scene-element">
+                <h3 class="text-2xl font-bold mb-6 text-center">Culinary Experiences</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-4">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-amber-600 dark:text-amber-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">Cooking Classes</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Learn authentic recipes from local experts in traditional home kitchens.</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-teal-100 dark:bg-teal-900 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-teal-600 dark:text-teal-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">Food Tours</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Guided culinary walks through markets, street food stalls, and hidden gems.</p>
+                    </div>
+                    <div class="text-center p-4">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-indigo-600 dark:text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <h4 class="font-bold text-xl mb-2">Royal Dining</h4>
+                        <p class="text-gray-600 dark:text-gray-300">Experience traditional feasts in heritage palaces and historic venues.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Map -->
+    <section id="map" class="py-20 bg-white dark:bg-gray-900 overflow-hidden">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 scene-element">Explore West India</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-16 max-w-3xl mx-auto scene-element">Navigate through the vibrant regions of West India with our interactive map. Discover key destinations, travel routes, and seasonal highlights.</p>
+            
+            <div class="relative h-[500px] bg-gray-100 dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg scene-element" id="interactive-map">
+                <!-- Map Container -->
+                <div class="absolute inset-0">
+                    <!-- This would be replaced with an actual interactive map implementation -->
+                    <div class="relative w-full h-full">
+                        <!-- Map Background -->
+                        <div class="absolute inset-0 bg-blue-50 dark:bg-blue-900/30">
+                            <!-- Simplified Map Outline -->
+                            <svg viewBox="0 0 800 600" class="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Rajasthan Region -->
+                                <path d="M200,100 L350,150 L400,250 L300,350 L200,300 Z" fill="#F8E3C5" stroke="#A67C52" stroke-width="2" class="cursor-pointer hover:fill-amber-200 transition-colors duration-300" id="rajasthan-region"/>
+                                
+                                <!-- Goa Region -->
+                                <path d="M300,450 L350,420 L400,450 L380,500 L320,510 Z" fill="#B3E0E2" stroke="#0F8B8D" stroke-width="2" class="cursor-pointer hover:fill-teal-200 transition-colors duration-300" id="goa-region"/>
+                                
+                                <!-- Kutch Region -->
+                                <path d="M100,200 L180,180 L200,250 L150,280 L100,250 Z" fill="#F5F5F5" stroke="#2C365E" stroke-width="2" class="cursor-pointer hover:fill-indigo-100 transition-colors duration-300" id="kutch-region"/>
+                            </svg>
+                            
+                            <!-- Map Pins -->
+                            <div class="absolute top-[120px] left-[220px] map-pin" data-city="Jaipur">
+                                <div class="w-4 h-4 bg-amber-500 rounded-full"></div>
+                                <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-2 py-1 rounded text-xs font-bold shadow">Jaipur</span>
+                            </div>
+                            
+                            <div class="absolute top-[200px] left-[350px] map-pin" data-city="Udaipur">
+                                <div class="w-4 h-4 bg-amber-500 rounded-full"></div>
+                                <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-2 py-1 rounded text-xs font-bold shadow">Udaipur</span>
+                            </div>
+                            
+                            <div class="absolute top-[160px] left-[140px] map-pin" data-city="Dhordo">
+                                <div class="w-4 h-4 bg-indigo-500 rounded-full"></div>
+                                <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-2 py-1 rounded text-xs font-bold shadow">Dhordo</span>
+                            </div>
+                            
+                            <div class="absolute top-[450px] left-[350px] map-pin" data-city="Panaji">
+                                <div class="w-4 h-4 bg-teal-500 rounded-full"></div>
+                                <span class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white dark:bg-gray-800 px-2 py-1 rounded text-xs font-bold shadow">Panaji</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Map Controls -->
+                <div class="absolute top-4 right-4 flex flex-col space-y-2">
+                    <button class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                    </button>
+                    <button class="w-10 h-10 bg-white dark:bg-gray-700 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Map Legend -->
+                <div class="absolute bottom-4 left-4 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg">
+                    <h4 class="font-bold text-sm mb-2">Legend:</h4>
+                    <div class="flex items-center mb-1">
+                        <div class="w-3 h-3 bg-amber-500 rounded-full mr-2"></div>
+                        <span class="text-xs text-gray-700 dark:text-gray-300">Rajasthan</span>
+                    </div>
+                    <div class="flex items-center mb-1">
+                        <div class="w-3 h-3 bg-teal-500 rounded-full mr-2"></div>
+                        <span class="text-xs text-gray-700 dark:text-gray-300">Goa</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-indigo-500 rounded-full mr-2"></div>
+                        <span class="text-xs text-gray-700 dark:text-gray-300">Rann of Kutch</span>
+                    </div>
+                </div>
+                
+                <!-- Region Info (Hidden initially, shown on click) -->
+                <div class="absolute bottom-4 right-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-xs hidden" id="region-info">
+                    <h4 class="font-bold text-lg mb-2">Rajasthan</h4>
+                    <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">Land of kings with majestic forts, palaces, and vibrant culture.</p>
+                    <div class="flex items-center justify-between text-xs">
+                        <span class="text-amber-600 dark:text-amber-400">Best season: Oct-Mar</span>
+                        <a href="#destinations" class="text-blue-600 dark:text-blue-400 underline">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Traveler Stories -->
+    <section id="stories" class="py-20 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-4 scene-element">Traveler Stories</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 mb-16 max-w-3xl mx-auto scene-element">Real experiences from travelers who discovered the magic of West India. These are their stories, adventures, and transformations.</p>
+            
+            <!-- Story Filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12 scene-element">
+                <button class="px-4 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md text-gray-800 dark:text-white font-medium story-filter active" data-filter="all">All Stories</button>
+                <button class="px-4 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md text-gray-800 dark:text-white font-medium story-filter" data-filter="heritage">Heritage</button>
+                <button class="px-4 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md text-gray-800 dark:text-white font-medium story-filter" data-filter="adventure">Adventure</button>
+                <button class="px-4 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md text-gray-800 dark:text-white font-medium story-filter" data-filter="cultural">Cultural</button>
+                <button class="px-4 py-2 rounded-full bg-white dark:bg-gray-700 shadow-md text-gray-800 dark:text-white font-medium story-filter" data-filter="foodie">Foodie</button>
+            </div>
+            
+            <!-- Stories Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Story 1 -->
+                <div class="traveler-story bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg scene-element" data-category="heritage adventure">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80" alt="Traveler in Jaipur" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-100 text-xs px-2 py-1 rounded mb-2 inline-block">Rajasthan</span>
+                        <h3 class="text-xl font-bold mb-2">Royal Memories in Rajasthan</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">"The moment I stepped into the Amber Fort, I felt transported back in time. The intricate mirror work, the grandeur, the history in every stone..."</p>
+                        <div class="flex items-center mt-4">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80" alt="James Wilson" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold">James Wilson</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Photographer, UK</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Story 2 -->
+                <div class="traveler-story bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg scene-element" data-category="adventure foodie">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80" alt="Traveler in Goa" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 text-xs px-2 py-1 rounded mb-2 inline-block">Goa</span>
+                        <h3 class="text-xl font-bold mb-2">Finding Peace in Goa's Waves</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">"I came for the beach parties but stayed for the serene mornings. Watching the fishermen set out at dawn, tasting freshly caught fish curry..."</p>
+                        <div class="flex items-center mt-4">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80" alt="Sarah Chen" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold">Sarah Chen</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Digital Nomad, Canada</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Story 3 -->
+                <div class="traveler-story bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg scene-element" data-category="cultural heritage">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80" alt="Traveler in Kutch" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100 text-xs px-2 py-1 rounded mb-2 inline-block">Rann of Kutch</span>
+                        <h3 class="text-xl font-bold mb-2">The Desert That Changed Me</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">"Standing on the salt plains under a full moon, it's like being on another planet. The artisans taught me that beauty exists even in the harshest places..."</p>
+                        <div class="flex items-center mt-4">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80" alt="Raj Mehta" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold">Raj Mehta</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Travel Writer, India</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Story 4 -->
+                <div class="traveler-story bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg scene-element" data-category="foodie cultural">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80" alt="Traveler at Food Festival" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-amber-100 dark:bg-amber-900 text-amber-800 dark:text-amber-100 text-xs px-2 py-1 rounded mb-2 inline-block">Rajasthan</span>
+                        <h3 class="text-xl font-bold mb-2">A Culinary Love Affair</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">"Learning to make Dal Baati Churma from a local grandmother changed how I think about food. Every spice tells a story of this magnificent land..."</p>
+                        <div class="flex items-center mt-4">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80" alt="Emma Rodriguez" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold">Emma Rodriguez</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Food Blogger, Spain</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Story 5 -->
+                <div class="traveler-story bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg scene-element" data-category="adventure cultural">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80" alt="Traveler at Festival" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-100 text-xs px-2 py-1 rounded mb-2 inline-block">Goa</span>
+                        <h3 class="text-xl font-bold mb-2">Dancing Through Goa Carnival</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">"The colors, the music, the joyful chaos! I joined a local dance troupe for the carnival parade and made friends that will last a lifetime..."</p>
+                        <div class="flex items-center mt-4">
+                            <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80" alt="Alex Thompson" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold">Alex Thompson</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Dancer, Australia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Story 6 -->
+                <div class="traveler-story bg-white dark:bg-gray-700 rounded-xl overflow-hidden shadow-lg scene-element" data-category="heritage adventure">
+                    <div class="relative h-48">
+                        <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?auto=format&fit=crop&q=80" alt="Traveler on Camel" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <span class="bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-100 text-xs px-2 py-1 rounded mb-2 inline-block">Rann of Kutch</span>
+                        <h3 class="text-xl font-bold mb-2">Night Under Desert Stars</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-4">"Camping on the white salt desert during Rann Utsav, with local musicians playing folk songs and the moonlight creating a silvery landscape..."</p>
+                        <div class="flex items-center mt-4">
+                            <img src="https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?auto=format&fit=crop&q=80" alt="Michael Kim" class="w-10 h-10 rounded-full mr-4">
+                            <div>
+                                <p class="font-bold">Michael Kim</p>
+                                <p class="text-gray-500 dark:text-gray-400 text-sm">Yoga Instructor, South Korea</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Load More Button -->
+            <div class="text-center mt-12 scene-element">
+                <button class="px-6 py-3 bg-gray-800 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-500 transition">
+                    Load More Stories
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-20 bg-gradient-to-r from-amber-500 to-pink-500 text-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center scene-element">
+                <h2 class="text-4xl font-bold mb-4">Stay Updated on West India</h2>
+                <p class="mb-8">Subscribe to our newsletter for travel tips, seasonal festivals, and exclusive offers to plan your perfect West India adventure.</p>
+                <form class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <input type="email" placeholder="Your email address" class="px-5 py-3 rounded-lg text-gray-800 w-full sm:w-80 text-base focus:outline-none focus:ring-2 focus:ring-white">
+                    <button type="submit" class="px-6 py-3 bg-white text-pink-600 font-bold rounded-lg hover:bg-gray-100 transition">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Wonders of West India</h3>
+                    <p class="text-gray-400 mb-4">Explore the vibrant and contrasting landscapes of Rajasthan, Goa, and the Rann of Kutch through our immersive travel experiences.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="footer-icon text-white hover:text-pink-400 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M13.397 20.997v-8.196h2.765l.411-3.209h-3.176V7.548c0-.926.258-1.56 1.587-1.56h1.684V3.127A22.336 22.336 0 0014.201 3c-2.444 0-4.122 1.492-4.122 4.231v2.355H7.332v3.209h2.753v8.202h3.312z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="footer-icon text-white hover:text-pink-400 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.633 7.997c.013.175.013.349.013.523 0 5.325-4.053 11.461-11.46 11.461-2.282 0-4.402-.661-6.186-1.809.324.037.636.05.973.05a8.07 8.07 0 0 0 5.001-1.721 4.036 4.036 0 0 1-3.767-2.793c.249.037.499.062.761.062.361 0 .724-.05 1.061-.137a4.027 4.027 0 0 1-3.23-3.953v-.05c.537.299 1.16.486 1.82.511a4.022 4.022 0 0 1-1.796-3.354c0-.748.199-1.434.548-2.032a11.457 11.457 0 0 0 8.306 4.215c-.062-.3-.1-.599-.1-.898a4.026 4.026 0 0 1 4.028-4.028c1.16 0 2.207.486 2.943 1.272a7.957 7.957 0 0 0 2.556-.973 4.02 4.02 0 0 1-1.771 2.22 8.073 8.073 0 0 0 2.319-.624 8.645 8.645 0 0 1-2.019 2.083z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="footer-icon text-white hover:text-pink-400 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.999 7.377a4.623 4.623 0 1 0 0 9.248 4.623 4.623 0 0 0 0-9.248zm0 7.627a3.004 3.004 0 1 1 0-6.008 3.004 3.004 0 0 1 0 6.008z"></path><circle cx="16.806" cy="7.207" r="1.078"></circle><path d="M20.533 6.111A4.605 4.605 0 0 0 17.9 3.479a6.606 6.606 0 0 0-2.186-.42c-.963-.042-1.268-.054-3.71-.054s-2.755 0-3.71.054a6.554 6.554 0 0 0-2.184.42 4.6 4.6 0 0 0-2.633 2.632 6.585 6.585 0 0 0-.419 2.186c-.043.962-.056 1.267-.056 3.71 0 2.442 0 2.753.056 3.71.015.748.156 1.486.419 2.187a4.61 4.61 0 0 0 2.634 2.632 6.584 6.584 0 0 0 2.185.45c.963.042 1.268.055 3.71.055s2.755 0 3.71-.055a6.615 6.615 0 0 0 2.186-.419 4.613 4.613 0 0 0 2.633-2.633c.263-.7.404-1.438.419-2.186.043-.962.056-1.267.056-3.71s0-2.753-.056-3.71a6.581 6.581 0 0 0-.421-2.217zm-1.218 9.532a5.043 5.043 0 0 1-.311 1.688 2.987 2.987 0 0 1-1.712 1.711 4.985 4.985 0 0 1-1.67.311c-.95.044-1.218.055-3.654.055-2.438 0-2.687 0-3.655-.055a4.96 4.96 0 0 1-1.669-.311 2.985 2.985 0 0 1-1.719-1.711 5.08 5.08 0 0 1-.311-1.669c-.043-.95-.053-1.218-.053-3.654 0-2.437 0-2.686.053-3.655a5.038 5.038 0 0 1 .311-1.687c.305-.789.93-1.41 1.719-1.712a5.01 5.01 0 0 1 1.669-.311c.951-.043 1.218-.055 3.655-.055s2.687 0 3.654.055a4.96 4.96 0 0 1 1.67.311 2.991 2.991 0 0 1 1.712 1.712 5.08 5.08 0 0 1 .311 1.669c.043.951.054 1.218.054 3.655 0 2.436 0 2.698-.043 3.654h-.011z"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="footer-icon text-white hover:text-pink-400 transition">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M21.593 7.203a2.506 2.506 0 0 0-1.762-1.766C18.265 5.007 12 5 12 5s-6.264-.007-7.831.404a2.56 2.56 0 0 0-1.766 1.778c-.413 1.566-.417 4.814-.417 4.814s-.004 3.264.406 4.814c.23.857.905 1.534 1.763 1.765 1.582.43 7.83.437 7.83.437s6.265.007 7.831-.403a2.515 2.515 0 0 0 1.767-1.763c.414-1.565.417-4.812.417-4.812s.02-3.265-.407-4.831zM9.996 15.005l.005-6 5.207 3.005-5.212 2.995z"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Destinations</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Rajasthan</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Goa</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Rann of Kutch</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Jaipur</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Udaipur</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Jaisalmer</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Travel Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Itineraries</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Festival Calendar</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Travel Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Photography Tips</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Packing Essentials</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Cultural Etiquette</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                            </svg>
+                            <span class="text-gray-400">info@westindiatours.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
+                            </svg>
+                            <span class="text-gray-400">+91 123 456 7890</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="text-gray-400">123 Tourism Street, Jaipur, Rajasthan, India</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 Wonders of West India. All rights reserved.</p>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Check for dark mode preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize GSAP
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Remove preloader after content loads
+            setTimeout(() => {
+                const preloader = document.getElementById('preloader');
+                if (preloader) {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => {
+                        preloader.style.display = 'none';
+                    }, 500);
+                }
+            }, 1500);
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileNav = document.getElementById('mobileNav');
+            
+            if (mobileMenuBtn && mobileNav) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileNav.classList.toggle('active');
+                });
+            }
+            
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', () => {
+                    document.documentElement.classList.toggle('dark');
+                });
+            }
+            
+            // Hero carousel
+            const carouselSlides = document.querySelectorAll('.carousel-slide');
+            let currentSlide = 0;
+            
+            function showSlide(index) {
+                carouselSlides.forEach((slide, i) => {
+                    slide.style.opacity = i === index ? '1' : '0';
+                });
+            }
+            
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % carouselSlides.length;
+                showSlide(currentSlide);
+            }
+            
+            // Start carousel
+            setInterval(nextSlide, 5000);
+            
+            // Animate hero title letters
+            const heroTitle = document.getElementById('heroTitle');
+            if (heroTitle) {
+                const text = heroTitle.innerHTML;
+                heroTitle.innerHTML = '';
+                
+                [...text].forEach((letter, index) => {
+                    const span = document.createElement('span');
+                    span.className = 'animated-letter';
+                    span.innerHTML = letter === ' ' ? '&nbsp;' : letter;
+                    heroTitle.appendChild(span);
+                    
+                    gsap.to(span, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.5,
+                        delay: 0.05 * index + 1,
+                        ease: "power2.out"
+                    });
+                });
+            }
+            
+            // Scene animations with ScrollTrigger
+            const sceneElements = document.querySelectorAll('.scene-element');
+            
+            sceneElements.forEach((element) => {
+                gsap.fromTo(element, 
+                    { opacity: 0, y: 50 },
+                    { 
+                        opacity: 1, 
+                        y: 0, 
+                        duration: 0.8,
+                        scrollTrigger: {
+                            trigger: element,
+                            start: "top 85%",
+                            toggleClass: "scene-visible"
+                        }
+                    }
+                );
+            });
+            
+            // Header scroll effect
+            const header = document.getElementById('main-header');
+            
+            function updateHeader() {
+                if (window.scrollY > 50) {
+                    header.classList.add('bg-black/80', 'backdrop-blur-sm', 'py-2');
+                    header.classList.remove('py-4');
+                } else {
+                    header.classList.remove('bg-black/80', 'backdrop-blur-sm', 'py-2');
+                    header.classList.add('py-4');
+                }
+            }
+            
+            window.addEventListener('scroll', updateHeader);
+            updateHeader(); // Initial call
+            
+            // Itinerary filters
+            const itineraryFilters = document.querySelectorAll('.itinerary-filter');
+            const itineraryCards = document.querySelectorAll('.itinerary-card');
+            
+            itineraryFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    // Remove active class from all filters
+                    itineraryFilters.forEach(f => f.classList.remove('active', 'bg-gradient-to-r', 'from-amber-500', 'to-pink-500', 'text-white'));
+                    
+                    // Add active class to clicked filter
+                    this.classList.add('active', 'bg-gradient-to-r', 'from-amber-500', 'to-pink-500', 'text-white');
+                    
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Show/hide itinerary cards based on filter
+                    itineraryCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Story filters
+            const storyFilters = document.querySelectorAll('.story-filter');
+            const storyCards = document.querySelectorAll('.traveler-story');
+            
+            storyFilters.forEach(filter => {
+                filter.addEventListener('click', function() {
+                    // Remove active class from all filters
+                    storyFilters.forEach(f => f.classList.remove('active', 'bg-gradient-to-r', 'from-amber-500', 'to-pink-500', 'text-white'));
+                    
+                    // Add active class to clicked filter
+                    this.classList.add('active', 'bg-gradient-to-r', 'from-amber-500', 'to-pink-500', 'text-white');
+                    
+                    const filterValue = this.getAttribute('data-filter');
+                    
+                    // Show/hide story cards based on filter
+                    storyCards.forEach(card => {
+                        if (filterValue === 'all' || card.getAttribute('data-category').includes(filterValue)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Map interactions
+            const mapRegions = document.querySelectorAll('#rajasthan-region, #goa-region, #kutch-region');
+            const mapInfo = document.getElementById('region-info');
+            
+            mapRegions.forEach(region => {
+                region.addEventListener('click', function() {
+                    const regionId = this.id;
+                    let regionName, description, season;
+                    
+                    if (regionId === 'rajasthan-region') {
+                        regionName = 'Rajasthan';
+                        description = 'Land of kings with majestic forts, palaces, and vibrant culture.';
+                        season = 'Oct-Mar';
+                    } else if (regionId === 'goa-region') {
+                        regionName = 'Goa';
+                        description = 'Coastal paradise with pristine beaches, colonial heritage, and lively atmosphere.';
+                        season = 'Nov-Feb';
+                    } else if (regionId === 'kutch-region') {
+                        regionName = 'Rann of Kutch';
+                        description = 'Mesmerizing white salt desert with vibrant cultural festivals and handicrafts.';
+                        season = 'Nov-Feb';
+                    }
+                    
+                    // Update region info
+                    if (mapInfo) {
+                        mapInfo.innerHTML = `
+                            <h4 class="font-bold text-lg mb-2">${regionName}</h4>
+                            <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">${description}</p>
+                            <div class="flex items-center justify-between text-xs">
+                                <span class="text-amber-600 dark:text-amber-400">Best season: ${season}</span>
+                                <a href="#destinations" class="text-blue-600 dark:text-blue-400 underline">View Details</a>
+                            </div>
+                        `;
+                        mapInfo.classList.remove('hidden');
+                    }
+                });
+            });
+            
+            // Load More Stories button placeholder
+            const loadMoreBtn = document.querySelector('#stories .mt-12 button');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', function() {
+                    this.innerHTML = 'Loading...';
+                    setTimeout(() => {
+                        this.innerHTML = 'No More Stories Available';
+                        this.disabled = true;
+                        this.classList.add('opacity-50', 'cursor-not-allowed');
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
