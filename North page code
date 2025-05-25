@@ -1,0 +1,1463 @@
+//north page code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North India: Mystical. Majestic. Mesmerizing.</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        dark: {
+                            bg: '#181818',
+                            card: '#252525',
+                            text: '#F3F4F6'
+                        },
+                        light: {
+                            bg: '#FFFFFF',
+                            card: '#F3F4F6',
+                            text: '#1F2937'
+                        },
+                        accent: {
+                            orange: '#FF7E3D',
+                            red: '#D53F41',
+                            blue: '#2A85B3',
+                            green: '#45A87A'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Poppins', 'sans-serif'],
+                        'display': ['Playfair Display', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        .dark body {
+            background-color: #181818;
+            color: #F3F4F6;
+        }
+        
+        /* Animated underline */
+        .animated-underline {
+            position: relative;
+        }
+        
+        .animated-underline::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: #5D5CDE;
+            transition: width 0.3s ease;
+        }
+        
+        .animated-underline:hover::after {
+            width: 100%;
+        }
+        
+        /* Parallax container */
+        .parallax-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 120%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            transform: translateZ(0);
+        }
+        
+        /* Horizontal scroll section */
+        .horizontal-scroll-section {
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .horizontal-scroll-section::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .scroll-item {
+            display: inline-block;
+            scroll-snap-align: start;
+        }
+        
+        /* Carousel */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+        }
+        
+        /* Glowing effects */
+        .glow {
+            position: relative;
+        }
+        
+        .glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: inherit;
+            box-shadow: 0 0 15px 5px rgba(93, 92, 222, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .glow:hover::before {
+            opacity: 1;
+        }
+        
+        /* Custom animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-arrow {
+            0%, 100% { transform: translateY(0); opacity: 0.8; }
+            50% { transform: translateY(10px); opacity: 1; }
+        }
+        
+        .pulse-arrow {
+            animation: pulse-arrow 2s ease-in-out infinite;
+        }
+        
+        /* Custom tour card animation */
+        .tour-card {
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .tour-card:hover {
+            transform: translateY(-10px) rotateX(3deg);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #5D5CDE;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret .75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #5D5CDE; }
+        }
+
+        /* Dark mode toggle animation */
+        .mode-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            border-radius: 15px;
+            background: #F3F4F6;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .dark .mode-toggle {
+            background: #252525;
+        }
+        
+        .toggle-circle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            transition: transform 0.3s ease;
+        }
+        
+        .dark .toggle-circle {
+            transform: translateX(30px);
+        }
+        
+        /* Custom image grid */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-auto-rows: 250px;
+            grid-gap: 15px;
+        }
+        
+        .image-grid-item {
+            overflow: hidden;
+            position: relative;
+            border-radius: 8px;
+        }
+        
+        .image-grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .image-grid-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Tour timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(93, 92, 222, 0), rgba(93, 92, 222, 0.7), rgba(93, 92, 222, 0));
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 30px;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: -34.5px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: #5D5CDE;
+            border: 3px solid white;
+        }
+        
+        .dark .timeline-dot {
+            border-color: #181818;
+        }
+    </style>
+</head>
+<body class="font-sans">
+    <!-- Dark mode detection -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    
+    <!-- Preloader (will be animated with GSAP) -->
+    <div id="preloader" class="fixed inset-0 bg-white dark:bg-dark-bg z-50 flex flex-col items-center justify-center">
+        <div class="w-24 h-24 relative">
+            <div class="absolute inset-0 border-4 border-primary rounded-full animate-spin" style="border-top-color: transparent;"></div>
+        </div>
+        <div class="typewriter text-xl md:text-2xl font-display mt-6 text-primary overflow-hidden whitespace-nowrap animate-pulse">
+            North India awaits...
+        </div>
+    </div>
+
+    <!-- Floating Navigation Bar -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-40 transition-all duration-300 py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2">
+                <span class="text-accent-orange text-3xl"><i class="fas fa-om"></i></span>
+                <span class="font-display text-xl md:text-2xl font-bold text-white">North India</span>
+            </a>
+            
+            <div class="hidden md:flex items-center gap-8 text-white">
+                <a href="#destinations" class="animated-underline py-1">Destinations</a>
+                <a href="#tours" class="animated-underline py-1">Tours</a>
+                <a href="#experiences" class="animated-underline py-1">Experiences</a>
+                <a href="#gallery" class="animated-underline py-1">Gallery</a>
+                <a href="#testimonials" class="animated-underline py-1">Testimonials</a>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="mode-toggle" id="modeToggle">
+                    <div class="toggle-circle"></div>
+                </div>
+                
+                <select id="languageSelect" class="bg-transparent text-white border border-white rounded px-2 py-1">
+                    <option value="en">EN</option>
+                    <option value="hi">हिंदी</option>
+                </select>
+                
+                <button class="md:hidden text-white text-2xl" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden absolute top-full left-0 w-full bg-white dark:bg-dark-bg shadow-lg">
+            <div class="container mx-auto px-4 py-4 flex flex-col gap-4">
+                <a href="#destinations" class="text-light-text dark:text-dark-text py-2 border-b">Destinations</a>
+                <a href="#tours" class="text-light-text dark:text-dark-text py-2 border-b">Tours</a>
+                <a href="#experiences" class="text-light-text dark:text-dark-text py-2 border-b">Experiences</a>
+                <a href="#gallery" class="text-light-text dark:text-dark-text py-2 border-b">Gallery</a>
+                <a href="#testimonials" class="text-light-text dark:text-dark-text py-2 border-b">Testimonials</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative h-screen overflow-hidden">
+        <div class="absolute inset-0 bg-black/40 z-10"></div>
+        
+        <!-- Hero Background Carousel (will be controlled by GSAP) -->
+        <div id="heroCarousel" class="absolute inset-0">
+            <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-1000">
+                <img src="martijn-vonk-wloNuC7qKf8-unsplash.jpg" alt="Varanasi Ghats" class="w-full h-full object-cover">
+            </div>
+            <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-1000">
+                <img src="rohit-tandon-9wg5jCEPBsw-unsplash.jpg" alt="Himalayan Peaks" class="w-full h-full object-cover">
+            </div>
+            <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-1000">
+                <img src="https://images.unsplash.com/photo-1564507592333-c60657eea523" alt="Taj Mahal" class="w-full h-full object-cover">
+            </div>
+        </div>
+        
+        <div class="relative z-20 h-full flex flex-col items-center justify-center px-4 text-center text-white">
+            <h1 class="font-display text-4xl md:text-6xl lg:text-7xl mb-4 hero-title">
+                <span class="block">North India:</span>
+                <span class="hero-tagline text-2xl md:text-4xl block mt-4">
+                    <span class="inline-block">Mystical.</span>
+                    <span class="inline-block">Majestic.</span>
+                    <span class="inline-block">Mesmerizing.</span>
+                </span>
+            </h1>
+            
+            <p class="max-w-2xl mx-auto text-lg md:text-xl opacity-90 mb-8 hero-subtitle">
+                Embark on a journey through ancient ghats, towering peaks, and timeless monuments
+            </p>
+            
+            <button class="bg-accent-orange hover:bg-accent-orange/90 text-white py-3 px-8 rounded-full font-medium text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl glow">
+                Plan Your Adventure
+            </button>
+            
+            <div class="absolute bottom-10 pulse-arrow">
+                <i class="fas fa-chevron-down text-3xl"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations Section -->
+<section id="destinations" class="py-20 px-4" style="background-color: #1e1a16;">
+    <!-- Use this instead if you prefer gradient blending -->
+    <!-- style="background: linear-gradient(to bottom, transparent, #1e1a16);" -->
+
+    <div class="container mx-auto">
+        <div class="text-center mb-16">
+            <span class="inline-block text-primary font-medium mb-2">DISCOVER</span>
+            <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-white mb-4">Enchanting Destinations</h2>
+            <p class="max-w-2xl mx-auto text-gray-300">
+                Explore the spiritual heart, majestic mountains, and architectural wonders of North India
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Varanasi Card -->
+            <div class="destination-card overflow-hidden rounded-xl shadow-lg bg-light-card dark:bg-dark-card transform hover:translate-y-[-10px] transition-all duration-300">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1627894483216-2138af692e32" alt="Varanasi Ghats" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
+                        <h3 class="font-display text-2xl text-white">Varanasi</h3>
+                        <p class="text-white/90 text-sm">The Spiritual Capital</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-light-text dark:text-dark-text mb-4">
+                        Experience the mystical ghats, ancient temples, and spiritual energy of one of the world's oldest living cities.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Holy Ghats</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Ganga Aarti</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Temples</span>
+                    </div>
+                    <a href="#" class="inline-block text-primary font-medium hover:underline">Discover More <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+            
+            <!-- Himalayas Card -->
+            <div class="destination-card overflow-hidden rounded-xl shadow-lg bg-light-card dark:bg-dark-card transform hover:translate-y-[-10px] transition-all duration-300">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="himalayas.jpg" alt="Himalayas" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
+                        <h3 class="font-display text-2xl text-white">Himalayas</h3>
+                        <p class="text-white/90 text-sm">The Majestic Mountains</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-light-text dark:text-dark-text mb-4">
+                        Trek through breathtaking landscapes, discover remote monasteries, and find inner peace in the world's highest mountain range.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Trekking</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Yoga Retreats</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Adventure</span>
+                    </div>
+                    <a href="#" class="inline-block text-primary font-medium hover:underline">Discover More <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+            
+            <!-- Taj Mahal Card -->
+            <div class="destination-card overflow-hidden rounded-xl shadow-lg bg-light-card dark:bg-dark-card transform hover:translate-y-[-10px] transition-all duration-300">
+                <div class="relative h-64 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1548013146-72479768bada" alt="Taj Mahal" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
+                        <h3 class="font-display text-2xl text-white">Taj Mahal</h3>
+                        <p class="text-white/90 text-sm">Eternal Monument of Love</p>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-light-text dark:text-dark-text mb-4">
+                        Marvel at the perfect symmetry and breathtaking beauty of this iconic marble mausoleum, a UNESCO World Heritage site.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Architecture</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">History</span>
+                        <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Romance</span>
+                    </div>
+                    <a href="#" class="inline-block text-primary font-medium hover:underline">Discover More <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-16 text-center">
+            <div class="relative inline-block">
+                <div class="w-16 h-1 bg-accent-orange absolute -top-4 left-1/2 transform -translate-x-1/2"></div>
+                <p class="text-gray-300 text-lg italic">
+                    "In North India, every stone tells a story, every sunrise is a blessing, and every journey becomes a pilgrimage."
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Tour Plans Section -->
+    <section id="tours" class="py-20 parallax-container">
+        <div class="parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1588416499018-d8c615ef7800?auto=format&fit=crop&w=1920&q=80'); opacity: 0.2;"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <span class="inline-block text-primary font-medium mb-2">EXPERIENCES</span>
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-light-text dark:text-dark-text mb-4">Curated Tour Plans</h2>
+                <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
+                    Handcrafted itineraries to experience the best of North India's cultural and spiritual treasures
+                </p>
+            </div>
+            
+            <div class="horizontal-scroll-section pb-4 -mx-4 px-4">
+                <!-- 3-Day Taj & Agra Tour -->
+                <div class="scroll-item w-full md:w-[85%] lg:w-[60%] pr-6">
+                    <div class="tour-card bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-2/5">
+                                <div class="relative rounded-lg overflow-hidden h-64">
+                                    <img src="https://images.unsplash.com/photo-1585135497273-1a86b09fe70e" alt="Taj Mahal Tour" class="w-full h-full object-cover">
+                                    <div class="absolute top-4 left-4 bg-accent-red text-white px-4 py-1 rounded-full font-medium">
+                                        3 Days
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md:w-3/5">
+                                <h3 class="font-display text-2xl mb-3 text-light-text dark:text-dark-text">Taj & Agra Heritage Tour</h3>
+                                
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Day 1: Taj Mahal at Sunrise</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Witness the Taj Mahal bathed in golden morning light.</p>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Day 2: Fatehpur Sikri & Crafts</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Visit the abandoned city, meet local artisans.</p>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Day 3: Mehtab Bagh & Departure</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">View Taj from across the river, visit marble workshops.</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-6 flex flex-wrap gap-4">
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-user-group text-primary"></i> 2-8 people   
+                                    </span>
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-bed text-primary"></i> 4-star hotels   
+                                    </span>
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-car text-primary"></i> Private transport
+                                    </span>
+                                </div>
+                                <div class="mt-6">
+                                <a href="bookingoriginal.html"    <button class="bg-primary hover:bg-primary/90 text-white py-2 px-6 rounded-lg font-medium transition-all transform hover:scale-105">
+                                        Book Now
+                                    </button></a>
+                                <a href="bookingoriginal.html"    <button class="ml-4 border border-primary text-primary hover:bg-primary/10 py-2 px-6 rounded-lg font-medium transition-all">
+                                        Customize Plan
+                                    </button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 7-Day Himalayan Trekking Adventure -->
+                <div class="scroll-item w-full md:w-[85%] lg:w-[60%] pr-6">
+                    <div class="tour-card bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-2/5">
+                                <div class="relative rounded-lg overflow-hidden h-64">
+                                    <img src="https://images.unsplash.com/photo-1513023840371-dd774fcaee5b" alt="Himalayan Trek" class="w-full h-full object-cover">
+                                    <div class="absolute top-4 left-4 bg-accent-blue text-white px-4 py-1 rounded-full font-medium">
+                                        7 Days
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="md:w-3/5">
+                                <h3 class="font-display text-2xl mb-3 text-light-text dark:text-dark-text">Himalayan Trekking Adventure</h3>
+                                
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Days 1-2: Arrival & Acclimatization</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Arrive in Rishikesh, visit ashrams.</p>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Days 3-5: Valley of Flowers Trek</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Trek through alpine meadows bursting with endemic flowers.</p>
+                                    </div>
+                                    
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Days 6-7: Hemkund Sahib & Return</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Visit the sacred high-altitude lake and temples.</p>
+                                    </div>
+                                </div>
+                                 <div class="mt-6 flex flex-wrap gap-4">
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-person-hiking text-primary"></i> Moderate difficulty
+                                    </span>
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-mountain text-primary"></i> Max 4,200m elevation
+                                    </span>
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-campground text-primary"></i> Camping & guesthouses
+                                    </span>
+                                </div>
+                                 <div class="mt-6">
+                                 <a href="bookingoriginal.html"   <button class="bg-primary hover:bg-primary/90 text-white py-2 px-6 rounded-lg font-medium transition-all transform hover:scale-105">
+                                        Book Now
+                                    </button></a>
+                                <a href="bookingoriginal.html"    <button class="ml-4 border border-primary text-primary hover:bg-primary/10 py-2 px-6 rounded-lg font-medium transition-all">
+                                        Customize Plan
+                                    </button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 5-Day Varanasi Spiritual Journey -->
+                <div class="scroll-item w-full md:w-[85%] lg:w-[60%]">
+                    <div class="tour-card bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="md:w-2/5">
+                                <div class="relative rounded-lg overflow-hidden h-64">
+                                    <img src="varnasifinall.jpeg" alt="Varanasi Spiritual Journey" class="w-full h-full object-cover">
+                                    <div class="absolute top-4 left-4 bg-accent-green text-white px-4 py-1 rounded-full font-medium">
+                                        5 Days
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="md:w-3/5">
+                                <h3 class="font-display text-2xl mb-3 text-light-text dark:text-dark-text">Varanasi Spiritual & Cultural Journey</h3>
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Days 1-2: Ghats & Temples</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Witness the Ganga Aarti ceremony, and visit Kashi Vishwanath.</p>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Day 3: Sarnath Buddhist Site</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Visit the place where Buddha gave his first sermon.</p>
+                                    </div>
+                                     <div class="timeline-item">
+                                        <div class="timeline-dot top-1"></div>
+                                        <h4 class="font-medium text-primary">Days 4-5: Spiritual Practices & Departure</h4>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300">Join yoga and meditation sessions, explore silk weaving.</p>
+                                    </div>
+                                </div>
+                                <div class="mt-6 flex flex-wrap gap-4">
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-om text-primary"></i> Spiritual immersion
+                                    </span>
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-hotel text-primary"></i> Heritage hotels
+                                    </span>
+                                    <span class="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                                        <i class="fas fa-utensils text-primary"></i> Vegetarian cuisine
+                                    </span>
+                                </div>
+                                 <div class="mt-6">
+                                 <a href="bookingoriginal.html"   <button class="bg-primary hover:bg-primary/90 text-white py-2 px-6 rounded-lg font-medium transition-all transform hover:scale-105">
+                                        Book Now
+                                    </button></a>
+                                <a href="bookingoriginal.html"    <button class="ml-4 border border-primary text-primary hover:bg-primary/10 py-2 px-6 rounded-lg font-medium transition-all">
+                                        Customize Plan
+                                    </button></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scroll Navigation -->
+            <div class="mt-8 flex justify-center gap-4">
+                <button id="scrollLeft" class="bg-white dark:bg-dark-card text-primary w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all hover:shadow-lg">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button id="scrollRight" class="bg-white dark:bg-dark-card text-primary w-12 h-12 rounded-full flex items-center justify-center shadow-md transition-all hover:shadow-lg">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cultural Experience Section -->
+    <section id="experiences" class="py-20 bg-light-bg dark:bg-dark-bg">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="inline-block text-primary font-medium mb-2">IMMERSE</span>
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-light-text dark:text-dark-text mb-4">Cultural Experiences</h2>
+                <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
+                    Taste, feel, and live the authentic culture of North India through its food, festivals, and traditions
+                </p>
+            </div>
+            
+            <!-- Food Trails -->
+            <div class="mb-20">
+                <h3 class="font-display text-2xl md:text-3xl text-light-text dark:text-dark-text mb-8 text-center">
+                    <i class="fas fa-utensils text-accent-orange mr-3"></i> Food Trails
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Varanasi Food -->
+                    <div class="experience-card bg-light-card dark:bg-dark-card rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1601050690597-df0568f70950" alt="Varanasi Street Food" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-display text-xl mb-3 text-light-text dark:text-dark-text">Varanasi Flavors</h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Savor Banarasi paan, kachori sabzi, lassi, and the famous Banarasi chai from roadside stalls.
+                            </p>
+                            <div class="flex gap-3">
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-leaf"></i>
+                                </span>
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-mug-hot"></i>
+                                </span>
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-cheese"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Himalayan Food -->
+                    <div class="experience-card bg-light-card dark:bg-dark-card rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-48 overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1626074353765-517a681e40be" alt="Himalayan Food" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-display text-xl mb-3 text-light-text dark:text-dark-text">Himalayan Cuisine</h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Warm up with steaming momos, thukpa, siddu, and authentic herbal teas in mountain cafes.
+                            </p>
+                            <div class="flex gap-3">
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-bowl-food"></i>
+                                </span>
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-seedling"></i>
+                                </span>
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-wheat-awn"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Agra Food -->
+                    <div class="experience-card bg-light-card dark:bg-dark-card rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-48 overflow-hidden">
+                            <img src="agrafood.jpg" alt="Agra Food" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-6">
+                            <h4 class="font-display text-xl mb-3 text-light-text dark:text-dark-text">Mughlai Delicacies</h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Indulge in rich kebabs, biryani, nihari, and the sweet petha - Agra's signature dessert.
+                            </p>
+                            <div class="flex gap-3">
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-drumstick-bite"></i>
+                                </span>
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-bowl-rice"></i>
+                                </span>
+                                <span class="inline-block w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+                                    <i class="fas fa-candy-cane"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Festivals -->
+            <div>
+                <h3 class="font-display text-2xl md:text-3xl text-light-text dark:text-dark-text mb-8 text-center">
+                    <i class="fas fa-sparkles text-accent-orange mr-3"></i> Festivals & Celebrations
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Dev Deepawali -->
+                    <div class="festival-card flex flex-col md:flex-row gap-6 bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <div class="md:w-1/3 relative overflow-hidden rounded-lg">
+                            <img src="diwali.jpeg" alt="Dev Deepawali Festival" class="w-full h-48 md:h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end">
+                                <span class="text-white px-4 py-2 font-medium">November</span>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <h4 class="font-display text-xl mb-2 text-light-text dark:text-dark-text">Dev Deepawali, Varanasi</h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Witness the "Diwali of the Gods" when all 84 ghats of Varanasi are illuminated with over a million earthen lamps, creating a breathtaking spectacle along the Ganges.
+                            </p>
+                            <div class="flex gap-2 flex-wrap">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Ghats Lighting</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Ganga Aarti</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Processions</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Holi -->
+                    <div class="festival-card flex flex-col md:flex-row gap-6 bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <div class="md:w-1/3 relative overflow-hidden rounded-lg">
+                            <img src="holi.jpeg" alt="Holi Festival" class="w-full h-48 md:h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end">
+                                <span class="text-white px-4 py-2 font-medium">March</span>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <h4 class="font-display text-xl mb-2 text-light-text dark:text-dark-text">Holi in Mathura & Vrindavan</h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Experience the most vibrant and traditional celebration of Holi, the festival of colors, in the birthplace of Lord Krishna with traditional music and dance.
+                            </p>
+                            <div class="flex gap-2 flex-wrap">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Colors</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Music</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Sweets</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Kumbh Mela -->
+                    <div class="festival-card flex flex-col md:flex-row gap-6 bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <div class="md:w-1/3 relative overflow-hidden rounded-lg">
+                            <img src="kumbhmela.jpg" alt="Kumbh Mela" class="w-full h-48 md:h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end">
+                                <span class="text-white px-4 py-2 font-medium">Periodic</span>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <h4 class="font-display text-xl mb-2 text-light-text dark:text-dark-text">Kumbh Mela, Various Cities</h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Join the world's largest gathering of humanity at this sacred pilgrimage that rotates between four riverside cities, including Prayagraj and Haridwar.
+                            </p>
+                            <div class="flex gap-2 flex-wrap">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Holy Dip</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Sadhus</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Rituals</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Taj Mahotsav -->
+                    <div class="festival-card flex flex-col md:flex-row gap-6 bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg">
+                        <div class="md:w-1/3 relative overflow-hidden rounded-lg">
+                            <img src="tajmahotsav1.jpeg" alt="Taj Mahotsav" class="w-full h-48 md:h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end">
+                                <span class="text-white px-4 py-2 font-medium">February</span>
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <h4 class="font-display text-xl mb-2 text-light-text dark:text-dark-text">Taj Mahotsav, Agra</h4>
+                            <p class="text-gray-600 dark:text-gray-300 mb-4">
+                                Celebrate Mughal and Rajasthani heritage through this 10-day cultural extravaganza featuring crafts, cuisine, and performances near the Taj Mahal.
+                            </p>
+                            <div class="flex gap-2 flex-wrap">
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Crafts</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Dance</span>
+                                <span class="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm">Food</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-primary/5">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="inline-block text-primary font-medium mb-2">VISUALIZE</span>
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-light-text dark:text-dark-text mb-4">Immersive Gallery</h2>
+                <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
+                    Glimpses of the stunning landscapes, spiritual moments, and architectural marvels that await you
+                </p>
+            </div>
+            
+            <div class="image-grid">
+                <div class="image-grid-item">
+                    <img src="varanasiboat.jpeg" alt="Varanasi Boat" class="gallery-image">
+                </div>
+                <div class="image-grid-item">
+                    <img src="tajmahotsav.jpeg" alt="Taj Mahal" class="gallery-image">
+                </div>
+                <div class="image-grid-item">
+                    <img src="himalayanlandscape.jpeg" alt="Himalayan Landscape" class="gallery-image">
+                </div>
+                <div class="image-grid-item">
+                    <img src="varnasifinall.jpeg" alt="Varanasi Ghats" class="gallery-image">
+                </div>
+                <div class="image-grid-item">
+                    <img src="himalayantemple.jpeg" alt="Himalayan Temple" class="gallery-image">
+                </div>
+                <div class="image-grid-item">
+                    <img src="agrafort.jpeg" alt="Agra Fort" class="gallery-image">
+                </div>
+            </div>
+            
+           
+        </div>
+    </section>
+
+    <!-- Why Visit Section -->
+    <section id="why-visit" class="py-20 bg-light-bg dark:bg-dark-bg">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <span class="inline-block text-primary font-medium mb-2">INSIGHTS</span>
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-light-text dark:text-dark-text mb-4">Why Visit North India?</h2>
+                <p class="max-w-2xl mx-auto text-gray-600 dark:text-gray-300">
+                    From practical travel tips to cultural insights, here's everything you need to know
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Best Time to Visit -->
+                <div class="info-card bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg transform transition-all hover:translate-y-[-5px]">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-calendar-days text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="font-display text-xl mb-4 text-center text-light-text dark:text-dark-text">Best Time to Visit</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-300">Varanasi</span>
+                            <span class="text-primary font-medium">October - March</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full">
+                            <div class="bg-primary h-full rounded-full" style="width: 80%"></div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-300">Himalayas</span>
+                            <span class="text-primary font-medium">April - June</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full">
+                            <div class="bg-primary h-full rounded-full" style="width: 65%"></div>
+                        </div>
+                        
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 dark:text-gray-300">Taj Mahal</span>
+                            <span class="text-primary font-medium">November - February</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 h-1.5 rounded-full">
+                            <div class="bg-primary h-full rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cultural Etiquette -->
+                <div class="info-card bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg transform transition-all hover:translate-y-[-5px]">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-hands-praying text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="font-display text-xl mb-4 text-center text-light-text dark:text-dark-text">Cultural Etiquette</h3>
+                    <ul class="space-y-3 text-gray-600 dark:text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-accent-green mt-1"></i>
+                            <span>Remove shoes before entering temples</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-accent-green mt-1"></i>
+                            <span>Dress modestly at religious sites</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-accent-green mt-1"></i>
+                            <span>Ask permission before photographing people</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-accent-green mt-1"></i>
+                            <span>Greet people with "Namaste" with folded hands</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-circle-check text-accent-green mt-1"></i>
+                            <span>Use right hand for giving and receiving</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Getting Around -->
+                <div class="info-card bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg transform transition-all hover:translate-y-[-5px]">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-route text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="font-display text-xl mb-4 text-center text-light-text dark:text-dark-text">Getting Around</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-accent-blue/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-train text-accent-blue"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-light-text dark:text-dark-text">Trains</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Extensive network connecting major cities</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-accent-green/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-car text-accent-green"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-light-text dark:text-dark-text">Private Transfers</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Comfortable and convenient for tourists</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-accent-orange/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-bus text-accent-orange"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-light-text dark:text-dark-text">Local Transport</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">Auto-rickshaws, cycle rickshaws, local buses</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-accent-red/10 flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-plane text-accent-red"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-light-text dark:text-dark-text">Domestic Flights</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">For longer distances between major destinations</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Essential Packing -->
+                <div class="info-card bg-light-card dark:bg-dark-card p-6 rounded-xl shadow-lg transform transition-all hover:translate-y-[-5px]">
+                    <div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-suitcase text-2xl text-primary"></i>
+                    </div>
+                    <h3 class="font-display text-xl mb-4 text-center text-light-text dark:text-dark-text">Essential Packing</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col items-center gap-2 bg-primary/5 p-3 rounded-lg">
+                            <i class="fas fa-shirt text-primary"></i>
+                            <span class="text-sm text-gray-600 dark:text-gray-300 text-center">Modest Clothing</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center gap-2 bg-primary/5 p-3 rounded-lg">
+                            <i class="fas fa-hat-cowboy text-primary"></i>
+                            <span class="text-sm text-gray-600 dark:text-gray-300 text-center">Sun Protection</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center gap-2 bg-primary/5 p-3 rounded-lg">
+                            <i class="fas fa-pills text-primary"></i>
+                            <span class="text-sm text-gray-600 dark:text-gray-300 text-center">Basic Meds</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center gap-2 bg-primary/5 p-3 rounded-lg">
+                            <i class="fas fa-camera text-primary"></i>
+                            <span class="text-sm text-gray-600 dark:text-gray-300 text-center">Camera Gear</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center gap-2 bg-primary/5 p-3 rounded-lg">
+                            <i class="fas fa-plug text-primary"></i>
+                            <span class="text-sm text-gray-600 dark:text-gray-300 text-center">Power Adapter</span>
+                        </div>
+                        
+                        <div class="flex flex-col items-center gap-2 bg-primary/5 p-3 rounded-lg">
+                            <i class="fas fa-bottle-water text-primary"></i>
+                            <span class="text-sm text-gray-600 dark:text-gray-300 text-center">Water Bottle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="cta" class="py-20 bg-primary">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-white mb-6">Ready to Embark on Your Journey?</h2>
+                <p class="max-w-2xl mx-auto text-white/90 mb-10 text-lg">
+                    Let us craft a personalized North India experience that speaks to your soul
+                </p>
+                
+                <div class="flex flex-col md:flex-row gap-4 justify-center">
+                 <a href="bookingoriginal.html"   <button class="bg-white text-primary py-3 px-8 rounded-full font-medium text-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                        Plan My Trip
+                    </button></a>
+                    <button class="border-2 border-white text-white py-3 px-8 rounded-full font-medium text-lg transition-all transform hover:scale-105 hover:bg-white/10">
+                        Contact a Travel Specialist
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <span class="text-accent-orange text-3xl"><i class="fas fa-om"></i></span>
+                        <span class="font-display text-2xl font-bold">North India</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Creating unforgettable journeys through the mystical, majestic, and mesmerizing landscapes of North India.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-all">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-medium mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#destinations" class="text-gray-400 hover:text-white transition-colors">Destinations</a></li>
+                        <li><a href="#tours" class="text-gray-400 hover:text-white transition-colors">Tour Plans</a></li>
+                        <li><a href="#experiences" class="text-gray-400 hover:text-white transition-colors">Experiences</a></li>
+                        <li><a href="#gallery" class="text-gray-400 hover:text-white transition-colors">Gallery</a></li>
+                        <li><a href="#testimonials" class="text-gray-400 hover:text-white transition-colors">Testimonials</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-medium mb-6">Resources</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Travel Guide</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Travel Insurance</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Visa Information</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Travel Blog</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-medium mb-6">Contact Us</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-map-marker-alt text-primary mt-1"></i>
+                            <span class="text-gray-400">123 Travel Street, New Delhi, India</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-phone text-primary mt-1"></i>
+                            <span class="text-gray-400">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fas fa-envelope text-primary mt-1"></i>
+                            <span class="text-gray-400">info@northindiatours.com</span>
+                        </li>
+                    </ul>
+                    
+                    <div class="mt-6">
+                        <h4 class="text-sm font-medium mb-3">Subscribe to our newsletter</h4>
+                        <form class="flex">
+                            <input type="email" placeholder="Your email" class="bg-white/10 rounded-l-lg py-2 px-4 text-white focus:outline-none focus:ring-2 focus:ring-primary" style="min-width: 0;">
+                            <button type="submit" class="bg-primary rounded-r-lg py-2 px-4">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    &copy; 2023 North India Tours. All rights reserved.
+                </p>
+                
+                <div class="flex gap-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Fixed "Plan My Trip" Button -->
+    <div class="fixed bottom-8 right-8 z-30 hidden md:block">
+        <button class="bg-accent-orange hover:bg-accent-orange/90 text-white py-3 px-6 rounded-full font-medium shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center gap-2 glow">
+            <i class="fas fa-map-marked-alt"></i>
+            <span>Plan My Trip</span>
+        </button>
+    </div>
+
+    <script>
+        // Initialize GSAP and ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // DOM Elements
+        const preloader = document.getElementById('preloader');
+        const navbar = document.getElementById('navbar');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const modeToggle = document.getElementById('modeToggle');
+        const heroCarousel = document.getElementById('heroCarousel');
+        const scrollLeft = document.getElementById('scrollLeft');
+        const scrollRight = document.getElementById('scrollRight');
+        const horizontalScroll = document.querySelector('.horizontal-scroll-section');
+        const testimonialsLeft = document.getElementById('testimonialsLeft');
+        const testimonialsRight = document.getElementById('testimonialsRight');
+        const testimonialCarousel = document.getElementById('testimonialCarousel');
+        
+        // Preloader Animation
+        window.addEventListener('load', () => {
+            gsap.to(preloader, {
+                opacity: 0,
+                duration: 1,
+                onComplete: () => {
+                    preloader.style.display = 'none';
+                }
+            });
+        });
+        
+        // Hero Section Animations
+        const heroItems = heroCarousel.querySelectorAll('.carousel-item');
+        let currentHeroIndex = 0;
+        
+        function showHeroSlide(index) {
+            heroItems.forEach((item, i) => {
+                if (i === index) {
+                    gsap.to(item, { opacity: 1, duration: 1.5, ease: 'power2.inOut' });
+                } else {
+                    gsap.to(item, { opacity: 0, duration: 1.5, ease: 'power2.inOut' });
+                }
+            });
+        }
+        
+        function nextHeroSlide() {
+            currentHeroIndex = (currentHeroIndex + 1) % heroItems.length;
+            showHeroSlide(currentHeroIndex);
+        }
+        
+        // Initialize Hero Carousel
+        showHeroSlide(0);
+        setInterval(nextHeroSlide, 5000);
+        
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'py-3');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'py-3');
+                navbar.classList.add('py-4');
+            }
+        });
+        
+        // Mobile Menu Toggle
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenuBtn.innerHTML = '<i class="fas fa-times"></i>';
+            } else {
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+        });
+        
+        // Dark Mode Toggle
+        modeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+        
+        // Horizontal Scroll Navigation
+        scrollLeft.addEventListener('click', () => {
+            horizontalScroll.scrollBy({ left: -350, behavior: 'smooth' });
+        });
+        
+        scrollRight.addEventListener('click', () => {
+            horizontalScroll.scrollBy({ left: 350, behavior: 'smooth' });
+        });
+        
+        // Testimonials Carousel
+        let testimonialIndex = 0;
+        const testimonialItems = testimonialCarousel.querySelectorAll('.carousel-item');
+        
+        function showTestimonial(index) {
+            const newPosition = -100 * index + '%';
+            gsap.to(testimonialCarousel, { 
+                transform: `translateX(${newPosition})`,
+                duration: 0.7,
+                ease: 'power2.out'
+            });
+        }
+        
+        testimonialsLeft.addEventListener('click', () => {
+            testimonialIndex = Math.max(0, testimonialIndex - 1);
+            showTestimonial(testimonialIndex);
+        });
+        
+        testimonialsRight.addEventListener('click', () => {
+            testimonialIndex = Math.min(testimonialItems.length - 1, testimonialIndex + 1);
+            showTestimonial(testimonialIndex);
+        });
+        
+        // GSAP Scroll Animations
+        
+        // Hero Animations
+        gsap.from('.hero-title', {
+            opacity: 0,
+            y: 50,
+            duration: 1,
+            delay: 0.5,
+            ease: 'power3.out'
+        });
+        
+        gsap.from('.hero-tagline span', {
+            opacity: 0,
+            y: 30,
+            stagger: 0.2,
+            duration: 0.8,
+            delay: 1,
+            ease: 'back.out'
+        });
+        
+        gsap.from('.hero-subtitle', {
+            opacity: 0,
+            y: 30,
+            duration: 0.8,
+            delay: 1.6,
+            ease: 'power2.out'
+        });
+        
+        // Destination Card Animations
+        gsap.from('.destination-card', {
+            scrollTrigger: {
+                trigger: '#destinations',
+                start: 'top 70%'
+            },
+            opacity: 0,
+            y: 50,
+            stagger: 0.2,
+            duration: 0.8,
+            ease: 'back.out(1.2)'
+        });
+        
+        // Tour Cards Animation
+        gsap.from('.tour-card', {
+            scrollTrigger: {
+                trigger: '#tours',
+                start: 'top 70%'
+            },
+            opacity: 0,
+            y: 50,
+            stagger: 0.3,
+            duration: 0.8,
+            ease: 'power2.out'
+        });
+        
+        // Experience Card Animations
+        gsap.from('.experience-card', {
+            scrollTrigger: {
+                trigger: '#experiences',
+                start: 'top 70%'
+            },
+            opacity: 0,
+            y: 30,
+            stagger: 0.2,
+            duration: 0.7,
+            ease: 'power2.out'
+        });
+        
+        // Festival Card Animations
+        gsap.from('.festival-card', {
+            scrollTrigger: {
+                trigger: '.festival-card',
+                start: 'top 80%'
+            },
+            opacity: 0,
+            x: -30,
+            stagger: 0.2,
+            duration: 0.7,
+            ease: 'power2.out'
+        });
+        
+        // Gallery Images Animation
+        gsap.from('.gallery-image', {
+            scrollTrigger: {
+                trigger: '#gallery',
+                start: 'top 70%'
+            },
+            opacity: 0,
+            scale: 0.8,
+            stagger: 0.1,
+            duration: 0.7,
+            ease: 'power1.out'
+        });
+        
+        // Info Card Animations
+        gsap.from('.info-card', {
+            scrollTrigger: {
+                trigger: '#why-visit',
+                start: 'top 70%'
+            },
+            opacity: 0,
+            y: 40,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: 'back.out(1.2)'
+        });
+        
+        // Parallax Effect for Background Images
+        document.querySelectorAll('.parallax-bg').forEach(bg => {
+            gsap.to(bg, {
+                scrollTrigger: {
+                    trigger: bg.parentElement,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true
+                },
+                y: '20%',
+                ease: 'none'
+            });
+        });
+        
+        // Timeline Animation
+        gsap.from('.timeline-item', {
+            scrollTrigger: {
+                trigger: '.timeline',
+                start: 'top 80%'
+            },
+            opacity: 0,
+            x: -30,
+            stagger: 0.3,
+            duration: 0.8,
+            ease: 'power2.out'
+        });
+    </script>
+</body>
+</html>
