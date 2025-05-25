@@ -1,0 +1,1351 @@
+//South page code
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>South India: Ancient Wonders, Living Stories</title>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // Kerala
+                        'coconut-white': '#F5F5F0',
+                        'palm-green': '#0B6E4F',
+                        'lagoon-blue': '#08A4BD',
+                        
+                        // Hampi
+                        'stone-brown': '#9B7E46',
+                        'sunset-orange': '#F27D52',
+                        'antique-gold': '#D5A021',
+                        
+                        // Madurai
+                        'vermilion-red': '#C41E3A',
+                        'temple-yellow': '#FFB30F',
+                        'midnight-indigo': '#1A1B41'
+                    },
+                    fontFamily: {
+                        'serif': ['Playfair Display', 'serif'],
+                        'sans': ['DM Sans', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'temple-pattern': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cGF0aCBkPSJNMzAgNEMxNS42NyA0IDQgMTUuNjcgNCAzMHMxMS42NyAyNiAyNiAyNiAyNi0xMS42NyAyNi0yNlM0NC4zMyA0IDMwIDR6bTAgNDhjLTEyLjE1IDAtMjItOS44NS0yMi0yMlMxNy44NSA4IDMwIDhzMjIgOS44NSAyMiAyMi05Ljg1IDIyLTIyIDIyeiIgZmlsbD0icmdiYSgxNjgsIDg0LCAyNCwgMC4wNikiLz48L3N2Zz4=')",
+                        'leaf-pattern': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cGF0aCBkPSJNMjAgMEMxMC43NCAwIDMuMjQgNS4zIDAgMTMuMzlDMy4yNCAyMS40OCAxMC43NCAyNi43OCAyMCAyNi43OFMyOS4yNiAyMS40OCAzMi41IDEzLjM5QzI5LjI2IDUuMyAyOS4yNiAwIDIwIDB6IiBmaWxsPSJyZ2JhKDExLCAxMTAsIDc5LCAwLjA2KSIvPjwvc3ZnPg==')",
+                        'mural-pattern': "url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MCIgaGVpZ2h0PSI3MCIgdmlld0JveD0iMCAwIDcwIDcwIj48cGF0aCBkPSJNMzUgMEMxNS42NyAwIDAgMTUuNjcgMCAzNXMxNS42NyAzNSAzNSAzNXMzNS0xNS42NyAzNS0zNVMxNS42NyAwIDM1IDB6TTEwIDM1YzAtMTQuOTEgMTIuMDktMjcgMjctMjdzMjcgMTIuMDkgMjcgMjdTNTEuOTEgNjIgMzUgNjJzLTI3LTEyLjA5LTI3LTI3eiIgZmlsbD0icmdiYSgxOTYsIDYsIDU4LCAwLjA2KSIvPjwvc3ZnPg==')"
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #9B7E46;
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C41E3A;
+        }
+        
+        /* Custom CSS */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .destination-card {
+            transition: all 0.5s ease;
+        }
+        
+        .destination-card:hover {
+            flex-grow: 1.5;
+        }
+        
+        .magnetic-btn {
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .card-hover {
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+        
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+            z-index: -1;
+        }
+        
+        /* Animated path for SVG journey map */
+        .journey-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+        
+        /* Mandala loader */
+        .mandala-loader {
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Floating animation */
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Dark mode styles */
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .dark body {
+            background-color: #1A1B41;
+            color: #F5F5F0;
+        }
+    </style>
+</head>
+
+<body class="font-sans bg-coconut-white dark:bg-midnight-indigo">
+    <!-- Preloader Animation (Shows until site loads) -->
+    <div id="preloader" class="fixed inset-0 z-50 flex items-center justify-center bg-coconut-white dark:bg-midnight-indigo">
+        <div class="w-32 h-32 mandala-loader">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" stroke="#D5A021" stroke-width="1">
+                    <circle cx="50" cy="50" r="45" />
+                    <path d="M50 5 V95 M5 50 H95 M14.6 14.6 L85.4 85.4 M14.6 85.4 L85.4 14.6 M29.3 7.3 L70.7 92.7 M7.3 29.3 L92.7 70.7 M7.3 70.7 L92.7 29.3 M29.3 92.7 L70.7 7.3" />
+                    <circle cx="50" cy="50" r="20" />
+                </g>
+            </svg>
+        </div>
+        <div class="absolute mt-24 text-center">
+            <p class="font-serif text-lg text-stone-brown dark:text-temple-yellow">Loading your journey...</p>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-white bg-opacity-90 dark:bg-midnight-indigo dark:bg-opacity-90 backdrop-blur-sm transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="#" class="flex items-center">
+                <svg class="w-8 h-8 mr-2" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 2L30 7L25 12L20 7L25 2Z" fill="#0B6E4F" class="dark:fill-temple-yellow" />
+                    <path d="M25 20L35 10L45 20H25Z" fill="#9B7E46" class="dark:fill-temple-yellow" />
+                    <path d="M25 20L15 10L5 20H25Z" fill="#C41E3A" class="dark:fill-vermilion-red" />
+                    <rect x="10" y="20" width="30" height="25" fill="#D5A021" class="dark:fill-sunset-orange" />
+                    <path d="M15 30H35V45H15V30Z" fill="#08A4BD" class="dark:fill-lagoon-blue" />
+                    <circle cx="25" cy="38" r="4" fill="#F5F5F0" />
+                </svg>
+                <span class="font-serif text-xl font-bold text-stone-brown dark:text-temple-yellow">South India</span>
+            </a>
+            
+            <div class="flex items-center space-x-1 md:space-x-4">
+                <button id="darkModeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-midnight-indigo transition">
+                    <i class="fas fa-moon text-stone-brown dark:text-temple-yellow hidden dark:block"></i>
+                    <i class="fas fa-sun text-sunset-orange dark:hidden"></i>
+                </button>
+                
+                <!-- Language Selector -->
+                <div class="relative group">
+                    <button class="flex items-center px-2 py-1 text-sm rounded-md border border-stone-brown/30 dark:border-temple-yellow/30 hover:bg-gray-100 dark:hover:bg-midnight-indigo/50">
+                        <span class="mr-1">EN</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div class="absolute right-0 mt-2 w-24 bg-white dark:bg-midnight-indigo shadow-lg rounded-md overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-midnight-indigo/50">EN</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-midnight-indigo/50">தமிழ்</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-midnight-indigo/50">മലയാളം</a>
+                        <a href="#" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-midnight-indigo/50">ಕನ್ನಡ</a>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuBtn" class="md:hidden p-2">
+                    <i class="fas fa-bars text-stone-brown dark:text-temple-yellow"></i>
+                </button>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#destinations" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Destinations</a>
+                    <a href="#experiences" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Experiences</a>
+                    <a href="#planner" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Plan Your Trip</a>
+                    <a href="#gallery" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Gallery</a>
+                    <a href="#stories" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Stories</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" class="md:hidden hidden bg-white dark:bg-midnight-indigo shadow-md">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#destinations" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Destinations</a>
+                <a href="#experiences" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Experiences</a>
+                <a href="#planner" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Plan Your Trip</a>
+                <a href="#gallery" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Gallery</a>
+                <a href="#stories" class="font-medium text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">Stories</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Video Background -->
+    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Video placeholder - would be replaced with actual video in production -->
+        <div class="video-container absolute inset-0 bg-cover bg-center z-0">
+            <!-- In a real implementation, this would be a video element -->
+            <div class="video-placeholder w-full h-full bg-gradient-to-r from-palm-green via-stone-brown to-vermilion-red opacity-50"></div>
+            <!-- Video gradient overlay -->
+            <div class="gradient-overlay"></div>
+        </div>
+        
+        <div class="container mx-auto px-4 z-10 text-center">
+            <h1 class="font-serif text-4xl md:text-6xl font-bold text-white text-shadow mb-6 opacity-0" id="heroTitle">
+                <span class="block">South India:</span>
+                <span class="block mt-2">Ancient Wonders, Living Stories</span>
+            </h1>
+            
+            <p class="text-lg md:text-xl text-white text-shadow max-w-3xl mx-auto mb-8 opacity-0" id="heroSubtitle">
+                Experience the mystical beauty of Kerala's backwaters, Hampi's ancient ruins, and Madurai's majestic temples.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 opacity-0" id="heroCta">
+                <a href="#destinations" class="magnetic-btn bg-palm-green hover:bg-palm-green/90 text-white px-8 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg">
+                    Begin Your Journey
+                </a>
+                <a href="#planner" class="magnetic-btn bg-transparent border-2 border-white text-white hover:bg-white/10 px-8 py-3 rounded-full font-medium transition transform hover:scale-105">
+                    Plan Your Escape
+                </a>
+            </div>
+            
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 float">
+                <svg class="w-16 h-16 opacity-80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" stroke="white" stroke-width="1" />
+                    <circle cx="50" cy="50" r="30" stroke="white" stroke-width="1" />
+                    <circle cx="50" cy="50" r="15" stroke="white" stroke-width="1" />
+                    <path d="M50 30 L50 70 M40 60 L50 70 L60 60" stroke="white" stroke-width="2" />
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations Portal (Animated Split Reveal Scroll) -->
+    <section id="destinations" class="py-20 relative overflow-hidden bg-temple-pattern dark:bg-midnight-indigo">
+        <div class="container mx-auto px-4">
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-stone-brown dark:text-temple-yellow text-center mb-16">
+                Where Stone Speaks and Rivers Sing
+            </h2>
+            
+            <div class="flex flex-col md:flex-row md:h-[600px] gap-3 md:gap-6">
+                <!-- Kerala Card -->
+                <div class="destination-card relative flex-1 bg-gradient-to-b from-palm-green/90 to-lagoon-blue/80 rounded-2xl overflow-hidden group transition-all duration-500">
+                    <div class="absolute inset-0 bg-center bg-cover" style="background-image: url('keralacard.jpeg'); opacity: 0.7;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-palm-green/90"></div>
+                    
+                    <div class="relative p-6 md:p-8 h-full flex flex-col justify-end">
+                        <h3 class="font-serif text-2xl md:text-3xl font-bold text-white mb-2">Kerala</h3>
+                        <div class="transform transition-all duration-500 max-h-0 group-hover:max-h-[500px] overflow-hidden">
+                            <p class="text-white/90 mb-4">Meandering waterways, swaying palms, and emerald hills create a paradise known as God's Own Country.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Backwaters</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Ayurveda</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Tea Estates</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Wildlife</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Spice Gardens</span>
+                            </div>
+                            <a href="#" class="inline-flex items-center text-white hover:underline">
+                                Explore Kerala
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hampi Card -->
+                <div class="destination-card relative flex-1 bg-gradient-to-b from-sunset-orange/90 to-stone-brown/80 rounded-2xl overflow-hidden group transition-all duration-500">
+                    <div class="absolute inset-0 bg-center bg-cover" style="background-image: url('hampi.jpeg'); opacity: 0.7;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-sunset-orange/90"></div>
+                    
+                    <div class="relative p-6 md:p-8 h-full flex flex-col justify-end">
+                        <h3 class="font-serif text-2xl md:text-3xl font-bold text-white mb-2">Hampi</h3>
+                        <div class="transform transition-all duration-500 max-h-0 group-hover:max-h-[500px] overflow-hidden">
+                            <p class="text-white/90 mb-4">A surreal landscape where imposing ruins of the Vijayanagara Empire whisper stories from a golden past.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Temple Ruins</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Boulder Landscapes</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Ancient Bazaars</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Coracle Rides</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">History</span>
+                            </div>
+                            <a href="#" class="inline-flex items-center text-white hover:underline">
+                                Explore Hampi
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Madurai Card -->
+                <div class="destination-card relative flex-1 bg-gradient-to-b from-vermilion-red/90 to-midnight-indigo/80 rounded-2xl overflow-hidden group transition-all duration-500">
+                    <div class="absolute inset-0 bg-center bg-cover" style="background-image: url('madurai.jpeg'); opacity: 0.7;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-vermilion-red/90"></div>
+                    
+                    <div class="relative p-6 md:p-8 h-full flex flex-col justify-end">
+                        <h3 class="font-serif text-2xl md:text-3xl font-bold text-white mb-2">Madurai</h3>
+                        <div class="transform transition-all duration-500 max-h-0 group-hover:max-h-[500px] overflow-hidden">
+                            <p class="text-white/90 mb-4">The ancient city where the magnificent Meenakshi Temple stands as a living canvas of color, art, and devotion.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Meenakshi Temple</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Silk Markets</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Temple Festivals</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Heritage</span>
+                                <span class="px-3 py-1 bg-white/30 backdrop-blur-sm rounded-full text-sm text-white">Tamil Culture</span>
+                            </div>
+                            <a href="#" class="inline-flex items-center text-white hover:underline">
+                                Explore Madurai
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dynamic Tour Planner (Smart Cards + Timeline Animation) -->
+    <section id="planner" class="py-20 relative overflow-hidden bg-white dark:bg-midnight-indigo bg-leaf-pattern">
+        <div class="container mx-auto px-4">
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-stone-brown dark:text-temple-yellow text-center mb-6">
+                A Temple in Every Footstep
+            </h2>
+            <p class="text-center text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-16">
+                Customize your South Indian odyssey with our interactive journey planner, crafting the perfect blend of wonder, serenity, and adventure.
+            </p>
+            
+            <!-- Filters -->
+            <div class="bg-white dark:bg-midnight-indigo/50 rounded-lg p-6 shadow-lg mb-12">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Travel Theme</label>
+                        <select class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-midnight-indigo/80 text-base">
+                            <option value="">All Themes</option>
+                            <option value="spiritual">Spiritual Journey</option>
+                            <option value="romantic">Romantic Getaway</option>
+                            <option value="adventure">Adventure Trek</option>
+                            <option value="wellness">Wellness Retreat</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration</label>
+                        <select class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-midnight-indigo/80 text-base">
+                            <option value="">Any Duration</option>
+                            <option value="3-5">3-5 Days</option>
+                            <option value="6-10">6-10 Days</option>
+                            <option value="11-15">11-15 Days</option>
+                            <option value="15+">15+ Days</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Budget</label>
+                        <select class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-midnight-indigo/80 text-base">
+                            <option value="">Any Budget</option>
+                            <option value="budget">Budget Friendly</option>
+                            <option value="mid">Mid Range</option>
+                            <option value="luxury">Luxury</option>
+                            <option value="ultra">Ultra Luxury</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Season</label>
+                        <select class="w-full p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-midnight-indigo/80 text-base">
+                            <option value="">Any Season</option>
+                            <option value="winter">Winter (Nov-Feb)</option>
+                            <option value="summer">Summer (Mar-May)</option>
+                            <option value="monsoon">Monsoon (Jun-Sep)</option>
+                            <option value="autumn">Autumn (Oct)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tour Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <!-- Backwater Escape -->
+                <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('kerback.jpeg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-serif text-xl font-bold text-stone-brown dark:text-temple-yellow">Backwater Escape</h3>
+                            <span class="bg-palm-green/10 text-palm-green dark:bg-palm-green/20 dark:text-green-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">5 Days</span>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">Glide through Kerala's serene backwaters on a traditional houseboat, experiencing the rhythm of rural life along verdant shores.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-lagoon-blue/10 text-lagoon-blue dark:bg-lagoon-blue/20 dark:text-blue-300 text-xs rounded-md">Alleppey</span>
+                            <span class="px-2 py-1 bg-lagoon-blue/10 text-lagoon-blue dark:bg-lagoon-blue/20 dark:text-blue-300 text-xs rounded-md">Kumarakom</span>
+                            <span class="px-2 py-1 bg-lagoon-blue/10 text-lagoon-blue dark:bg-lagoon-blue/20 dark:text-blue-300 text-xs rounded-md">Kochi</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-semibold text-stone-brown dark:text-temple-yellow">From 55000</span>
+                           <a href="bookingoriginal.html" button class="magnetic-btn bg-palm-green hover:bg-palm-green/90 text-white px-4 py-2 rounded-lg font-medium transition transform hover:scale-105">View Details</button></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Heritage Trek -->
+                <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('hampi.jpeg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-serif text-xl font-bold text-stone-brown dark:text-temple-yellow">Heritage Trek</h3>
+                            <span class="bg-sunset-orange/10 text-sunset-orange dark:bg-sunset-orange/20 dark:text-orange-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">7 Days</span>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">Journey through time as you explore the majestic ruins of Hampi, where every stone tells a tale of ancient grandeur.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-sunset-orange/10 text-sunset-orange dark:bg-sunset-orange/20 dark:text-orange-300 text-xs rounded-md">Hampi</span>
+                            <span class="px-2 py-1 bg-sunset-orange/10 text-sunset-orange dark:bg-sunset-orange/20 dark:text-orange-300 text-xs rounded-md">Hospet</span>
+                            <span class="px-2 py-1 bg-sunset-orange/10 text-sunset-orange dark:bg-sunset-orange/20 dark:text-orange-300 text-xs rounded-md">Badami</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-semibold text-stone-brown dark:text-temple-yellow">From 30000</span>
+                        <a href="bookingoriginal.html"button class="magnetic-btn bg-sunset-orange hover:bg-sunset-orange/90 text-white px-4 py-2 rounded-lg font-medium transition transform hover:scale-105">View Details</button></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Spiritual Journey -->
+                <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('meenakshitemple.jpeg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="font-serif text-xl font-bold text-stone-brown dark:text-temple-yellow">Spiritual Journey</h3>
+                            <span class="bg-vermilion-red/10 text-vermilion-red dark:bg-vermilion-red/20 dark:text-red-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">6 Days</span>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300 mb-4">Witness sacred rituals at the magnificent Meenakshi Temple and immerse yourself in Madurai's vibrant spiritual traditions.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-vermilion-red/10 text-vermilion-red dark:bg-vermilion-red/20 dark:text-red-300 text-xs rounded-md">Madurai</span>
+                            <span class="px-2 py-1 bg-vermilion-red/10 text-vermilion-red dark:bg-vermilion-red/20 dark:text-red-300 text-xs rounded-md">Rameshwaram</span>
+                            <span class="px-2 py-1 bg-vermilion-red/10 text-vermilion-red dark:bg-vermilion-red/20 dark:text-red-300 text-xs rounded-md">Thanjavur</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-semibold text-stone-brown dark:text-temple-yellow">From 25000</span>
+                         <a href="bookingoriginal.html"   button class="magnetic-btn bg-vermilion-red hover:bg-vermilion-red/90 text-white px-4 py-2 rounded-lg font-medium transition transform hover:scale-105">View Details</button></a>                     </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tour Map with SVG -->
+            <div class="bg-white dark:bg-midnight-indigo/50 rounded-xl p-6 shadow-lg">
+                <h3 class="font-serif text-2xl font-bold text-stone-brown dark:text-temple-yellow mb-6 text-center">Journey Map</h3>
+                <div class="relative h-[400px] overflow-hidden">
+                    <!-- South India outline SVG map -->
+                    <svg class="w-full h-full" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Map outline for South India (simplified) -->
+                        <path d="M200,100 Q300,50 400,100 T600,100 Q650,200 600,300 T600,500 Q500,550 400,500 T200,500 Q150,400 200,300 T200,100" 
+                              stroke="#9B7E46" stroke-width="2" fill="none" class="dark:stroke-temple-yellow" />
+                        
+                        <!-- Kerala -->
+                        <circle cx="250" cy="350" r="20" fill="#0B6E4F" class="dark:fill-palm-green/70" />
+                        <text x="250" y="350" text-anchor="middle" dy=".3em" fill="white" font-size="12">Kerala</text>
+                        
+                        <!-- Hampi -->
+                        <circle cx="450" cy="200" r="20" fill="#F27D52" class="dark:fill-sunset-orange/70" />
+                        <text x="450" y="200" text-anchor="middle" dy=".3em" fill="white" font-size="12">Hampi</text>
+                        
+                        <!-- Madurai -->
+                        <circle cx="500" cy="400" r="20" fill="#C41E3A" class="dark:fill-vermilion-red/70" />
+                        <text x="500" y="400" text-anchor="middle" dy=".3em" fill="white" font-size="12">Madurai</text>
+                        
+                        <!-- Journey path between points -->
+                        <path d="M250,350 L450,200 L500,400 L250,350" 
+                              stroke="#D5A021" stroke-width="3" stroke-dasharray="8,8" fill="none" 
+                              class="journey-path dark:stroke-antique-gold" />
+                    </svg>
+                </div>
+                
+                <div class="mt-8 text-center">
+                  <a href="bookingoriginal.html"  button class="magnetic-btn bg-antique-gold hover:bg-antique-gold/90 text-white px-8 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg">
+                        Craft My Journey
+                    </button></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cultural Experiences Hub (Vertical Parallax Storytelling) -->
+    <section id="experiences" class="py-20 relative overflow-hidden bg-mural-pattern">
+        <div class="container mx-auto px-4">
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-stone-brown dark:text-temple-yellow text-center mb-6">
+                Backwaters to Bell Towers: A Journey Through the South
+            </h2>
+            <p class="text-center text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-16">
+                Immerse yourself in the vibrant cultural tapestry of South India – a land where every meal is a celebration and every dance tells a story.
+            </p>
+            
+            <!-- Tabs for Cultural Categories -->
+            <div class="flex flex-wrap justify-center mb-12">
+                <button class="tab-btn px-6 py-3 m-2 rounded-full bg-palm-green text-white font-medium" data-tab="food">
+                    <i class="fas fa-utensils mr-2"></i>Food Trails
+                </button>
+                <button class="tab-btn px-6 py-3 m-2 rounded-full bg-white dark:bg-midnight-indigo/50 text-stone-brown dark:text-temple-yellow font-medium border border-stone-brown/30 dark:border-temple-yellow/30" data-tab="arts">
+                    <i class="fas fa-masks-theater mr-2"></i>Performing Arts
+                </button>
+                <button class="tab-btn px-6 py-3 m-2 rounded-full bg-white dark:bg-midnight-indigo/50 text-stone-brown dark:text-temple-yellow font-medium border border-stone-brown/30 dark:border-temple-yellow/30" data-tab="festivals">
+                    <i class="fas fa-moon mr-2"></i>Festivals
+                </button>
+            </div>
+            
+            <!-- Food Trails Tab Content (Active by default) -->
+            <div class="tab-content active" id="food-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Kerala Food -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('keralafood.jpeg');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Kerala Cuisine</h3>
+                                <p class="text-white/80">Coconut-infused flavors of the coast</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Savor the delicate balance of spices in Appam with Stew, the grandeur of Sadya served on banana leaves, and the subtle sweetness of Payasam.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-palm-green/10 text-palm-green dark:bg-palm-green/20 dark:text-green-300 text-xs rounded-md">Appam & Stew</span>
+                                <span class="px-2 py-1 bg-palm-green/10 text-palm-green dark:bg-palm-green/20 dark:text-green-300 text-xs rounded-md">Sadya</span>
+                                <span class="px-2 py-1 bg-palm-green/10 text-palm-green dark:bg-palm-green/20 dark:text-green-300 text-xs rounded-md">Malabar Biryani</span>
+                            </div>
+                            <button class="magnetic-btn inline-flex items-center text-palm-green dark:text-green-300 hover:underline">
+                                Explore Kerala's Flavors
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Karnataka Food -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1505253758473-96b7015fcd40?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Karnataka Cuisine</h3>
+                                <p class="text-white/80">Rustic flavors of the Deccan Plateau</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Experience the earthy flavors of Ragi Mudde, the spicy tang of Bisi Bele Bath, and the sweet crunch of Mysore Pak from the land of coffee plantations.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-sunset-orange/10 text-sunset-orange dark:bg-sunset-orange/20 dark:text-orange-300 text-xs rounded-md">Ragi Mudde</span>
+                                <span class="px-2 py-1 bg-sunset-orange/10 text-sunset-orange dark:bg-sunset-orange/20 dark:text-orange-300 text-xs rounded-md">Bisi Bele Bath</span>
+                                <span class="px-2 py-1 bg-sunset-orange/10 text-sunset-orange dark:bg-sunset-orange/20 dark:text-orange-300 text-xs rounded-md">Mysore Pak</span>
+                            </div>
+                            <button class="magnetic-btn inline-flex items-center text-sunset-orange dark:text-orange-300 hover:underline">
+                                Explore Karnataka's Flavors
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tamil Nadu Food -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('tamilfood.jpeg');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Tamil Nadu Cuisine</h3>
+                                <p class="text-white/80">Fiery and flavorful traditions</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Delight in the tangy-sweet Jigarthanda of Madurai, the crispy Paniyaram, and the aromatic Chettinad curry that defines Tamil culinary heritage.
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-vermilion-red/10 text-vermilion-red dark:bg-vermilion-red/20 dark:text-red-300 text-xs rounded-md">Jigarthanda</span>
+                                <span class="px-2 py-1 bg-vermilion-red/10 text-vermilion-red dark:bg-vermilion-red/20 dark:text-red-300 text-xs rounded-md">Paniyaram</span>
+                                <span class="px-2 py-1 bg-vermilion-red/10 text-vermilion-red dark:bg-vermilion-red/20 dark:text-red-300 text-xs rounded-md">Chettinad Curry</span>
+                            </div>
+                            <button class="magnetic-btn inline-flex items-center text-vermilion-red dark:text-red-300 hover:underline">
+                                Explore Tamil Nadu's Flavors
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Performing Arts Tab Content (Hidden initially) -->
+            <div class="tab-content hidden" id="arts-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Kathakali -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1584811644165-33078f50eb15?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Kathakali</h3>
+                                <p class="text-white/80">Kerala's dramatic storytelling</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Witness the elaborate facial expressions, vibrant costumes, and intricate choreography of Kathakali, a classical dance form that narrates ancient epics.
+                            </p>
+                            <button class="magnetic-btn inline-flex items-center text-palm-green dark:text-green-300 hover:underline">
+                                Experience Kathakali
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Yakshagana -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1533652475678-c097c9dade4c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Yakshagana</h3>
+                                <p class="text-white/80">Karnataka's theatrical heritage</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Experience the energy of Yakshagana, a folk theater form combining dance, music, dialogue, and elaborate costumes to depict mythological tales.
+                            </p>
+                            <button class="magnetic-btn inline-flex items-center text-sunset-orange dark:text-orange-300 hover:underline">
+                                Experience Yakshagana
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Bharatanatyam -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1593486544518-d3d9830def05?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Bharatanatyam</h3>
+                                <p class="text-white/80">Tamil Nadu's divine dance</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Witness the precision of Bharatanatyam, one of India's oldest classical dance forms with geometric postures, expressive hand gestures, and rhythmic footwork.
+                            </p>
+                            <button class="magnetic-btn inline-flex items-center text-vermilion-red dark:text-red-300 hover:underline">
+                                Experience Bharatanatyam
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Festivals Tab Content (Hidden initially) -->
+            <div class="tab-content hidden" id="festivals-content">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Onam -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1596005554384-d293674c91d7?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Onam</h3>
+                                <p class="text-white/80">Kerala's harvest celebration</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Join the ten-day harvest festival featuring intricate flower carpets (pookkalam), boat races, traditional dances, and the grand Onam Sadya feast.
+                            </p>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                <i class="far fa-calendar-alt mr-2"></i>August-September (Malayalam month of Chingam)
+                            </div>
+                            <button class="magnetic-btn inline-flex items-center text-palm-green dark:text-green-300 hover:underline">
+                                Experience Onam
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Hampi Utsav -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1548013146-72479768bada?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Hampi Utsav</h3>
+                                <p class="text-white/80">Karnataka's heritage festival</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Experience a cultural extravaganza amid ancient ruins featuring puppet shows, fireworks, music performances, and traditional dance in a magical setting.
+                            </p>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                <i class="far fa-calendar-alt mr-2"></i>November (3-day celebration)
+                            </div>
+                            <button class="magnetic-btn inline-flex items-center text-sunset-orange dark:text-orange-300 hover:underline">
+                                Experience Hampi Utsav
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Chithirai Festival -->
+                    <div class="card-hover bg-white dark:bg-midnight-indigo/50 rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-60 bg-cover bg-center relative" style="background-image: url('https://images.unsplash.com/photo-1477382301583-11526bc00a11?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                            <div class="absolute bottom-0 left-0 p-6">
+                                <h3 class="font-serif text-xl font-bold text-white">Chithirai Festival</h3>
+                                <p class="text-white/80">Madurai's divine celebration</p>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-700 dark:text-gray-300 mb-4">
+                                Witness the celestial wedding of Goddess Meenakshi and Lord Sundareswarar in this month-long celebration, culminating in a grand procession.
+                            </p>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                <i class="far fa-calendar-alt mr-2"></i>April-May (Tamil month of Chithirai)
+                            </div>
+                            <button class="magnetic-btn inline-flex items-center text-vermilion-red dark:text-red-300 hover:underline">
+                                Experience Chithirai Festival
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Immersive Media Gallery -->
+    <section id="gallery" class="py-20 relative overflow-hidden bg-white dark:bg-midnight-indigo">
+        <div class="container mx-auto px-4">
+            <h2 class="font-serif text-3xl md:text-4xl font-bold text-stone-brown dark:text-temple-yellow text-center mb-6">
+                Moments That Tell Our Story
+            </h2>
+            <p class="text-center text-gray-700 dark:text-gray-300 max-w-3xl mx-auto mb-16">
+                From sacred temple corridors to misty mountain slopes, explore South India through our curated visual journey.
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item 1 -->
+                <div class="gallery-item rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                    <div class="h-80 bg-cover bg-center" style="background-image: url('keralaback.jpeg');"></div>
+                    <div class="p-4 bg-white dark:bg-midnight-indigo/80">
+                        <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow">Kerala Backwaters at Dusk</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">The rhythmic peace of houseboat life</p>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                    <div class="h-80 bg-cover bg-center" style="background-image: url('hampi.jpeg');"></div>
+                    <div class="p-4 bg-white dark:bg-midnight-indigo/80">
+                        <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow">Stone Chariots of Hampi</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Architectural marvel frozen in time</p>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                    <div class="h-80 bg-cover bg-center" style="background-image: url('meenakshitemple.jpeg');"></div>
+                    <div class="p-4 bg-white dark:bg-midnight-indigo/80">
+                        <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow">Meenakshi Temple Corridor</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">A thousand pillars tell a thousand tales</p>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                    <div class="h-80 bg-cover bg-center" style="background-image: url('munnar.jpeg');"></div>
+                    <div class="p-4 bg-white dark:bg-midnight-indigo/80">
+                        <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow">Munnar Tea Plantations</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Rolling hills of emerald treasures</p>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                    <div class="h-80 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1582510003544-4d00b7f74220?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');"></div>
+                    <div class="p-4 bg-white dark:bg-midnight-indigo/80">
+                        <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow">Kathakali Performer</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">The face of tradition embodied</p>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 6 -->
+                <div class="gallery-item rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-[1.02] cursor-pointer">
+                    <div class="h-80 bg-cover bg-center" style="background-image: url('hampi1.jpeg');"></div>
+                    <div class="p-4 bg-white dark:bg-midnight-indigo/80">
+                        <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow">Hampi's Boulder Landscape</h3>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Where earth touches the sky</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="magnetic-btn bg-antique-gold hover:bg-antique-gold/90 text-white px-8 py-3 rounded-full font-medium transition transform hover:scale-105 hover:shadow-lg">
+                    View Full Gallery
+                </button>
+            </div>
+            
+            <!-- Gallery Lightbox (Hidden initially) -->
+            <div id="gallery-lightbox" class="fixed inset-0 bg-black/90 z-50 hidden flex items-center justify-center p-4">
+                <div class="relative max-w-4xl w-full mx-auto">
+                    <!-- Close button -->
+                    <button id="close-lightbox" class="absolute -top-12 right-0 text-white text-2xl hover:text-gray-300">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    
+                    <!-- Image container -->
+                    <div class="bg-white dark:bg-midnight-indigo rounded-lg overflow-hidden">
+                        <img id="lightbox-image" class="w-full" src="" alt="Gallery image">
+                        <div class="p-6">
+                            <h3 id="lightbox-title" class="font-serif text-xl font-bold text-stone-brown dark:text-temple-yellow mb-2"></h3>
+                            <p id="lightbox-description" class="text-gray-700 dark:text-gray-300"></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation buttons -->
+                    <div class="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-12">
+                        <button id="prev-image" class="text-white text-4xl hover:text-gray-300">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                    </div>
+                    <div class="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-12">
+                        <button id="next-image" class="text-white text-4xl hover:text-gray-300">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-midnight-indigo py-16 relative overflow-hidden">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <!-- Logo and About -->
+                <div>
+                    <div class="flex items-center mb-6">
+                        <svg class="w-8 h-8 mr-2" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M25 2L30 7L25 12L20 7L25 2Z" fill="#0B6E4F" class="dark:fill-temple-yellow" />
+                            <path d="M25 20L35 10L45 20H25Z" fill="#9B7E46" class="dark:fill-temple-yellow" />
+                            <path d="M25 20L15 10L5 20H25Z" fill="#C41E3A" class="dark:fill-vermilion-red" />
+                            <rect x="10" y="20" width="30" height="25" fill="#D5A021" class="dark:fill-sunset-orange" />
+                            <path d="M15 30H35V45H15V30Z" fill="#08A4BD" class="dark:fill-lagoon-blue" />
+                            <circle cx="25" cy="38" r="4" fill="#F5F5F0" />
+                        </svg>
+                        <span class="font-serif text-xl font-bold text-stone-brown dark:text-temple-yellow">South India</span>
+                    </div>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        Immersive journeys through Kerala, Hampi, and Madurai, crafting memories that last a lifetime.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-stone-brown dark:text-temple-yellow hover:text-palm-green dark:hover:text-sunset-orange transition">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Destinations -->
+                <div>
+                    <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow mb-6">Destinations</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Kerala Backwaters</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Munnar Tea Gardens</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Hampi Ruins</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Badami Caves</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Meenakshi Temple</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Rameshwaram</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Experiences -->
+                <div>
+                    <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow mb-6">Experiences</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Houseboat Stays</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Ayurvedic Retreats</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Temple Tours</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Culinary Workshops</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Dance Performances</a></li>
+                        <li><a href="#" class="text-gray-700 dark:text-gray-300 hover:text-palm-green dark:hover:text-sunset-orange transition">Festival Celebrations</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h3 class="font-serif text-lg font-bold text-stone-brown dark:text-temple-yellow mb-6">Join Our Journey</h3>
+                    <p class="text-gray-700 dark:text-gray-300 mb-4">
+                        Subscribe to receive travel inspiration, exclusive offers, and cultural insights.
+                    </p>
+                    <div class="bg-white dark:bg-midnight-indigo shadow-lg rounded-full overflow-hidden flex border border-stone-brown/20 dark:border-temple-yellow/20">
+                        <input type="email" placeholder="Your email address" class="flex-grow py-3 px-4 bg-transparent focus:outline-none text-gray-700 dark:text-gray-300 text-base">
+                        <button class="bg-palm-green hover:bg-palm-green/90 text-white px-4 py-3 font-medium">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 md:mb-0">
+                    © 2023 South India Tours. All rights reserved.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-palm-green dark:hover:text-sunset-orange transition text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-palm-green dark:hover:text-sunset-orange transition text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-600 dark:text-gray-400 hover:text-palm-green dark:hover:text-sunset-orange transition text-sm">Contact Us</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating South Indian instruments (Animated SVGs) -->
+        <div class="absolute bottom-40 left-10 opacity-20 float">
+            <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Simplified Veena SVG -->
+                <path d="M10,50 C10,30 20,20 30,20 C40,20 50,30 50,50 C50,70 40,80 30,80 C20,80 10,70 10,50 Z" stroke="#9B7E46" stroke-width="2" class="dark:stroke-temple-yellow" />
+                <line x1="50" y1="50" x2="90" y2="50" stroke="#9B7E46" stroke-width="2" class="dark:stroke-temple-yellow" />
+                <circle cx="70" cy="50" r="5" fill="#9B7E46" class="dark:fill-temple-yellow" />
+            </svg>
+        </div>
+        
+        <div class="absolute bottom-20 right-10 opacity-20 float" style="animation-delay: 1s;">
+            <svg class="w-16 h-16" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Simplified Tabla SVG -->
+                <circle cx="50" cy="30" r="20" stroke="#C41E3A" stroke-width="2" fill="none" class="dark:stroke-vermilion-red" />
+                <path d="M30,30 C30,60 40,70 50,70 C60,70 70,60 70,30" stroke="#C41E3A" stroke-width="2" class="dark:stroke-vermilion-red" />
+            </svg>
+        </div>
+        
+        <!-- Scroll to top button -->
+        <div class="fixed bottom-8 right-8 z-30">
+            <button id="scrollToTop" class="w-12 h-12 bg-antique-gold hover:bg-antique-gold/90 text-white rounded-full shadow-lg flex items-center justify-center transform transition-transform hover:scale-110 opacity-0 invisible">
+                <i class="fas fa-chevron-up"></i>
+            </button>
+        </div>
+    </footer>
+
+    <!-- Floating AI Tour Guide chatbot -->
+    <div id="chatbot-toggle" class="fixed bottom-8 left-8 z-30 bg-palm-green hover:bg-palm-green/90 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center cursor-pointer transform transition-transform hover:scale-110">
+        <i class="fas fa-comment-dots text-xl"></i>
+    </div>
+    
+    <div id="chatbot" class="fixed bottom-24 left-8 z-30 bg-white dark:bg-midnight-indigo rounded-lg shadow-xl w-80 overflow-hidden transform transition-transform scale-0 origin-bottom-left">
+        <div class="bg-palm-green dark:bg-palm-green/80 text-white p-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center mr-3">
+                    <span class="text-xl font-bold">L</span>
+                </div>
+                <div>
+                    <h3 class="font-medium">Lakshmi</h3>
+                    <p class="text-xs text-white/80">AI Tour Guide</p>
+                </div>
+            </div>
+            <button id="close-chatbot" class="text-white hover:text-white/80">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="h-80 p-4 overflow-y-auto" id="chatbot-messages">
+            <div class="flex mb-4">
+                <div class="w-8 h-8 rounded-full bg-palm-green flex-shrink-0 flex items-center justify-center text-white mr-2">
+                    L
+                </div>
+                <div class="bg-gray-100 dark:bg-midnight-indigo/50 rounded-lg p-3 max-w-[80%]">
+                    <p class="text-gray-800 dark:text-gray-200">Namaste! I'm Lakshmi, your South India guide. How can I help you plan your journey today?</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-3 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex rounded-full bg-gray-100 dark:bg-midnight-indigo/50 overflow-hidden">
+                <input type="text" id="chatbot-input" placeholder="Ask me anything..." class="flex-grow py-2 px-4 bg-transparent focus:outline-none text-gray-700 dark:text-gray-300 text-base">
+                <button id="send-message" class="bg-palm-green hover:bg-palm-green/90 text-white px-4 py-2">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for Interactions -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for dark mode preference
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                document.documentElement.classList.add('dark');
+            }
+            
+            // Dark mode toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            darkModeToggle.addEventListener('click', function() {
+                document.documentElement.classList.toggle('dark');
+            });
+            
+            // Listen for system dark mode changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+                if (event.matches) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            });
+            
+            // GSAP Animations
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Preloader animation
+            const preloader = document.getElementById('preloader');
+            gsap.to(preloader, {
+                opacity: 0,
+                duration: 1,
+                delay: 1.5,
+                onComplete: () => {
+                    preloader.style.display = 'none';
+                    
+                    // Hero section animations
+                    const heroTitle = document.getElementById('heroTitle');
+                    const heroSubtitle = document.getElementById('heroSubtitle');
+                    const heroCta = document.getElementById('heroCta');
+                    
+                    gsap.to(heroTitle, { opacity: 1, y: 0, duration: 1, delay: 0.3 });
+                    gsap.to(heroSubtitle, { opacity: 1, y: 0, duration: 1, delay: 0.8 });
+                    gsap.to(heroCta, { opacity: 1, y: 0, duration: 1, delay: 1.3 });
+                }
+            });
+            
+            // Navbar scroll behavior
+            const navbar = document.querySelector('nav');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-md');
+                } else {
+                    navbar.classList.remove('shadow-md');
+                }
+            });
+            
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            mobileMenuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Destination cards animations
+            gsap.utils.toArray('.destination-card').forEach(card => {
+                gsap.from(card, {
+                    y: 50,
+                    opacity: 0,
+                    duration: 1,
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 80%",
+                        toggleActions: "play none none reverse"
+                    }
+                });
+            });
+            
+            // Tour planner journey path animation
+            gsap.to('.journey-path', {
+                scrollTrigger: {
+                    trigger: '.journey-path',
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                strokeDashoffset: 0,
+                duration: 2,
+                ease: "power2.out"
+            });
+            
+            // Tabs functionality for Cultural Experiences
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('bg-palm-green', 'text-white');
+                        btn.classList.add('bg-white', 'dark:bg-midnight-indigo/50', 'text-stone-brown', 'dark:text-temple-yellow', 'border', 'border-stone-brown/30', 'dark:border-temple-yellow/30');
+                    });
+                    
+                    // Add active class to clicked button
+                    button.classList.remove('bg-white', 'dark:bg-midnight-indigo/50', 'text-stone-brown', 'dark:text-temple-yellow', 'border', 'border-stone-brown/30', 'dark:border-temple-yellow/30');
+                    button.classList.add('bg-palm-green', 'text-white');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show the corresponding content
+                    const contentId = button.getAttribute('data-tab') + '-content';
+                    const content = document.getElementById(contentId);
+                    content.classList.remove('hidden');
+                    content.classList.add('active');
+                });
+            });
+            
+            // Gallery lightbox functionality
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            const lightbox = document.getElementById('gallery-lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxTitle = document.getElementById('lightbox-title');
+            const lightboxDescription = document.getElementById('lightbox-description');
+            const closeLightbox = document.getElementById('close-lightbox');
+            const prevImage = document.getElementById('prev-image');
+            const nextImage = document.getElementById('next-image');
+            
+            let currentImageIndex = 0;
+            
+            galleryItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    currentImageIndex = index;
+                    const imgSrc = item.querySelector('div').style.backgroundImage.slice(5, -2);
+                    const title = item.querySelector('h3').textContent;
+                    const description = item.querySelector('p').textContent;
+                    
+                    lightboxImage.src = imgSrc;
+                    lightboxTitle.textContent = title;
+                    lightboxDescription.textContent = description;
+                    
+                    lightbox.classList.remove('hidden');
+                    lightbox.classList.add('flex');
+                });
+            });
+            
+            closeLightbox.addEventListener('click', () => {
+                lightbox.classList.add('hidden');
+                lightbox.classList.remove('flex');
+            });
+            
+            prevImage.addEventListener('click', () => {
+                currentImageIndex = (currentImageIndex - 1 + galleryItems.length) % galleryItems.length;
+                updateLightbox();
+            });
+            
+            nextImage.addEventListener('click', () => {
+                currentImageIndex = (currentImageIndex + 1) % galleryItems.length;
+                updateLightbox();
+            });
+            
+            function updateLightbox() {
+                const item = galleryItems[currentImageIndex];
+                const imgSrc = item.querySelector('div').style.backgroundImage.slice(5, -2);
+                const title = item.querySelector('h3').textContent;
+                const description = item.querySelector('p').textContent;
+                
+                lightboxImage.src = imgSrc;
+                lightboxTitle.textContent = title;
+                lightboxDescription.textContent = description;
+            }
+            
+            // Magnetic buttons
+            const magneticButtons = document.querySelectorAll('.magnetic-btn');
+            
+            magneticButtons.forEach(btn => {
+                btn.addEventListener('mousemove', function(e) {
+                    const position = btn.getBoundingClientRect();
+                    const x = e.clientX - position.left - position.width / 2;
+                    const y = e.clientY - position.top - position.height / 2;
+                    
+                    btn.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
+                });
+                
+                btn.addEventListener('mouseout', function() {
+                    btn.style.transform = 'translate(0px, 0px)';
+                });
+            });
+            
+            // Scroll to top button
+            const scrollToTopBtn = document.getElementById('scrollToTop');
+            
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 500) {
+                    scrollToTopBtn.classList.remove('opacity-0', 'invisible');
+                    scrollToTopBtn.classList.add('opacity-100', 'visible');
+                } else {
+                    scrollToTopBtn.classList.add('opacity-0', 'invisible');
+                    scrollToTopBtn.classList.remove('opacity-100', 'visible');
+                }
+            });
+            
+            scrollToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Chatbot functionality
+            const chatbotToggle = document.getElementById('chatbot-toggle');
+            const chatbot = document.getElementById('chatbot');
+            const closeChat = document.getElementById('close-chatbot');
+            const chatMessages = document.getElementById('chatbot-messages');
+            const chatInput = document.getElementById('chatbot-input');
+            const sendMessage = document.getElementById('send-message');
+            
+            chatbotToggle.addEventListener('click', function() {
+                chatbot.classList.toggle('scale-0');
+                chatbot.classList.toggle('scale-100');
+            });
+            
+            closeChat.addEventListener('click', function() {
+                chatbot.classList.add('scale-0');
+                chatbot.classList.remove('scale-100');
+            });
+            
+            function sendChatMessage() {
+                const message = chatInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message
+                chatMessages.innerHTML += `
+                    <div class="flex justify-end mb-4">
+                        <div class="bg-palm-green rounded-lg p-3 max-w-[80%] text-white">
+                            <p>${message}</p>
+                        </div>
+                    </div>
+                `;
+                
+                chatInput.value = '';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simulate AI response after a short delay
+                setTimeout(() => {
+                    const responses = [
+                        "The best time to visit Kerala is from September to March when the weather is pleasant.",
+                        "Hampi is best explored over 2-3 days to fully appreciate the vast archaeological site.",
+                        "For Madurai's Meenakshi Temple, I recommend visiting early morning or during the evening ceremony.",
+                        "South Indian cuisine varies by region - Kerala is known for coconut-based seafood, while Tamil Nadu offers spicier vegetarian thalis.",
+                        "Yes, we can arrange Ayurvedic wellness retreats in Kerala as part of your custom itinerary.",
+                        "The Pongal festival in Tamil Nadu (mid-January) offers a wonderful cultural experience."
+                    ];
+                    
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    
+                    chatMessages.innerHTML += `
+                        <div class="flex mb-4">
+                            <div class="w-8 h-8 rounded-full bg-palm-green flex-shrink-0 flex items-center justify-center text-white mr-2">
+                                L
+                            </div>
+                            <div class="bg-gray-100 dark:bg-midnight-indigo/50 rounded-lg p-3 max-w-[80%]">
+                                <p class="text-gray-800 dark:text-gray-200">${randomResponse}</p>
+                            </div>
+                        </div>
+                    `;
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+            
+            sendMessage.addEventListener('click', sendChatMessage);
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendChatMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
