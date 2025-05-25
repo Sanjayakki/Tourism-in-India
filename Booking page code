@@ -1,0 +1,1587 @@
+//Booking page code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incredible India - Your Journey Begins Here</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'india-saffron': '#FF9933',
+                        'india-green': '#138808',
+                        'india-blue': '#000080',
+                        'india-chakra': '#0000FF',
+                        'india-cream': '#FFF6E9',
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'fadeIn': 'fadeIn 0.8s ease-in-out',
+                        'slideUp': 'slideUp 0.5s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(100%)', opacity: 0 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .destination-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .destination-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-container {
+            transition: transform 0.5s ease;
+        }
+        
+        /* Custom styling for date picker and other form controls */
+        input, select {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        .dark {
+            color-scheme: dark;
+        }
+        
+        .dark .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* Video background styling */
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .gradient-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+            z-index: 5;
+        }
+        
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Progress bar animation for booking success */
+        @keyframes progress {
+            0% { width: 0; }
+            100% { width: 100%; }
+        }
+        
+        .progress-animation {
+            animation: progress 2s ease-out forwards;
+        }
+
+        /* Custom checkmark animation */
+        .checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 6;
+            stroke: #4BB71B;
+            stroke-miterlimit: 10;
+            margin: 10% auto;
+            box-shadow: inset 0px 0px 0px #4BB71B;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+        }
+
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 6;
+            stroke-miterlimit: 10;
+            stroke: #4BB71B;
+            fill: none;
+            animation: stroke .6s cubic-bezier(0.650, 0.000, 0.450, 1.000) forwards;
+        }
+
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke .3s cubic-bezier(0.650, 0.000, 0.450, 1.000) .8s forwards;
+        }
+
+        @keyframes stroke {
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        @keyframes scale {
+            0%, 100% {
+                transform: none;
+            }
+            50% {
+                transform: scale3d(1.1, 1.1, 1);
+            }
+        }
+
+        @keyframes fill {
+            100% {
+                box-shadow: inset 0px 0px 0px 30px #4BB71B;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 transition-colors duration-300">
+    <!-- Header - Navigation Bar -->
+    <header class="fixed top-0 left-0 w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-sm z-50 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <span class="text-india-saffron font-playfair font-bold text-2xl">Incredible</span>
+                <span class="text-india-green font-playfair font-bold text-2xl">India</span>
+            </a>
+            
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#destinations" class="text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Destinations</a>
+                <a href="#packages" class="text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Packages</a>
+                <a href="#why-us" class="text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Why Us</a>
+                <a href="#contact" class="text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Contact</a>
+            </nav>
+            
+            <div class="flex items-center space-x-4">
+                <button id="darkModeToggle" class="p-2 rounded-full text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 block dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                    </svg>
+                </button>
+                
+                <button id="mobileMenuToggle" class="md:hidden p-2 rounded-md text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-gray-800 shadow-lg">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#destinations" class="block py-2 text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Destinations</a>
+                <a href="#packages" class="block py-2 text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Packages</a>
+                <a href="#why-us" class="block py-2 text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Why Us</a>
+                <a href="#contact" class="block py-2 text-gray-800 dark:text-white hover:text-india-saffron transition duration-300">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="video-container">
+        <div class="gradient-overlay"></div>
+        <div class="hero-content">
+            <h1 class="font-playfair text-4xl md:text-6xl font-bold mb-6 text-white">
+                <span class="block">Incredible India Awaits</span>
+                <span class="block text-2xl md:text-3xl mt-2 text-india-cream">Your Journey Begins Here</span>
+            </h1>
+            <p class="max-w-2xl text-lg md:text-xl mb-8 text-white/90">
+                Discover the beauty, culture, and wonder of India with our exclusive travel packages
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4">
+                <a href="#destinations" class="px-8 py-3 bg-india-saffron hover:bg-amber-600 text-white font-medium rounded-lg transition duration-300 shadow-lg hover:shadow-xl">
+                    Browse Packages
+                </a>
+                <button id="instantBookBtn" class="px-8 py-3 bg-white hover:bg-gray-100 text-india-green font-medium rounded-lg transition duration-300 shadow-lg hover:shadow-xl">
+                    Instant Booking
+                </button>
+            </div>
+        </div>
+        
+        <!-- Video Background (Placeholder) -->
+        <div class="bg-gradient-to-br from-india-blue via-purple-900 to-india-green absolute inset-0 z-[1]"></div>
+        
+        <!-- Animated pattern overlay -->
+        <div class="absolute inset-0 z-[2] opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBmaWxsPSIjZmZmIiBkPSJNOTkgMTUxLjVjMi43NiAwIDUgMi4yNCA1IDVzLTIuMjQgNS01IDUtNS0yLjI0LTUtNSAyLjI0LTUgNS01em0tLjUtNDNjMi43NiAwIDUgMi4yNCA1IDVzLTIuMjQgNS01IDUtNS0yLjI0LTUtNSAyLjI0LTUgNS01em0tNi0uNWMyLjc2IDAgNSAyLjI0IDUgNXMtMi4yNCA1LTUgNS01LTIuMjQtNS01IDIuMjQtNSA1LTV6TTEzNyA5OWMzLjMxIDAgNiAyLjY5IDYgNiAwIDMuMzEtMi42OSA2LTYgNnMtNi0yLjY5LTYtNiAyLjY5LTYgNi02em0tOTgtMTljMCAxLjEwNS44OTUgMiAyIDJzMi0uODk1IDItMi0uODk1LTItMi0yLTIgLjg5NS0yIDJ6TTk5IDk1YzIuNzYgMCA1IDIuMjQgNSA1cy0yLjI0IDUtNSA1LTUtMi4yNC01LTUgMi4yNC01IDUtNXptMCAxYzIuMjEgMCA0IDEuNzkgNCA0cy0xLjc5IDQtNCA0LTQtMS43OS00LTQgMS43OS00IDQtNHptMC0yYzMuMzEgMCA2IDIuNjkgNiA2IDAgMy4zMS0yLjY5IDYtNiA2cy02LTIuNjktNi02IDIuNjktNiA2LTZ6bTcgN2MzLjMxIDAgNiAyLjY5IDYgNiAwIDMuMzEtMi42OSA2LTYgNnMtNi0yLjY5LTYtNiAyLjY5LTYgNi02em0tMTQgNmMzLjMxIDAgNiAyLjY5IDYgNiAwIDMuMzEtMi42OSA2LTYgNnMtNi0yLjY5LTYtNiAyLjY5LTYgNi02em0xLTQzYzIuNzYgMCA1IDIuMjQgNSA1cy0yLjI0IDUtNSA1LTUtMi4yNC01LTUgMi4yNC01IDUtNXptMC0uc0zIdzpLSQgeIjoiNTIiIHk9IjEyNCIvPjxjaXJjbGUgZmlsbD0iI0ZGRiIgY3g9IjExMCIgY3k9IjExMCIgcj0iNCIvPjxjaXJjbGUgZmlsbD0iIzAwRiIgY3g9IjExMCIgY3k9IjEzNSIgcj0iNCIvPjwvZz48L3N2Zz4=')]"></div>
+    </section>
+
+    <!-- Filters Section (Sticky) -->
+    <section id="filters" class="sticky top-16 z-40 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-md py-4 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Find Your Perfect Trip</h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full md:w-auto">
+                    <select id="budget-filter" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-india-saffron">
+                        <option value="all">All Budgets</option>
+                        <option value="budget">Budget (Under ₹10k)</option>
+                        <option value="mid">Mid-Range (₹10k-₹25k)</option>
+                        <option value="premium">Premium (₹25k-₹50k)</option>
+                        <option value="luxury">Luxury (₹50k+)</option>
+                    </select>
+                    
+                    <select id="duration-filter" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-india-saffron">
+                        <option value="all">All Durations</option>
+                        <option value="weekend">Weekend (1-2 days)</option>
+                        <option value="short">Short Trip (3-5 days)</option>
+                        <option value="week">Week (6-8 days)</option>
+                        <option value="extended">Extended (9+ days)</option>
+                    </select>
+                    
+                    <select id="type-filter" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-india-saffron">
+                        <option value="all">All Types</option>
+                        <option value="adventure">Adventure</option>
+                        <option value="family">Family</option>
+                        <option value="honeymoon">Honeymoon</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="wildlife">Wildlife</option>
+                        <option value="spiritual">Spiritual</option>
+                    </select>
+                    
+                    <button id="reset-filters" class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded-lg px-4 py-2 transition duration-300">
+                        Reset Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations Grid -->
+    <section id="destinations" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-playfair font-bold text-center mb-4 text-gray-900 dark:text-white reveal">Discover Incredible Destinations</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 reveal">
+                From the snow-capped Himalayas to the sun-kissed beaches of Goa, India offers a mosaic of experiences waiting to be explored
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 reveal" id="destination-grid">
+                <!-- Destination cards will be populated here by JavaScript -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Why Book With Us -->
+    <section id="why-us" class="py-16 bg-india-cream dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-playfair font-bold text-center mb-4 text-gray-900 dark:text-white reveal">Why Book With Us</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 reveal">
+                We're committed to making your Indian adventure seamless, memorable, and extraordinary
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 reveal">
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-india-saffron/10 text-india-saffron rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">24x7 Support</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Our travel experts are available round the clock to assist you during your journey</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-india-green/10 text-india-green rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Verified Hotels</h3>
+                    <p class="text-gray-600 dark:text-gray-300">All accommodations are personally verified for quality, hygiene, and service</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-india-blue/10 text-india-blue rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">1000+ Happy Travelers</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Join our growing family of satisfied travelers who've experienced India with us</p>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-700 p-6 rounded-xl shadow-lg text-center hover:shadow-xl transition duration-300">
+                    <div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-white">Flexible Cancellation</h3>
+                    <p class="text-gray-600 dark:text-gray-300">Plans change. Enjoy peace of mind with our flexible cancellation policy</p>
+                </div>
+            </div>
+            
+            <!-- Testimonials -->
+            <div class="mt-16 reveal">
+                <h3 class="text-2xl font-playfair font-bold text-center mb-8 text-gray-900 dark:text-white">What Our Travelers Say</h3>
+                
+                <div class="testimonial-slider relative">
+                    <div class="overflow-hidden">
+                        <div id="testimonials-container" class="flex transition-transform duration-500 ease-in-out">
+                            <!-- Testimonials will be populated here by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-center mt-6 space-x-2">
+                        <button id="testimonial-prev" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button id="testimonial-next" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Trust Score -->
+            <div class="mt-16 text-center reveal">
+                <div class="inline-block bg-white dark:bg-gray-700 rounded-xl shadow-lg px-8 py-4">
+                    <div class="flex items-center justify-center">
+                        <div class="mr-4">
+                            <div class="text-3xl font-bold text-india-saffron">4.8 / 5</div>
+                            <div class="flex mt-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-saffron" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-saffron" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-saffron" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-saffron" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-300 dark:text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-gray-800 dark:text-white font-semibold">Trust Score</div>
+                            <div class="text-gray-600 dark:text-gray-300 text-sm">Based on 2,456 reviews</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Quick Help -->
+    <section id="contact" class="py-16 bg-white dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-playfair font-bold text-center mb-4 text-gray-900 dark:text-white reveal">Get in Touch</h2>
+            <p class="text-center text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-12 reveal">
+                Have questions about your trip? Our travel experts are ready to assist you
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto reveal">
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-semibold mb-4 text-gray-900 dark:text-white">Contact Us</h3>
+                    
+                    <form id="contact-form" class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 dark:text-gray-300 mb-1">Your Name</label>
+                            <input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                        </div>
+                        
+                        <div>
+                            <label for="email" class="block text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                        </div>
+                        
+                        <div>
+                            <label for="phone" class="block text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                        </div>
+                        
+                        <div>
+                            <label for="message" class="block text-gray-700 dark:text-gray-300 mb-1">Your Message</label>
+                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="w-full px-6 py-3 bg-india-saffron hover:bg-amber-600 text-white font-medium rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="flex flex-col space-y-6">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex items-center">
+                        <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-india-saffron/10 text-india-saffron rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-gray-900 dark:text-white font-semibold">Call Our Travel Experts</h4>
+                            <p class="text-india-saffron">+91 9986194679</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">Available 24/7 for your inquiries</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex items-center">
+                        <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-india-green/10 text-india-green rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-gray-900 dark:text-white font-semibold">Email Us</h4>
+                            <p class="text-india-green">info@incredibleindia.com</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">We'll respond within 24 hours</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg flex items-center">
+                        <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center bg-india-blue/10 text-india-blue rounded-full mr-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-gray-900 dark:text-white font-semibold">Visit Our Office</h4>
+                            <p class="text-india-blue">New Delhi, India</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-sm">Open Monday to Saturday, 9am - 6pm</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                        <h4 class="text-gray-900 dark:text-white font-semibold mb-2">Connect With Us</h4>
+                        <div class="flex space-x-3">
+                            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 text-white transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-pink-600 hover:bg-pink-700 text-white transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-red-600 hover:bg-red-700 text-white transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                                </svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-400 hover:bg-blue-500 text-white transition duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <span class="text-india-saffron font-playfair font-bold text-3xl">Incredible</span>
+                        <span class="text-india-green font-playfair font-bold text-3xl">India</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Discover the wonders of India with our curated travel experiences. From majestic mountains to serene beaches, we bring you the best of Incredible India.
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Home</a></li>
+                        <li><a href="#destinations" class="text-gray-400 hover:text-white transition duration-300">Destinations</a></li>
+                        <li><a href="#packages" class="text-gray-400 hover:text-white transition duration-300">Packages</a></li>
+                        <li><a href="#why-us" class="text-gray-400 hover:text-white transition duration-300">Why Choose Us</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition duration-300">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Popular Destinations</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Goa</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Rajasthan</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Kerala</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Himachal Pradesh</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Andaman Islands</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for the latest offers and updates</p>
+                    
+                    <form id="newsletter-form" class="space-y-3">
+                        <div class="relative">
+                            <input type="email" placeholder="Your email address" class="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                        </div>
+                        <button type="submit" class="w-full px-4 py-2 bg-india-saffron hover:bg-amber-600 text-white font-medium rounded-lg transition duration-300">
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-10 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                        © 2025 Incredible India. All rights reserved.
+                    </p>
+                    
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Terms & Conditions</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Privacy Policy</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition duration-300">Refund Policy</a>
+                    </div>
+                </div>
+                
+                <div class="mt-6 flex flex-wrap justify-center items-center gap-4">
+                    <span class="text-gray-400 text-xs">Payment Partners:</span>
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCA0OCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHJ4PSI0IiBmaWxsPSIjMTQzNDg0Ii8+PHBhdGggZD0iTTIxLjQ0MSAxOC41NjFMMTkuMTY1IDExLjc5OUMxOSAxMS4zIDIwLjExIDEwLjIgMTkuNDk2IDkuOEgxNi4zMDlDMTUuOTUyIDkuOCAxNS41ODMgMTAuMDc3IDE1LjQ2OCAxMC40NkwxMiAxOS44SDE1LjEzOEMxNS40OSAxOS44IDE1Ljg1NSAxOS41MTUgMTUuOTY5IDE5LjEzNkwxNi42MzggMTcuMjdIMjAuNTMxTDIwLjgxMSAxOC41NjFDMjAuOTI1IDE4Ljk0NiAyMS4yODggMTkuMjI4IDIxLjY0NCAxOS4yMjhIMjQuNDQxTDIxLjQ0MSAxOC41NjFaTTE3LjQ2MSAxNC45MzRMMTguNDIgMTIuMTI1QzE4LjQyIDEyLjEyNSAxOC42NzMgMTEuMzc2IDE4LjkzMyAxMi4xMjVDMTkuMjU3IDEzLjA1MSAxOS43NzMgMTQuOTA2IDE5Ljc3MyAxNC45MDZIMTcuNDY0TDE3LjQ2MSAxNC45MzRaIiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0yMC44MzggMTkuMkg2LjE4QzYuMDgxIDE5LjIgNiAxOS4wOTMgNiAxOS4wNEw4Ljc2OCA5Ljk2QzguNzczIDkuOTYgOC44NDYgOS44IDkuMDY2IDkuOEgyMS40NzlDMjEuNTc1IDkuOCAyMS42NDYgOS44MDkgMjEuNjUgOS45NkwyMSAxMC40QzIwLjcgMTAuNCAyMC41IDEwLjQgMjAuMzc1IDEwLjU2TDIwLjgzOSAxOS4ySDIwLjgzOFoiIGZpbGw9IndoaXRlIi8+PHBhdGggZD0iTTM2IDE5LjJIMzIuODYzQzMyLjUxMiAxOS4yIDMyLjE0MiAxOC45MTUgMzIuMDI2IDE4LjUzN0wzMC44NDYgMTUuNjQxSDI3Ljk2NUwyNi45NyAxOC41MzdDMjYuODU1IDE4LjkyMiAyNi40OTIgMTkuMiAyNi4xMzcgMTkuMkgyMy4yNjJMMjcuMjA1IDEwLjQ2QzI3LjMyIDE2LjA3NiAyNy42OTEgOS44IDI4LjA0OCA5LjhIMzEuNzFDMzIuMDY3IDkuOCAzMi40MzMgMTAuMDc3IDMyLjU0OCAxMC40Nkw1Ni4zMzQgMTkuMkgzNlpNMjkuNzI1IDEyLjEyNUwyOCAxNC45QzI4IDE0LjkgMzAuMjMgMTQuOSAzMC4yMyAxNC45QzMwLjIzIDE0LjkgMjkuNjYgMTMgMjkuMzM0IDEyLjEyNUMyOS4wNzQgMTEuMzc2IDI5LjcyNSAxMi4xMjUgMjkuNzI1IDEyLjEyNVoiIGZpbGw9IndoaXRlIi8+PC9zdmc+" alt="Visa" class="h-6">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCA0OCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHJ4PSI0IiBmaWxsPSIjMjUyNTI1Ii8+PGNpcmNsZSBjeD0iMTkiIGN5PSIxNSIgcj0iOCIgZmlsbD0iI0VFMDA2MyIgZmlsbC1vcGFjaXR5PSIwLjgiLz48Y2lyY2xlIGN4PSIyOSIgY3k9IjE1IiByPSI4IiBmaWxsPSIjRkIwIiBmaWxsLW9wYWNpdHk9IjAuOCIvPjxwYXRoIGQ9Ik0yOC44MjQgMTkuMDQxQzI3LjMyIDE5LjA0MSAyNS45MTggMTguMzcxIDI0Ljg3OCAxNy4zMzNDMjMuODQxIDE2LjA4MiAyMi4xODQgMTYuODIgMjIuMTg0IDE2LjgyQzIzLjA4NSAxNi4wMyAyMy43NzUgMTQuOTIyIDI0LjEyMiAxMy42ODJDMjQuMTIyIDEzLjY4MiAyNS4wNDMgMTMuOTk5IDI1LjY3NyAxMy42ODJDMjUuNjc3IDEzLjY4MiAyNC43NTYgMTMuMDQ1IDI0Ljc1NiAxMi40MDhDMjQuNzU2IDExLjA5OCAyNi43NzkgMTAuMTM3IDI2Ljc3OSAxMC4xMzdDMjUuOTk4IDEwLjk1OCAyNS41OTEgMTIuMDA3IDI1LjU5MSAxMy4wNDVDMjUuNTkxIDEzLjA0NSAyNy4wNjMgMTMuMzYyIDI3LjYxNyAxMi4wODlDMjcuNjE3IDEyLjA4OSAyNi4zNDQgMTQuMzI0IDI4Ljk0NCAxNS45MkMyOC45NDQgMTUuOTIgMjcuODMxIDE2LjkwOSAyNi4zOTggMTYuNTY1QzI2LjM5OCAxNi41NjUgMjcuNTc3IDE3LjYzNSAyOC44MjQgMTcuNjM1TDI4LjgyNCAxOS4wNDFaIiBmaWxsPSIjRkZGIi8+PC9zdmc+" alt="Mastercard" class="h-6">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCA0OCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHJ4PSI0IiBmaWxsPSIjMDYwOTBCIi8+PHBhdGggZD0iTTE0IDEwLjVIMzRWMjAuNUgxNFYxMC41WiIgZmlsbD0iIzAzOUJFNSIvPjxwYXRoIGQ9Ik0xNi42NjcgMThoMy4zMzNWMTNoLTMuMzMzVjE4WiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTcuNTU2IDExLjI1QzE3LjEwMSAxMS4yNSAxNi42NjcgMTEuNDU3IDE2LjY2NyAxMS43NUMxNi42NjcgMTIuMDQzIDE3LjEwMSAxMi4yNSAxNy41NTYgMTIuMjVIMjIuODg5QzIzLjM0NCAxMi4yNSAyMy43NzggMTIuMDQzIDIzLjc3OCAxMS43NUMyMy43NzggMTEuNDU3IDIzLjM0NCAxMS4yNSAyMi44ODkgMTEuMjVIMTcuNTU2WiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMTYuNjY3IDE4LjVDMTYuNjY3IDE4Ljc3NiAxNy4wOTIgMTkgMTcuNTU2IDE5SDIyLjg4OUMyMy4zNTMgMTkgMjMuNzc4IDE4Ljc3NiAyMy43NzggMTguNUMyMy43NzggMTguMjI0IDIzLjM1MyAxOCAyMi44ODkgMThIMTcuNTU2QzE3LjA5MiAxOCAxNi42NjcgMTguMjI0IDE2LjY2NyAxOC41WiIgZmlsbD0id2hpdGUiLz48cGF0aCBkPSJNMjUgMThIMzFWMTNIMjVWMThaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==" alt="PayPal" class="h-6">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCA0OCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDgiIGhlaWdodD0iMzAiIHJ4PSI0IiBmaWxsPSJ3aGl0ZSIvPjxwYXRoIGQ9Ik0zNy41IDEwLjVIMTAuNVYxOC41SDM3LjVWMTAuNVoiIGZpbGw9IiMxNDI1ODYiLz48cGF0aCBkPSJNMTAuNSAxOS41SDM3LjVWMjAuNUgxMC41VjE5LjVaIiBmaWxsPSIjRjQ5MjMxIi8+PHBhdGggZD0iTTI2LjY2NyAxMy41TDI0IDE3LjVMMjEuMzM0IDEzLjVIMjYuNjY3WiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=" alt="UPI" class="h-6">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Floating Button -->
+    <div class="fixed bottom-6 right-6 z-50">
+        <button id="whatsappBtn" class="w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Expert Call Button -->
+    <div class="fixed bottom-6 left-6 z-50 hidden md:block">
+        <button id="callExpertBtn" class="px-4 py-3 bg-india-saffron hover:bg-amber-600 text-white rounded-lg shadow-lg hover:shadow-xl flex items-center space-x-2 transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+            </svg>
+            <span>Call a Travel Expert</span>
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <!-- Destination Details Modal -->
+    <div id="destination-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="modal-overlay absolute inset-0 bg-black opacity-75"></div>
+        
+        <div class="modal-container relative bg-white dark:bg-gray-800 w-11/12 md:max-w-4xl mx-auto rounded-xl shadow-2xl overflow-y-auto transform translate-y-full opacity-0 transition-all duration-500">
+            <div class="modal-content py-4 text-left px-6">
+                <div class="flex justify-between items-center pb-3">
+                    <h3 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-white"></h3>
+                    <button id="modal-close" class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition duration-150">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="relative h-64 md:h-96 overflow-hidden rounded-lg mb-6">
+                        <img id="modal-image" src="" alt="" class="w-full h-full object-cover">
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2 space-y-4">
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Package Overview</h4>
+                                <p id="modal-description" class="text-gray-700 dark:text-gray-300"></p>
+                            </div>
+
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Includes</h4>
+                                <ul id="modal-includes" class="space-y-2">
+                                    <!-- Populated by JS -->
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Day-wise Itinerary</h4>
+                                <div id="modal-itinerary" class="space-y-4">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <h4 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Book This Package</h4>
+                            
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">Travel Dates</label>
+                                    <input type="date" id="travel-date" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">Number of Travelers</label>
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <label class="block text-gray-600 dark:text-gray-400 text-sm mb-1">Adults</label>
+                                            <input type="number" id="adults" min="1" value="2" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-gray-600 dark:text-gray-400 text-sm mb-1">Children</label>
+                                            <input type="number" id="children" min="0" value="0" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-700 dark:text-gray-300">Base Price:</span>
+                                        <span id="modal-base-price" class="text-gray-900 dark:text-white"></span>
+                                    </div>
+                                    <div class="flex justify-between mb-2">
+                                        <span class="text-gray-700 dark:text-gray-300">Travelers:</span>
+                                        <span id="modal-travelers">2 Adults, 0 Children</span>
+                                    </div>
+                                    <div class="flex justify-between font-semibold">
+                                        <span class="text-gray-700 dark:text-gray-300">Total Price:</span>
+                                        <span id="modal-total-price" class="text-india-saffron"></span>
+                                    </div>
+                                </div>
+                                
+                                <button id="book-now-btn" class="w-full px-6 py-3 bg-india-saffron hover:bg-amber-600 text-white font-medium rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                                    Book Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Form Modal -->
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="modal-overlay absolute inset-0 bg-black opacity-75"></div>
+        
+        <div class="modal-container relative bg-white dark:bg-gray-800 w-11/12 md:max-w-2xl mx-auto rounded-xl shadow-2xl overflow-y-auto transform translate-y-full opacity-0 transition-all duration-500 my-12">
+            <div class="modal-content py-4 text-left px-6">
+                <div class="flex justify-between items-center pb-3">
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Complete Your Booking</h3>
+                    <button id="booking-modal-close" class="modal-close text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white transition duration-150">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="booking-form-container">
+                    <div class="modal-body">
+                        <div class="bg-india-cream dark:bg-gray-700 p-4 rounded-lg mb-6">
+                            <h4 class="text-gray-900 dark:text-white font-medium mb-2">Booking Summary</h4>
+                            <div class="flex justify-between">
+                                <div>
+                                    <p id="booking-destination" class="text-gray-800 dark:text-white font-semibold"></p>
+                                    <p id="booking-dates" class="text-gray-600 dark:text-gray-300 text-sm"></p>
+                                    <p id="booking-travelers" class="text-gray-600 dark:text-gray-300 text-sm"></p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-gray-600 dark:text-gray-300 text-sm">Total Amount</p>
+                                    <p id="booking-total" class="text-india-saffron font-semibold"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <form id="payment-form" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">First Name</label>
+                                    <input type="text" id="first-name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">Last Name</label>
+                                    <input type="text" id="last-name" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">Email Address</label>
+                                    <input type="email" id="booking-email" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
+                                    <input type="tel" id="booking-phone" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-300 mb-1">Card Number</label>
+                                <input type="text" id="card-number" placeholder="1234 5678 9012 3456" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">Expiry Date</label>
+                                    <input type="text" id="card-expiry" placeholder="MM/YY" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-gray-700 dark:text-gray-300 mb-1">CVV</label>
+                                    <input type="text" id="card-cvv" placeholder="123" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-india-saffron" required>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start">
+                                <input type="checkbox" id="terms-agree" class="mt-1 mr-2" required>
+                                <label for="terms-agree" class="text-gray-700 dark:text-gray-300 text-sm">I agree to the <a href="#" class="text-india-saffron hover:underline">Terms & Conditions</a> and <a href="#" class="text-india-saffron hover:underline">Privacy Policy</a></label>
+                            </div>
+                            
+                            <button type="submit" class="w-full px-6 py-3 bg-india-saffron hover:bg-amber-600 text-white font-medium rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                                Complete Payment
+                            </button>
+                            
+                            <p class="text-center text-gray-600 dark:text-gray-400 text-sm mt-4">
+                                Your payment information is secure and encrypted
+                            </p>
+                        </form>
+                    </div>
+                </div>
+                
+                <div id="booking-success" class="modal-body text-center py-8 hidden">
+                    <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                    
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mt-6">Booking Confirmed!</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mt-2 mb-6">
+                        Your journey is set! Booking reference: <span id="booking-reference" class="font-semibold">IND8372</span>
+                    </p>
+                    
+                    <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-left max-w-md mx-auto">
+                        <h4 class="text-gray-900 dark:text-white font-medium text-lg mb-2">What's Next?</h4>
+                        <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-green mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Check your email for booking confirmation</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-green mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>A travel expert will contact you within 24 hours</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-green mr-2 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                </svg>
+                                <span>Get ready for your incredible journey!</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <button id="booking-success-close" class="mt-6 px-6 py-2 bg-india-green hover:bg-green-700 text-white font-medium rounded-lg transition duration-300 shadow-md hover:shadow-lg">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Dark Mode Detection & Toggle
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+        
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+        });
+        
+        // Mobile Menu Toggle
+        document.getElementById('mobileMenuToggle').addEventListener('click', () => {
+            const mobileMenu = document.getElementById('mobileMenu');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+        
+        // Scroll Reveal Animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+        
+        // Destination Data
+        const destinations = [
+            {
+                id: 1,
+                name: "Goa",
+                tagline: "Sandy Shores & Silent Forts",
+                shortDesc: "Experience the perfect blend of beaches, nightlife, and Portuguese heritage.",
+                image: "goa.jpeg",
+                price: 15999,
+                type: "beach",
+                duration: "short",
+                budget: "mid",
+                rating: 4.8,
+                includes: [
+                    "4 nights accommodation in beach resort",
+                    "Daily breakfast and dinner",
+                    "Airport transfers",
+                    "North and South Goa sightseeing tour",
+                    "Sunset cruise on the Arabian Sea"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival & Beach Relaxation", desc: "Arrive at Goa International Airport. Transfer to hotel. Evening at leisure on Calangute Beach." },
+                    { day: 2, title: "North Goa Exploration", desc: "Visit Fort Aguada, Calangute Beach, and Anjuna Beach. Evening at famous beach shack with live music." },
+                    { day: 3, title: "South Goa Tour", desc: "Full day tour of South Goa beaches including Colva and Palolem. Visit to spice plantation with lunch." },
+                    { day: 4, title: "Water Sports & Nightlife", desc: "Morning water sports activities. Evening sunset cruise followed by visit to popular nightclub." },
+                    { day: 5, title: "Departure", desc: "After breakfast, checkout and transfer to airport for departure." }
+                ]
+            },
+            {
+                id: 2,
+                name: "Rajasthan",
+                tagline: "Royal Heritage & Desert Beauty",
+                shortDesc: "Discover the land of maharajas, mighty forts, and vast golden deserts.",
+                image: "rajas.jpeg",
+                price: 28999,
+                type: "cultural",
+                duration: "week",
+                budget: "premium",
+                rating: 4.9,
+                includes: [
+                    "7 nights accommodation in heritage hotels",
+                    "Daily breakfast and dinner",
+                    "Private AC vehicle for sightseeing",
+                    "English-speaking guide",
+                    "Camel safari in Jaisalmer",
+                    "Cultural performances"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival in Jaipur", desc: "Welcome at Jaipur Airport. Transfer to hotel. Evening visit to local market." },
+                    { day: 2, title: "Pink City Tour", desc: "Visit Amber Fort, City Palace, Hawa Mahal, and Jantar Mantar. Evening cultural performance with dinner." },
+                    { day: 3, title: "Jaipur to Jodhpur", desc: "Drive to Jodhpur. En route visit Pushkar. Evening at leisure in Jodhpur." },
+                    { day: 4, title: "Blue City Exploration", desc: "Visit Mehrangarh Fort, Jaswant Thada, and Umaid Bhawan Palace. Explore local markets." },
+                    { day: 5, title: "Jodhpur to Jaisalmer", desc: "Drive to Jaisalmer through Thar Desert. Evening at leisure." },
+                    { day: 6, title: "Golden City & Desert Safari", desc: "Morning visit to Jaisalmer Fort and Patwon Ki Haveli. Evening camel safari in sand dunes with cultural performance." },
+                    { day: 7, title: "Jaisalmer to Udaipur", desc: "Drive to Udaipur, the City of Lakes. Evening boat ride on Lake Pichola." },
+                    { day: 8, title: "Departure", desc: "Visit City Palace and Jagdish Temple. Transfer to airport for departure." }
+                ]
+            },
+            {
+                id: 3,
+                name: "Kerala",
+                tagline: "God's Own Country",
+                shortDesc: "Explore serene backwaters, pristine beaches, and lush tea plantations.",
+                image: "kerala1.jpeg",
+                price: 22999,
+                type: "nature",
+                duration: "short",
+                budget: "mid",
+                rating: 4.7,
+                includes: [
+                    "5 nights accommodation in luxury resorts",
+                    "Daily breakfast and dinner",
+                    "Private houseboat cruise with lunch",
+                    "Airport transfers",
+                    "Ayurvedic massage session",
+                    "Kathakali dance performance"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival in Kochi", desc: "Arrive at Kochi International Airport. Transfer to hotel. Evening Kathakali dance performance." },
+                    { day: 2, title: "Kochi Sightseeing", desc: "Visit Fort Kochi, Chinese Fishing Nets, Jewish Synagogue and Dutch Palace. Evening harbor cruise." },
+                    { day: 3, title: "Kochi to Alleppey", desc: "Transfer to Alleppey. Check-in to houseboat for overnight backwater cruise with meals onboard." },
+                    { day: 4, title: "Alleppey to Kumarakom", desc: "Morning on houseboat. Transfer to Kumarakom bird sanctuary. Evening at luxury lake resort." },
+                    { day: 5, title: "Kumarakom to Kovalam", desc: "Drive to Kovalam beach. En route visit Trivandrum city. Evening relaxation at beach." },
+                    { day: 6, title: "Departure", desc: "Morning ayurvedic massage. Transfer to Trivandrum airport for departure." }
+                ]
+            },
+            {
+                id: 4,
+                name: "Ladakh",
+                tagline: "Land of High Passes",
+                shortDesc: "Experience the breathtaking landscapes, ancient monasteries, and Tibetan culture.",
+                image: "ladakh.jpg",
+                price: 32999,
+                type: "adventure",
+                duration: "week",
+                budget: "premium",
+                rating: 4.9,
+                includes: [
+                    "7 nights accommodation in hotels and camps",
+                    "All meals (breakfast, lunch, dinner)",
+                    "Oxygen cylinder and first aid kit",
+                    "Inner line permits",
+                    "Private SUV with experienced driver",
+                    "Guided monastery tours"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival in Leh", desc: "Arrive at Leh airport. Transfer to hotel. Complete rest for acclimatization." },
+                    { day: 2, title: "Leh Local Sightseeing", desc: "Visit Shanti Stupa, Leh Palace, and local market. Short walks for acclimatization." },
+                    { day: 3, title: "Leh to Nubra Valley", desc: "Drive to Nubra Valley via Khardung La (world's highest motorable pass). Visit Diskit Monastery and sand dunes." },
+                    { day: 4, title: "Nubra Valley Exploration", desc: "Visit Panamik hot springs and Yarab Tso lake. Optional camel safari on sand dunes." },
+                    { day: 5, title: "Nubra to Pangong Lake", desc: "Drive to Pangong Lake via Shyok River. Evening at leisure by the lake." },
+                    { day: 6, title: "Pangong Lake to Leh", desc: "Morning at Pangong Lake. Return to Leh via Chang La pass. En route visit Thiksey Monastery." },
+                    { day: 7, title: "Leh to Tsomoriri Lake", desc: "Drive to Tsomoriri Lake via Chumathang hot springs. Visit nomadic settlements en route." },
+                    { day: 8, title: "Departure", desc: "Return to Leh. Transfer to airport for departure." }
+                ]
+            },
+            {
+                id: 5,
+                name: "Andaman Islands",
+                tagline: "Tropical Paradise & Marine Adventure",
+                shortDesc: "Crystal clear waters, pristine beaches, and underwater wonders await.",
+                image: "andaman.jpeg",
+                price: 45999,
+                type: "beach",
+                duration: "week",
+                budget: "luxury",
+                rating: 4.8,
+                includes: [
+                    "6 nights accommodation in beach resorts",
+                    "Daily breakfast and dinner",
+                    "Ferry tickets",
+                    "Snorkeling and scuba diving sessions",
+                    "Glass bottom boat ride",
+                    "Island hopping tours"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival in Port Blair", desc: "Arrive at Port Blair airport. Transfer to hotel. Visit Cellular Jail and Light & Sound show." },
+                    { day: 2, title: "Port Blair to Havelock Island", desc: "Morning ferry to Havelock Island. Check-in at resort. Evening at Radhanagar Beach (Asia's best beach)." },
+                    { day: 3, title: "Havelock Island Exploration", desc: "Snorkeling at Elephant Beach. Optional scuba diving. Evening at leisure." },
+                    { day: 4, title: "Havelock to Neil Island", desc: "Morning ferry to Neil Island. Visit Natural Bridge, Bharatpur Beach, and Laxmanpur Beach." },
+                    { day: 5, title: "Neil Island to Port Blair", desc: "Morning at leisure in Neil Island. Afternoon ferry to Port Blair. Evening shopping at local market." },
+                    { day: 6, title: "Ross Island & North Bay", desc: "Full day excursion to Ross Island and North Bay. Glass bottom boat ride to see coral reefs." },
+                    { day: 7, title: "Departure", desc: "Transfer to airport for departure with beautiful memories." }
+                ]
+            },
+            {
+                id: 6,
+                name: "Varanasi",
+                tagline: "Spiritual Capital of India",
+                shortDesc: "Experience ancient spiritual traditions along the holy Ganges.",
+                image: "varnasifinall.jpeg",
+                price: 18999,
+                type: "spiritual",
+                duration: "weekend",
+                budget: "mid",
+                rating: 4.5,
+                includes: [
+                    "3 nights accommodation in heritage hotels",
+                    "Daily breakfast and dinner",
+                    "Private evening Ganga Aarti ceremony",
+                    "Sunrise boat ride on the Ganges",
+                    "Guided walking tour of ancient temples",
+                    "Excursion to Sarnath"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival in Varanasi", desc: "Arrive at Varanasi Airport. Transfer to hotel. Evening visit to witness the magical Ganga Aarti ceremony at Dashashwamedh Ghat." },
+                    { day: 2, title: "Sacred Ganges Experience", desc: "Early morning boat ride on the Ganges to witness the sunrise and rituals. Visit important temples including Kashi Vishwanath. Evening walking tour through ancient lanes." },
+                    { day: 3, title: "Sarnath Excursion", desc: "Visit Sarnath, where Buddha gave his first sermon. See the Dhamek Stupa and Archaeological Museum. Evening at leisure or optional cultural program." },
+                    { day: 4, title: "Departure", desc: "Morning at leisure for shopping or independent exploration. Transfer to airport for departure." }
+                ]
+            },
+            {
+                id: 7,
+                name: "Himachal Pradesh",
+                tagline: "Adventure in Pine Forests & Snow Peaks",
+                shortDesc: "Explore the land of snow-capped mountains, apple orchards, and adventure sports.",
+                image: "himachal.jpeg",
+                price: 25999,
+                type: "adventure",
+                duration: "short",
+                budget: "premium",
+                rating: 4.6,
+                includes: [
+                    "6 nights accommodation in mountain resorts",
+                    "Daily breakfast and dinner",
+                    "Private vehicle for sightseeing",
+                    "Trekking guide fees",
+                    "Adventure activities: paragliding, rafting",
+                    "Bonfire and cultural evening"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival in Chandigarh", desc: "Arrive at Chandigarh Airport. Drive to Shimla. Evening at leisure at Mall Road." },
+                    { day: 2, title: "Shimla Exploration", desc: "Visit Kufri, Jakhu Temple, and Christ Church. Evening at leisure." },
+                    { day: 3, title: "Shimla to Manali", desc: "Scenic drive to Manali via Kullu. Visit Kullu Shawl factories. Evening at leisure in Manali." },
+                    { day: 4, title: "Manali Local Sightseeing", desc: "Visit Hadimba Temple, Manu Temple, and Vashisth Hot Springs. Evening shopping at Mall Road." },
+                    { day: 5, title: "Rohtang Pass Excursion", desc: "Full day excursion to Snow Point (Rohtang Pass subject to weather conditions). Enjoy snow activities." },
+                    { day: 6, title: "Adventure Day", desc: "Paragliding in Solang Valley. Optional river rafting in Beas River. Evening bonfire with cultural activities." },
+                    { day: 7, title: "Departure", desc: "Drive to Chandigarh. Transfer to airport for departure." }
+                ]
+            },
+            {
+                id: 8,
+                name: "Sikkim",
+                tagline: "Himalayan Serenity & Buddhist Culture",
+                shortDesc: "Nestled in the Eastern Himalayas, explore pristine lakes, monasteries, and mountains.",
+                image: "sikkim1.jpeg",
+                price: 33999,
+                type: "spiritual",
+                duration: "week",
+                budget: "premium",
+                rating: 4.7,
+                includes: [
+                    "7 nights accommodation in mountain resorts",
+                    "All meals (breakfast, lunch, dinner)",
+                    "Private SUV with experienced driver",
+                    "Inner line permits for restricted areas",
+                    "English-speaking guide",
+                    "Monastery visits and cultural experiences"
+                ],
+                itinerary: [
+                    { day: 1, title: "Arrival in Bagdogra", desc: "Arrive at Bagdogra Airport. Drive to Gangtok. Evening at leisure." },
+                    { day: 2, title: "Gangtok Local Sightseeing", desc: "Visit Enchey Monastery, Do-Drul Chorten, Flower Exhibition Center, and MG Marg." },
+                    { day: 3, title: "Tsomgo Lake & Baba Mandir", desc: "Full day excursion to Tsomgo Lake and Baba Mandir (subject to weather conditions)." },
+                    { day: 4, title: "Gangtok to Lachung", desc: "Drive to Lachung. En route visit Seven Sisters Waterfall and Singhik Viewpoint." },
+                    { day: 5, title: "Yumthang Valley Excursion", desc: "Full day excursion to Yumthang Valley and Zero Point (subject to weather conditions). Return to Lachung." },
+                    { day: 6, title: "Lachung to Pelling", desc: "Drive to Pelling via Singtam and Ravangla. Visit Temi Tea Garden en route." },
+                    { day: 7, title: "Pelling Sightseeing", desc: "Visit Khecheopalri Lake, Kanchenjunga Falls, and Pemayangtse Monastery." },
+                    { day: 8, title: "Departure", desc: "Drive to Bagdogra airport for departure." }
+                ]
+            }
+        ];
+        
+        // Testimonials Data
+        const testimonials = [
+            {
+                name: "Rahul Sharma",
+                avatar: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2U2ZTZlNiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMzgiIHI9IjE4IiBmaWxsPSIjYmRiZGJkIi8+PHBhdGggZD0iTTUwIDQyQzM0IDQyIDIyIDU2IDIyIDc0QzIyIDg4IDM0IDEwMCA1MCAxMDBDNjYgMTAwIDc4IDg4IDc4IDc0Qzc4IDU2IDY2IDQyIDUwIDQyWiIgZmlsbD0iI2JkYmRiZCIvPjwvc3ZnPg==",
+                location: "Mumbai",
+                trip: "Goa Beach Getaway",
+                rating: 5,
+                text: "I had an amazing time in Goa! The beaches were pristine, our hotel was luxurious, and the team took care of everything. The sunset cruise was a highlight - absolutely magical!"
+            },
+            {
+                name: "Priya Patel",
+                avatar: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2YwZDBmNSIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMzgiIHI9IjE4IiBmaWxsPSIjZTRiNmViIi8+PHBhdGggZD0iTTUwIDQyQzM0IDQyIDIyIDU2IDIyIDc0QzIyIDg4IDM0IDEwMCA1MCAxMDBDNjYgMTAwIDc4IDg4IDc4IDc0Qzc4IDU2IDY2IDQyIDUwIDQyWiIgZmlsbD0iI2U0YjZlYiIvPjwvc3ZnPg==",
+                location: "Bengaluru",
+                trip: "Kerala Backwaters",
+                rating: 5,
+                text: "The houseboat experience in Alleppey was unlike anything I've experienced before. Watching the sunset from the deck while cruising through the backwaters is a memory I'll cherish forever."
+            },
+            {
+                name: "Vikram Singh",
+                avatar: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2QxZjRmZiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMzgiIHI9IjE4IiBmaWxsPSIjOTNkN2YwIi8+PHBhdGggZD0iTTUwIDQyQzM0IDQyIDIyIDU2IDIyIDc0QzIyIDg4IDM0IDEwMCA1MCAxMDBDNjYgMTAwIDc4IDg4IDc4IDc0Qzc4IDU2IDY2IDQyIDUwIDQyWiIgZmlsbD0iIzkzZDdmMCIvPjwvc3ZnPg==",
+                location: "Delhi",
+                trip: "Rajasthan Heritage Tour",
+                rating: 4,
+                text: "The heritage hotels were magnificent, and the camel safari in Jaisalmer was the highlight of our trip. Our guide was incredibly knowledgeable about the history of each fort and palace."
+            },
+            {
+                name: "Anjali Desai",
+                avatar: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2ZmZDZkNiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMzgiIHI9IjE4IiBmaWxsPSIjZmZiMGIwIi8+PHBhdGggZD0iTTUwIDQyQzM0IDQyIDIyIDU2IDIyIDc0QzIyIDg4IDM0IDEwMCA1MCAxMDBDNjYgMTAwIDc4IDg4IDc4IDc0Qzc4IDU2IDY2IDQyIDUwIDQyWiIgZmlsbD0iI2ZmYjBiMCIvPjwvc3ZnPg==",
+                location: "Kolkata",
+                trip: "Andaman Islands",
+                rating: 5,
+                text: "The crystal clear waters of Radhanagar Beach took my breath away! Snorkeling at Elephant Beach was like swimming in an aquarium. Truly a paradise on earth."
+            },
+            {
+                name: "Karthik Raman",
+                avatar: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSI1MCIgZmlsbD0iI2QxZmZkNiIvPjxjaXJjbGUgY3g9IjUwIiBjeT0iMzgiIHI9IjE4IiBmaWxsPSIjOWRlYmE0Ii8+PHBhdGggZD0iTTUwIDQyQzM0IDQyIDIyIDU2IDIyIDc0QzIyIDg4IDM0IDEwMCA1MCAxMDBDNjYgMTAwIDc4IDg4IDc4IDc0Qzc4IDU2IDY2IDQyIDUwIDQyWiIgZmlsbD0iIzlkZWJhNCIvPjwvc3ZnPg==",
+                location: "Chennai",
+                trip: "Ladakh Adventure",
+                rating: 5,
+                text: "Pangong Lake was even more beautiful than in the movies! The team was excellent in handling altitude sickness concerns, and the monasteries were fascinating cultural experiences."
+            }
+        ];
+        
+        // Populating Destination Grid
+        const destinationGrid = document.getElementById('destination-grid');
+        
+        function createDestinationCards() {
+            destinationGrid.innerHTML = '';
+            
+            destinations.forEach(destination => {
+                const card = document.createElement('div');
+                card.classList.add('destination-card', 'bg-white', 'dark:bg-gray-800', 'rounded-xl', 'overflow-hidden', 'shadow-lg', 'cursor-pointer');
+                card.dataset.id = destination.id;
+                card.dataset.type = destination.type;
+                card.dataset.duration = destination.duration;
+                card.dataset.budget = destination.budget;
+                
+                card.innerHTML = `
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${destination.image}" alt="${destination.name}" class="w-full h-full object-cover">
+                        <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
+                            <h3 class="text-white font-semibold text-lg">${destination.name}</h3>
+                            <p class="text-white/90 text-sm">${destination.tagline}</p>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                                <span class="text-gray-700 dark:text-gray-300 text-sm ml-1">${destination.rating}</span>
+                            </div>
+                            <span class="text-india-green font-semibold">₹${destination.price.toLocaleString()}</span>
+                        </div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm mb-4">${destination.shortDesc}</p>
+                        <button class="w-full py-2 bg-india-saffron hover:bg-amber-600 text-white font-medium rounded-lg transition duration-300 shadow view-details">
+                            View Details
+                        </button>
+                    </div>
+                `;
+                
+                destinationGrid.appendChild(card);
+            });
+            
+            // Add event listeners to destination cards
+            document.querySelectorAll('.destination-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const id = parseInt(card.dataset.id);
+                    openDestinationModal(id);
+                });
+            });
+        }
+        
+        // Populate testimonials
+        const testimonialsContainer = document.getElementById('testimonials-container');
+        
+        function createTestimonials() {
+            testimonialsContainer.innerHTML = '';
+            
+            const testimonialWidth = 'w-full md:w-3/4 lg:w-1/2 flex-shrink-0';
+            
+            testimonials.forEach(testimonial => {
+                const testimonialCard = document.createElement('div');
+                testimonialCard.classList.add(testimonialWidth, 'px-4');
+                
+                testimonialCard.innerHTML = `
+                    <div class="bg-white dark:bg-gray-700 rounded-xl p-6 shadow-md">
+                        <div class="flex items-center mb-4">
+                            <img src="${testimonial.avatar}" alt="${testimonial.name}" class="w-12 h-12 rounded-full mr-4">
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">${testimonial.name}</h4>
+                                <p class="text-gray-600 dark:text-gray-300 text-sm">${testimonial.location} • ${testimonial.trip}</p>
+                            </div>
+                        </div>
+                        <div class="flex mb-3">
+                            ${Array(5).fill().map((_, i) => `
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'}" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                </svg>
+                            `).join('')}
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-300">${testimonial.text}</p>
+                    </div>
+                `;
+                
+                testimonialsContainer.appendChild(testimonialCard);
+            });
+        }
+        
+        // Testimonial Slider
+        let testimonialIndex = 0;
+        
+        function updateTestimonialSlider() {
+            const testimonialItems = document.querySelectorAll('#testimonials-container > div');
+            if (!testimonialItems.length) return;
+            
+            testimonialIndex = (testimonialIndex + testimonials.length) % testimonials.length;
+            const translateValue = -testimonialIndex * 100;
+            testimonialsContainer.style.transform = `translateX(${translateValue}%)`;
+        }
+        
+        document.getElementById('testimonial-prev').addEventListener('click', () => {
+            testimonialIndex--;
+            updateTestimonialSlider();
+        });
+        
+        document.getElementById('testimonial-next').addEventListener('click', () => {
+            testimonialIndex++;
+            updateTestimonialSlider();
+        });
+        
+        // Modal functionality
+        const destinationModal = document.getElementById('destination-modal');
+        const modalOverlay = destinationModal.querySelector('.modal-overlay');
+        const modalContainer = destinationModal.querySelector('.modal-container');
+        
+        function openDestinationModal(id) {
+            const destination = destinations.find(dest => dest.id === id);
+            if (!destination) return;
+            
+            // Update modal content
+            document.getElementById('modal-title').textContent = destination.name;
+            document.getElementById('modal-image').src = destination.image;
+            document.getElementById('modal-image').alt = destination.name;
+            document.getElementById('modal-description').textContent = destination.shortDesc;
+            
+            // Update includes list
+            const includesList = document.getElementById('modal-includes');
+            includesList.innerHTML = '';
+            destination.includes.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('flex', 'items-start');
+                listItem.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-india-green mt-0.5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <span class="text-gray-700 dark:text-gray-300">${item}</span>
+                `;
+                includesList.appendChild(listItem);
+            });
+            
+            // Update itinerary
+            const itineraryDiv = document.getElementById('modal-itinerary');
+            itineraryDiv.innerHTML = '';
+            destination.itinerary.forEach(day => {
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('border-l-2', 'border-india-saffron', 'pl-4');
+                dayDiv.innerHTML = `
+                    <h5 class="font-semibold text-gray-900 dark:text-white">Day ${day.day}: ${day.title}</h5>
+                    <p class="text-gray-700 dark:text-gray-300 text-sm">${day.desc}</p>
+                `;
+                itineraryDiv.appendChild(dayDiv);
+            });
+            
+            // Update pricing
+            document.getElementById('modal-base-price').textContent = `₹${destination.price.toLocaleString()}`;
+            updateTotalPrice();
+            
+            // Show modal
+            destinationModal.classList.remove('hidden');
+            setTimeout(() => {
+                modalOverlay.classList.add('opacity-75');
+                modalContainer.classList.remove('translate-y-full', 'opacity-0');
+            }, 50);
+        }
+        
+        function closeDestinationModal() {
+            modalOverlay.classList.remove('opacity-75');
+            modalContainer.classList.add('translate-y-full', 'opacity-0');
+            setTimeout(() => {
+                destinationModal.classList.add('hidden');
+            }, 500);
+        }
+        
+        document.getElementById('modal-close').addEventListener('click', closeDestinationModal);
+        modalOverlay.addEventListener('click', closeDestinationModal);
+        
+        // Booking modal functionality
+        const bookingModal = document.getElementById('booking-modal');
+        const bookingModalOverlay = bookingModal.querySelector('.modal-overlay');
+        const bookingModalContainer = bookingModal.querySelector('.modal-container');
+        
+        function openBookingModal() {
+            // Get data from destination modal
+            const destinationName = document.getElementById('modal-title').textContent;
+            const travelDate = document.getElementById('travel-date').value;
+            const adults = document.getElementById('adults').value;
+            const children = document.getElementById('children').value;
+            const totalPrice = document.getElementById('modal-total-price').textContent;
+            
+            // Update booking modal with this data
+            document.getElementById('booking-destination').textContent = destinationName;
+            document.getElementById('booking-dates').textContent = `Travel Date: ${travelDate}`;
+            document.getElementById('booking-travelers').textContent = `${adults} Adults, ${children} Children`;
+            document.getElementById('booking-total').textContent = totalPrice;
+            
+            // Close destination modal
+            closeDestinationModal();
+            
+            // Show booking modal
+            bookingModal.classList.remove('hidden');
+            setTimeout(() => {
+                bookingModalOverlay.classList.add('opacity-75');
+                bookingModalContainer.classList.remove('translate-y-full', 'opacity-0');
+            }, 50);
+        }
+        
+        function closeBookingModal() {
+            bookingModalOverlay.classList.remove('opacity-75');
+            bookingModalContainer.classList.add('translate-y-full', 'opacity-0');
+            setTimeout(() => {
+                bookingModal.classList.add('hidden');
+                // Reset booking success state
+                document.getElementById('booking-form-container').classList.remove('hidden');
+                document.getElementById('booking-success').classList.add('hidden');
+            }, 500);
+        }
+        
+        document.getElementById('booking-modal-close').addEventListener('click', closeBookingModal);
+        bookingModalOverlay.addEventListener('click', closeBookingModal);
+        
+        // Book Now button
+        document.getElementById('book-now-btn').addEventListener('click', () => {
+            // Validate travel date is selected
+            const travelDate = document.getElementById('travel-date').value;
+            if (!travelDate) {
+                alert('Please select a travel date');
+                return;
+            }
+            
+            openBookingModal();
+        });
+        
+        // Payment form submission
+        document.getElementById('payment-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Simulate payment processing
+            document.getElementById('booking-form-container').classList.add('hidden');
+            document.getElementById('booking-success').classList.remove('hidden');
+            
+            // Generate booking reference
+            const bookingRef = 'IND' + Math.floor(1000 + Math.random() * 9000);
+            document.getElementById('booking-reference').textContent = bookingRef;
+        });
+        
+        // Close success modal
+        document.getElementById('booking-success-close').addEventListener('click', closeBookingModal);
+        
+        // Update total price based on travelers
+        function updateTotalPrice() {
+            const basePrice = parseInt(document.getElementById('modal-base-price').textContent.replace(/[^\d]/g, ''));
+            const adults = parseInt(document.getElementById('adults').value) || 0;
+            const children = parseInt(document.getElementById('children').value) || 0;
+            
+            // Calculate total price (adults at full price, children at 50% discount)
+            const totalPrice = (basePrice * adults) + (basePrice * 0.5 * children);
+            
+            document.getElementById('modal-total-price').textContent = `₹${totalPrice.toLocaleString()}`;
+            document.getElementById('modal-travelers').textContent = `${adults} Adults, ${children} Children`;
+        }
+        
+        // Add event listeners for traveler inputs
+        document.getElementById('adults').addEventListener('change', updateTotalPrice);
+        document.getElementById('children').addEventListener('change', updateTotalPrice);
+        
+        // Filter functionality
+        function applyFilters() {
+            const budgetFilter = document.getElementById('budget-filter').value;
+            const durationFilter = document.getElementById('duration-filter').value;
+            const typeFilter = document.getElementById('type-filter').value;
+            
+            document.querySelectorAll('.destination-card').forEach(card => {
+                const budgetMatch = budgetFilter === 'all' || card.dataset.budget === budgetFilter;
+                const durationMatch = durationFilter === 'all' || card.dataset.duration === durationFilter;
+                const typeMatch = typeFilter === 'all' || card.dataset.type === typeFilter;
+                
+                if (budgetMatch && durationMatch && typeMatch) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        }
+        
+        document.getElementById('budget-filter').addEventListener('change', applyFilters);
+        document.getElementById('duration-filter').addEventListener('change', applyFilters);
+        document.getElementById('type-filter').addEventListener('change', applyFilters);
+        
+        document.getElementById('reset-filters').addEventListener('click', () => {
+            document.getElementById('budget-filter').value = 'all';
+            document.getElementById('duration-filter').value = 'all';
+            document.getElementById('type-filter').value = 'all';
+            
+            document.querySelectorAll('.destination-card').forEach(card => {
+                card.classList.remove('hidden');
+            });
+        });
+        
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+                
+                // Close mobile menu if open
+                document.getElementById('mobileMenu').classList.add('hidden');
+            });
+        });
+        
+        // Instant Booking Button
+        document.getElementById('instantBookBtn').addEventListener('click', () => {
+            document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // WhatsApp Chat Button
+        document.getElementById('whatsappBtn').addEventListener('click', () => {
+            alert('Connecting you to our travel expert on WhatsApp...');
+            // In a real application, this would open a WhatsApp chat
+        });
+        
+        // Call Expert Button
+        document.getElementById('callExpertBtn').addEventListener('click', () => {
+            alert('Connecting you to our travel expert...');
+            // In a real application, this would initiate a call
+        });
+        
+        // Contact Form Submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! Our team will contact you shortly.');
+            this.reset();
+        });
+        
+        // Newsletter Form Submission
+        document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for subscribing to our newsletter!');
+            this.reset();
+        });
+        
+        // Initialize page
+        window.addEventListener('load', function() {
+            createDestinationCards();
+            createTestimonials();
+            
+            // Simulate video background with an auto-changing gradient
+            // In a real application, this would be a video element
+            const videoContainer = document.querySelector('.video-container');
+            let gradientIndex = 0;
+            
+            const gradients = [
+                'linear-gradient(to right bottom, #FF9933, #138808)',
+                'linear-gradient(to right bottom, #138808, #000080)',
+                'linear-gradient(to left bottom, #FF9933, #000080)',
+                'linear-gradient(to right top, #138808, #FF9933)'
+            ];
+            
+            setInterval(() => {
+                gradientIndex = (gradientIndex + 1) % gradients.length;
+                videoContainer.querySelector('.bg-gradient-to-br').style.background = gradients[gradientIndex];
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
