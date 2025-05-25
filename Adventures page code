@@ -1,0 +1,1805 @@
+//Adventures page code
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wind trailsIndia | Adventure Trips</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #ff6b6b;
+            --primary-dark: #ff4757;
+            --secondary: #1e90ff;
+            --dark: #2f3542;
+            --light: #f1f2f6;
+            --gray: #a4b0be;
+            --success: #2ed573;
+            --warning: #ffa502;
+            --danger: #ff4757;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--dark);
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--dark);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            font-weight: 300;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.2);
+        }
+
+        .btn-small {
+            padding: 8px 20px;
+            font-size: 0.9rem;
+        }
+
+        .btn-book {
+            margin-left: 20px;
+        }
+
+        .btn-explore {
+            background: var(--secondary);
+        }
+
+        .btn-explore:hover {
+            background: #187bcd;
+            box-shadow: 0 10px 20px rgba(30, 144, 255, 0.2);
+        }
+
+        .btn-video {
+            background: transparent;
+            color: var(--dark);
+            border: 2px solid var(--dark);
+            margin-left: 15px;
+        }
+
+        .btn-video:hover {
+            background: var(--dark);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-view-more {
+            display: block;
+            margin: 40px auto 0;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-view-more:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--secondary);
+        }
+
+        .btn-submit:hover {
+            background: #187bcd;
+        }
+
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .preloader.fade-out {
+            opacity: 0;
+        }
+
+        .loader {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .mountain {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 30px solid var(--primary);
+            left: 50%;
+            transform: translateX(-50%);
+            animation: mountainBounce 2s infinite ease-in-out;
+        }
+
+        .hiker {
+            position: absolute;
+            width: 20px;
+            height: 30px;
+            background: var(--dark);
+            border-radius: 50% 50% 0 0;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: hikerWalk 2s infinite ease-in-out;
+        }
+
+        .hiker::before, .hiker::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 20px;
+            background: var(--dark);
+            top: 30px;
+        }
+
+        .hiker::before {
+            left: 3px;
+            transform: rotate(20deg);
+            animation: legLeft 2s infinite ease-in-out;
+        }
+
+        .hiker::after {
+            right: 3px;
+            transform: rotate(-20deg);
+            animation: legRight 2s infinite ease-in-out;
+        }
+
+        @keyframes mountainBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        @keyframes hikerWalk {
+            0%, 100% { transform: translateX(-60%); }
+            50% { transform: translateX(-40%); }
+        }
+
+        @keyframes legLeft {
+            0%, 100% { transform: rotate(30deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        @keyframes legRight {
+            0%, 100% { transform: rotate(-30deg); }
+            50% { transform: rotate(-10deg); }
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: white;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .menu-toggle .bar {
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            margin: 3px 0;
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 700px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            max-width: 600px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards 0.5s;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards 0.7s;
+        }
+
+        .hero-btns {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease forwards 0.9s;
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 1.5s;
+        }
+
+        .scroll-line {
+            width: 2px;
+            height: 50px;
+            background: white;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: var(--primary);
+            animation: scrollDown 2s infinite ease-in-out;
+        }
+
+        .hero-slides {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-slides .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .hero-slides .slide.active {
+            opacity: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scrollDown {
+            0% {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+        }
+
+        /* Adventures Section */
+        .adventure-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .adventure-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .adventure-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary);
+            transition: all 0.3s ease;
+            z-index: -1;
+        }
+
+        .adventure-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .adventure-card:hover::before {
+            height: 100%;
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px;
+            transition: all 0.3s ease;
+        }
+
+        .adventure-card:hover .card-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .card-icon i {
+            font-size: 2rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .adventure-card:hover .card-icon i {
+            color: white;
+        }
+
+        .adventure-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .adventure-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .adventure-card:hover h3,
+        .adventure-card:hover p {
+            color: white;
+        }
+
+        .card-hover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .adventure-card:hover .card-hover {
+            opacity: 1;
+        }
+
+        .card-hover h4 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .card-hover ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .card-hover ul li {
+            color: white;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .card-hover ul li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: white;
+        }
+
+        /* Destinations Section */
+        .destinations {
+            background: #f9f9f9;
+        }
+
+        .destination-slider {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .destination-card {
+            min-width: calc(33.333% - 20px);
+            margin-right: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .destination-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .destination-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+        }
+
+        .destination-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        }
+
+        .destination-image h3 {
+            color: white;
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .destination-info {
+            padding: 20px;
+        }
+
+        .destination-info p {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .activities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .activities span {
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 15px;
+        }
+
+        .slider-prev, .slider-next {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slider-prev:hover, .slider-next:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Gallery Section */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 200px;
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .gallery-item.tall {
+            grid-row: span 2;
+        }
+
+        .gallery-item.wide {
+            grid-column: span 2;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-overlay h3 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-overlay p {
+            color: var(--light);
+            font-size: 0.9rem;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay h3,
+        .gallery-item:hover .gallery-overlay p {
+            transform: translateY(0);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background: linear-gradient(135deg, rgba(30, 144, 255, 0.05), rgba(255, 107, 107, 0.05));
+        }
+
+        .testimonial-slider {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial-card {
+            min-width: 100%;
+            padding: 0 15px;
+        }
+
+        .testimonial-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .quote-icon {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            color: rgba(255, 107, 107, 0.1);
+            font-size: 3rem;
+        }
+
+        .testimonial-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: var(--dark);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            margin-right: 15px;
+        }
+
+        .author-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .author-info span {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .testimonial-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--gray);
+            opacity: 0.3;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: var(--primary);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-info h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .contact-info p {
+            color: var(--gray);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .contact-details {
+            margin-bottom: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .contact-item i {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .contact-item span {
+            color: var(--dark);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 107, 0.1);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 0;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-about .logo {
+            color: white;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-about .logo span {
+            color: var(--primary);
+        }
+
+        .footer-about p {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-links h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-links h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links ul li a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links ul li a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-newsletter h4 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-newsletter h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-newsletter p {
+            color: var(--gray);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .newsletter-form {
+            display: flex;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .newsletter-form button {
+            width: 50px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            background: var(--primary-dark);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-legal a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .destination-card {
+                min-width: calc(50% - 15px);
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: white;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 40px;
+                transition: all 0.3s ease;
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .nav-links a {
+                margin: 15px 0;
+                font-size: 1.2rem;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .menu-toggle.active .bar:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+
+            .menu-toggle.active .bar:nth-child(2) {
+                opacity: 0;
+            }
+
+            .menu-toggle.active .bar:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+
+            .btn-book {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .gallery-item.wide {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .destination-card {
+                min-width: 100%;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .footer-legal {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="loader">
+            <div class="mountain"></div>
+            <div class="hiker"></div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="#" class="logo">WildTrails<span>India</span></a>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#destinations">Destinations</a>
+                <a href="#adventures">Adventures</a>
+                <a href="#gallery">Gallery</a>
+                <a href="#contact">Contact</a>
+             <a href="bookingoriginal.html"   button class="btn btn-book">Book Now</button></a>
+
+            </div>
+            <div class="menu-toggle">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1 class="hero-title">Discover India's Wild Side</h1>
+            <p class="hero-subtitle">Experience adrenaline-pumping adventures in the most breathtaking landscapes</p>
+            <div class="hero-btns">
+                <button class="btn btn-explore">Explore Trips</button>
+                <button class="btn btn-video">
+                    <i class="fas fa-play"></i> Watch Story
+                </button>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span>Scroll Down</span>
+            <div class="scroll-line"></div>
+        </div>
+        <div class="hero-slides">
+            <div class="slide active" style="background-image: url('adv1.jpg');"></div>
+            <div class="slide" style="background-image: url('adv2.jpg');"></div>
+            <div class="slide" style="background-image: url('adv3.jpg');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+    </section>
+
+    <!-- Adventures Section -->
+    <section class="adventures" id="adventures">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our Adventures</h2>
+                <p class="section-subtitle">Choose your thrill</p>
+            </div>
+            <div class="adventure-grid">
+                <div class="adventure-card">
+                    <div class="card-icon">
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <h3>Trekking</h3>
+                    <p>Himalayan trails, Western Ghats, and more</p>
+                    <div class="card-hover">
+                        <h4>Popular Treks</h4>
+                        <ul>
+                            <li>Chadar Trek</li>
+                            <li>Valley of Flowers</li>
+                            <li>Hampta Pass</li>
+                        </ul>
+                        <button class="btn btn-small">View All</button>
+                    </div>
+                </div>
+                <div class="adventure-card">
+                    <div class="card-icon">
+                        <i class="fas fa-water"></i>
+                    </div>
+                    <h3>River Rafting</h3>
+                    <p>White water adventures across India</p>
+                    <div class="card-hover">
+                        <h4>Best Rivers</h4>
+                        <ul>
+                            <li>Ganges (Rishikesh)</li>
+                            <li>Teesta (Sikkim)</li>
+                            <li>Zanskar (Ladakh)</li>
+                        </ul>
+                        <button class="btn btn-small">View All</button>
+                    </div>
+                </div>
+                <div class="adventure-card">
+                    <div class="card-icon">
+                        <i class="fas fa-parachute-box"></i>
+                    </div>
+                    <h3>Paragliding</h3>
+                    <p>Fly like a bird over stunning landscapes</p>
+                    <div class="card-hover">
+                        <h4>Top Sites</h4>
+                        <ul>
+                            <li>Bir Billing</li>
+                            <li>Kamshet</li>
+                            <li>Nandi Hills</li>
+                        </ul>
+                        <button class="btn btn-small">View All</button>
+                    </div>
+                </div>
+                <div class="adventure-card">
+                    <div class="card-icon">
+                        <i class="fas fa-campground"></i>
+                    </div>
+                    <h3>Wilderness Camping</h3>
+                    <p>Sleep under the stars in remote locations</p>
+                    <div class="card-hover">
+                        <h4>Best Camping</h4>
+                        <ul>
+                            <li>Rann of Kutch</li>
+                            <li>Jaisalmer Desert</li>
+                            <li>Coorg Jungles</li>
+                        </ul>
+                        <button class="btn btn-small">View All</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destinations Section -->
+    <section class="destinations" id="destinations">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Top Destinations</h2>
+                <p class="section-subtitle">Explore India's adventure hotspots</p>
+            </div>
+            <div class="destination-slider">
+                <div class="slider-track">
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('ladakh.jpeg');">
+                            <div class="destination-overlay"></div>
+                            <h3>Ladakh</h3>
+                        </div>
+                        <div class="destination-info">
+                            <p>High altitude adventures in the land of passes</p>
+                            <div class="activities">
+                                <span>Trekking</span>
+                                <span>Biking</span>
+                                <span>Rafting</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('rishikesh.jpg');">
+                            <div class="destination-overlay"></div>
+                            <h3>Rishikesh</h3>
+                        </div>
+                        <div class="destination-info">
+                            <p>Yoga capital and adventure hub by the Ganges</p>
+                            <div class="activities">
+                                <span>Rafting</span>
+                                <span>Bungee</span>
+                                <span>Camping</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('goa.jpg');">
+                            <div class="destination-overlay"></div>
+                            <h3>Goa</h3>
+                        </div>
+                        <div class="destination-info">
+                            <p>Beach adventures and water sports paradise</p>
+                            <div class="activities">
+                                <span>Scuba</span>
+                                <span>Parasailing</span>
+                                <span>Kayaking</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('himachal.jpeg');">
+                            <div class="destination-overlay"></div>
+                            <h3>Himachal</h3>
+                        </div>
+                        <div class="destination-info">
+                            <p>Mountain adventures in the Himalayas</p>
+                            <div class="activities">
+                                <span>Trekking</span>
+                                <span>Paragliding</span>
+                                <span>Skiing</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="destination-card">
+                        <div class="destination-image" style="background-image: url('andamans.jpeg');">
+                            <div class="destination-overlay"></div>
+                            <h3>Andamans</h3>
+                        </div>
+                        <div class="destination-info">
+                            <p>Pristine islands with marine adventures</p>
+                            <div class="activities">
+                                <span>Scuba</span>
+                                <span>Snorkeling</span>
+                                <span>Sea Walking</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <button class="btn slider-prev"><i class="fas fa-chevron-left"></i></button>
+                <button class="btn slider-next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Adventure Gallery</h2>
+                <p class="section-subtitle">Moments that take our breath away</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item tall" style="background-image: url('himalayansunrise.jpeg');">
+                    <div class="gallery-overlay">
+                        <h3>Himalayan Sunrise</h3>
+                        <p>Spiti Valley Trek</p>
+                    </div>
+                </div>
+                <div class="gallery-item" style="background-image: url('desertcamping.jpeg');">
+                    <div class="gallery-overlay">
+                        <h3>Desert Camping</h3>
+                        <p>Jaisalmer, Rajasthan</p>
+                    </div>
+                </div>
+                <div class="gallery-item wide" style="background-image: url('riverrafting.jpeg');">
+                    <div class="gallery-overlay">
+                        <h3>River Rafting</h3>
+                        <p>Rishikesh, Uttarakhand</p>
+                    </div>
+                </div>
+                <div class="gallery-item" style="background-image: url('paraglding.jpg');">
+                    <div class="gallery-overlay">
+                        <h3>Paragliding</h3>
+                        <p>Bir Billing, Himachal</p>
+                    </div>
+                </div>
+                <div class="gallery-item tall" style="background-image: url('mountainbiking.jpeg');">
+                    <div class="gallery-overlay">
+                        <h3>Mountain Biking</h3>
+                        <p>Manali, Himachal</p>
+                    </div>
+                </div>
+                <div class="gallery-item" style="background-image: url('scubadiving.jpeg');">
+                    <div class="gallery-overlay">
+                        <h3>Scuba Diving</h3>
+                        <p>Havelock Island</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Adventurer Stories</h2>
+                <p class="section-subtitle">What our explorers say</p>
+            </div>
+            <div class="testimonial-slider">
+                <div class="testimonial-track">
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>The Spiti Valley trek organized by WildTrails was the most breathtaking experience of my life. The team took care of everything, allowing us to fully immerse in the stunning landscapes.</p>
+                            <div class="testimonial-author">
+                                <div class="author-image" style="background-image: url('https://randomuser.me/api/portraits/women/44.jpg');"></div>
+                                <div class="author-info">
+                                    <h4>Priya Sharma</h4>
+                                    <span>Spiti Valley Trek, June 2023</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>As a first-time rafter, I was nervous, but the Rishikesh team made me feel completely safe while still giving me the thrill I was looking for. Can't wait to go back for more adventures!</p>
+                            <div class="testimonial-author">
+                                <div class="author-image" style="background-image: url('https://randomuser.me/api/portraits/men/32.jpg');"></div>
+                                <div class="author-info">
+                                    <h4>Rahul Mehta</h4>
+                                    <span>Ganges Rafting, March 2023</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="testimonial-content">
+                            <div class="quote-icon">
+                                <i class="fas fa-quote-left"></i>
+                            </div>
+                            <p>The Andamans scuba diving package exceeded all expectations. From the professional instructors to the incredible marine life, every moment was magical. Highly recommend!</p>
+                            <div class="testimonial-author">
+                                <div class="author-image" style="background-image: url('https://randomuser.me/api/portraits/women/68.jpg');"></div>
+                                <div class="author-info">
+                                    <h4>Ananya Patel</h4>
+                                    <span>Andamans Scuba, January 2023</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-dots">
+                <span class="dot active"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h2>Ready for Your Adventure?</h2>
+                    <p>Have questions or need help choosing your perfect adventure? Our team is here to help you plan an unforgettable experience.</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+91 98765 43210</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>hello@wildtrailsindia.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Adventure House, Dehradun, Uttarakhand</span>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="adventureForm">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="phone" placeholder="Phone Number">
+                        </div>
+                        <div class="form-group">
+                            <select id="interest" required>
+                                <option value="">I'm interested in...</option>
+                                <option value="trekking">Trekking</option>
+                                <option value="rafting">River Rafting</option>
+                                <option value="paragliding">Paragliding</option>
+                                <option value="scuba">Scuba Diving</option>
+                                <option value="camping">Wilderness Camping</option>
+                                <option value="other">Other Adventure</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Your Message or Questions"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-submit">Send Adventure Request</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <a href="#" class="logo">WildTrails<span>India</span></a>
+                    <p>Creating unforgettable adventure experiences across India since 2010. Our mission is to connect people with nature through thrilling, safe, and sustainable adventures.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#destinations">Destinations</a></li>
+                        <li><a href="#adventures">Adventures</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Adventures</h4>
+                    <ul>
+                        <li><a href="#">Trekking</a></li>
+                        <li><a href="#">Rafting</a></li>
+                        <li><a href="#">Paragliding</a></li>
+                        <li><a href="#">Scuba Diving</a></li>
+                        <li><a href="#">Camping</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Adventure Newsletter</h4>
+                    <p>Subscribe to get updates on new trips, special offers and adventure tips.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your Email">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 WildTrails India. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Preloader
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.querySelector('.preloader').classList.add('fade-out');
+            }, 1500);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Hero slider
+        const slides = document.querySelectorAll('.hero-slides .slide');
+        let currentSlide = 0;
+
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        setInterval(nextSlide, 5000);
+
+        // Destination slider
+        const destinationTrack = document.querySelector('.slider-track');
+        const destinationCards = document.querySelectorAll('.destination-card');
+        const prevBtn = document.querySelector('.slider-prev');
+        const nextBtn = document.querySelector('.slider-next');
+        let currentPosition = 0;
+        const cardWidth = destinationCards[0].offsetWidth + 20; // width + margin
+
+        function updateSlider() {
+            destinationTrack.style.transform = `translateX(-${currentPosition}px)`;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            const maxPosition = (destinationCards.length - 3) * cardWidth;
+            if (currentPosition < maxPosition) {
+                currentPosition += cardWidth;
+                updateSlider();
+            }
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentPosition > 0) {
+                currentPosition -= cardWidth;
+                updateSlider();
+            }
+        });
+
+        // Testimonial slider
+        const testimonialTrack = document.querySelector('.testimonial-track');
+        const testimonialCards = document.querySelectorAll('.testimonial-card');
+        const dots = document.querySelectorAll('.dot');
+        let currentTestimonial = 0;
+
+        function showTestimonial(index) {
+            testimonialTrack.style.transform = `translateX(-${index * 100}%)`;
+            
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+            
+            currentTestimonial = index;
+        }
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showTestimonial(index);
+            });
+        });
+
+        // Auto-rotate testimonials
+        setInterval(() => {
+            currentTestimonial = (currentTestimonial + 1) % testimonialCards.length;
+            showTestimonial(currentTestimonial);
+        }, 5000);
+
+        // Form submission
+        const adventureForm = document.getElementById('adventureForm');
+        
+        adventureForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for your adventure request! We will contact you soon.');
+            adventureForm.reset();
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    if (navLinks.classList.contains('active')) {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.section-title, .section-subtitle, .adventure-card, .destination-card, .gallery-item, .testimonial-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        };
+
+        // Initialize animations when DOM is loaded
+        document.addEventListener('DOMContentLoaded', animateOnScroll);
+    </script>
+</body>
+</html>
